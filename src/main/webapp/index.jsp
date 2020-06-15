@@ -1,11 +1,5 @@
 <html>
 <body>
-<h2>Hello World!</h2>
+<jsp:forward page="/jsp/sign_in.jsp"></jsp:forward>
 </body>
-<form name="Simple" action="control" method="get">
-    <input required name="firstName" placeholder="First name"/>
-    <input required name="lastName" placeholder="Last name"/>
-    <input required name="password" placeholder="password"/>
-    <input type="submit" name="button" value="Sign Up"/>
-</form>
 </html>
