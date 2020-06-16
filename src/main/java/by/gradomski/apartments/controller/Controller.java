@@ -2,6 +2,7 @@ package by.gradomski.apartments.controller;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.command.CommandProvider;
+import by.gradomski.apartments.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,32 +27,22 @@ public class Controller extends HttpServlet {
         processRequest(request, response);
     }
 
+    @Override
+    public void destroy(){
+        ConnectionPool.getInstance().destroyPool();
+        log.debug("pool was destroyed");
+    }
+
     private void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
         Optional<Command> optionalCommand = CommandProvider.defineCommand(request.getParameter("command"));
         String page;
-        if(!optionalCommand.isEmpty()){
+        if(optionalCommand.isPresent()){
             Command command = optionalCommand.get();
             page = command.execute(request);
             RequestDispatcher dispatcher = request.getRequestDispatcher(page);
             dispatcher.forward(request, response);
         } else {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("command: " + request.getParameter("command"));
         }
-
-
-
-
-        log.warn("start servlet");
-        String fn = request.getParameter("firstName");
-        log.warn("name");
-        String ln = request.getParameter("lastName");
-        log.warn("last name");
-        String pass = request.getParameter("password");
-        log.warn("pass");
-        request.setAttribute("firstName", fn);
-        request.setAttribute("lastName", ln);
-        request.setAttribute("password", pass);
-        request.getRequestDispatcher("/jsp/result.jsp").forward(request, response);
-        log.warn("end servlet");
     }
 }

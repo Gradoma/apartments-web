@@ -14,6 +14,7 @@
     <h2>Sign In, please!</h2>
 </body>
 <form name="Simple" action="control" method="get">
+    <input type="hidden" name="command" value="sign_in">
     <input required name="login" placeholder="login"/>
     <input required name="password" placeholder="password"/>
     <input type="submit" name="button" value="Sign In"/>

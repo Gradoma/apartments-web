@@ -34,7 +34,8 @@ public class SignInCommand implements Command {
             }
         }catch (ServiceException e){
             log.error(e);
+            page = ERROR_PAGE;
         }
-        return null;
+        return page;
     }
 }
