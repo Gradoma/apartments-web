@@ -7,9 +7,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validator {
-    private static final String EMAIL_PATTERN = "[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+";
     private static final String LOGIN_PATTERN = "^[a-zA-Z0-9_-]{3,15}$";
     private static final String PASS_PATTERN = "^.{5,}$";
+    private static final String EMAIL_PATTERN = "[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+";
     private static Logger logger = LogManager.getLogger();
 
     public static boolean isValid(String login, String password){

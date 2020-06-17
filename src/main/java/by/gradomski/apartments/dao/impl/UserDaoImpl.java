@@ -57,6 +57,7 @@ public class UserDaoImpl implements UserDao {
             statement.setInt(1, user.getRole().getValue());
             statement.setString(2, user.getLoginName());
             statement.setString(3, user.getPassword());
+            //FIXME(delete null fields)
             statement.setString(4, user.getFirstName());
             statement.setString(5, user.getLastName());
             statement.setLong(6, user.getBirthday().getTime());
