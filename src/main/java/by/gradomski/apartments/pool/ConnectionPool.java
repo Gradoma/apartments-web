@@ -40,7 +40,6 @@ public class ConnectionPool {
             try {
                 freeConnections.add(DriverManager.getConnection(url, properties));
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
                 log.error(throwables);
             }
         }
@@ -51,14 +50,13 @@ public class ConnectionPool {
                 try {
                     freeConnections.add(DriverManager.getConnection(url, properties));
                 } catch (SQLException throwables) {
-                    throwables.printStackTrace();
                     log.error(throwables);
                 }
             }
         }
         if(freeConnections.size() != DEFAULT_POOL_SIZE){
             log.debug("connections after adding =" + freeConnections.size());
-            throw new ExceptionInInitializerError("Connection can't be created");
+            throw new ExceptionInInitializerError("all connection can't be created");
         }
     }
 
@@ -82,8 +80,9 @@ public class ConnectionPool {
         try {
             connection = freeConnections.take();
         } catch (InterruptedException e) {
-            // log
+            log.error("InterruptedException while taking a connection: ", e);
             Thread.currentThread().interrupt();
+            log.error(Thread.currentThread().toString() + " was interrupted");
         }
         return connection;
     }
@@ -97,9 +96,9 @@ public class ConnectionPool {
             try {
                 freeConnections.take().close();
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                log.error("SQLException while closing connection: ", throwables);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error("InterruptedException while closing connection: ", e);
             }
         }
         deregisterDrivers();
@@ -111,8 +110,7 @@ public class ConnectionPool {
             try {
                 DriverManager.deregisterDriver(iterator.next());
             } catch (SQLException throwables) {
-                throwables.printStackTrace();
-                // log
+                log.error("can't deregister driver: ", throwables);
             }
         }
     }

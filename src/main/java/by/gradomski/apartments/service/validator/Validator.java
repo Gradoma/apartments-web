@@ -14,19 +14,19 @@ public class Validator {
 
     public static boolean isValid(String login, String password){
         if(login == null || login.isBlank() || password == null || password.isEmpty()){
-            logger.error("login or pass null or empty");
+            logger.info("login or password null or empty");
             return false;
         }
         Pattern patternLogin = Pattern.compile(LOGIN_PATTERN);
         Matcher matcher = patternLogin.matcher(login);
         if( !matcher.matches()){
-            logger.error("login doesnt match");
+            logger.debug("login doesnt match pattern");
             return false;
         }
         Pattern patternPassword = Pattern.compile(PASS_PATTERN);
         matcher = patternPassword.matcher(password);
         if( !matcher.matches()){
-            logger.error("pass doesnt match");
+            logger.debug("password doesnt match pattern");
             return false;
         }
         return true;
@@ -34,13 +34,13 @@ public class Validator {
 
     public static boolean isValid(String login, String password, String email){
         if(email == null || email.isEmpty()){
-            logger.error("email null or empty");
+            logger.info("email null or empty");
             return false;
         }
         Pattern patternEmail = Pattern.compile(EMAIL_PATTERN);
         Matcher matcher = patternEmail.matcher(email);
         if( !matcher.matches()){
-            logger.error("email doesnt match");
+            logger.debug("email doesnt match pattern");
             return false;
         }
         return isValid(login, password);

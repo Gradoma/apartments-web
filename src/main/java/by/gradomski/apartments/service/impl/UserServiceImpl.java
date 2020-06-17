@@ -6,10 +6,14 @@ import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.UserService;
 import by.gradomski.apartments.service.validator.Validator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
+    private static final Logger log = LogManager.getLogger();
+
     @Override
     public void signUp(String login, String password, String email) throws ServiceException {
         // TODO
@@ -27,12 +31,14 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         if(optionalUser.isEmpty()){
+            log.debug("incorrect user");
             return false;
         }
         User user = optionalUser.get();
         if (password.equals(user.getPassword())){
             return true;
         }
+        log.debug("incorrect password");
         return false;
     }
 }

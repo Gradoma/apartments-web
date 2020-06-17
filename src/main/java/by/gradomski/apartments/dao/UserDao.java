@@ -6,7 +6,7 @@ import by.gradomski.apartments.exception.DaoException;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserDao extends AbstractDao{
+public interface UserDao extends BaseDao {
     boolean add(User user) throws DaoException;
     List<User> findAll() throws DaoException;
     Optional<User> findById(long id) throws DaoException;

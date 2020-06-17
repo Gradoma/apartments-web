@@ -21,6 +21,7 @@ public class SignInCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+        log.debug("start execute method");
         String page;
         String login = request.getParameter(LOGIN);
         String password = request.getParameter(PASSWORD);
@@ -30,12 +31,14 @@ public class SignInCommand implements Command {
                 page = USER_PAGE;
             } else {
                 // TODO request.setAttribute()
+                log.info("incorrect login or password");
                 page = SIGN_IN;
             }
         }catch (ServiceException e){
             log.error(e);
             page = ERROR_PAGE;
         }
+        log.debug("return page: " + page);
         return page;
     }
 }

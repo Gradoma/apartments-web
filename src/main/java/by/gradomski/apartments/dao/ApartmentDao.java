@@ -4,7 +4,7 @@ import by.gradomski.apartments.entity.Apartment;
 
 import java.util.List;
 
-public interface ApartmentDao extends AbstractDao {
+public interface ApartmentDao extends BaseDao {
     boolean add(Apartment apartment);
     List<Apartment> findApartmentsByOwner(long id);
     List<Apartment> findApartmentsByTenant(long id);

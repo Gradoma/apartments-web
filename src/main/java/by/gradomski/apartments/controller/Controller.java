@@ -34,6 +34,7 @@ public class Controller extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
+        log.debug("start method processRequest");
         Optional<Command> optionalCommand = CommandProvider.defineCommand(request.getParameter("command"));
         String page;
         if(optionalCommand.isPresent()){
@@ -42,7 +43,8 @@ public class Controller extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher(page);
             dispatcher.forward(request, response);
         } else {
-            throw new UnsupportedOperationException("command: " + request.getParameter("command"));
+            log.error("incorrect command: " + request.getParameter("command"));
+            throw new UnsupportedOperationException();
         }
     }
 }

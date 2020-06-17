@@ -48,7 +48,6 @@ public class UserDaoImpl implements UserDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;

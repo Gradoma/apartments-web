@@ -5,7 +5,7 @@ import by.gradomski.apartments.exception.DaoException;
 
 import java.util.List;
 
-public interface RequestDao extends AbstractDao {
+public interface RequestDao extends BaseDao {
     boolean add(Request request) throws DaoException;
     List<Request> findAll() throws DaoException;
     List<Request> findByApplicant(long id) throws DaoException;
