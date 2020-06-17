@@ -13,11 +13,7 @@ public class SignInCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
-    private UserServiceImpl userService;
-
-    public SignInCommand(){
-        userService = new UserServiceImpl();
-    }
+    private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
     public String execute(HttpServletRequest request) {

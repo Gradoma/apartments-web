@@ -12,8 +12,17 @@ import org.apache.logging.log4j.Logger;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
-    // TODO(make singleton)
+    private static UserServiceImpl instance;
     private static final Logger log = LogManager.getLogger();
+
+    private UserServiceImpl(){}
+
+    public static UserServiceImpl getInstance(){
+        if(instance == null){
+            instance = new UserServiceImpl();
+        }
+        return instance;
+    }
 
     @Override
     public boolean signUp(String login, String password, String email) throws ServiceException {

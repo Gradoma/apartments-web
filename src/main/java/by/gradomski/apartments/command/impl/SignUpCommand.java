@@ -15,11 +15,7 @@ public class SignUpCommand implements Command {
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
-    private UserServiceImpl userService;
-
-    public SignUpCommand(){
-        userService = new UserServiceImpl();
-    }
+    private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
     public String execute(HttpServletRequest request) {
