@@ -19,7 +19,8 @@
     <input required name="password" placeholder="password"/>
     <input type="submit" name="button" value="Sign In"/>
 </form>
-<form action="${ pageContext.request.contextPath }/jsp/sign_up.jsp">
+<form action="control" method="get">
+    <input type="hidden" name="command" value="transition_to_sign_up">
     <input type="submit" name="button" value="Sign Up"/>
 </form>
 </html>

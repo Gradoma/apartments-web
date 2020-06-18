@@ -13,7 +13,7 @@
 <body>
 <h2>Sign Up, please!</h2>
 </body>
-<form name="Simple" action="${ pageContext.request.contextPath }/control" method="get">
+<form name="Simple" action="control" method="get">
     <input type="hidden" name="command" value="sign_up">
     <input required name="login" placeholder="login"/>
     <input required name="password" placeholder="password"/>
