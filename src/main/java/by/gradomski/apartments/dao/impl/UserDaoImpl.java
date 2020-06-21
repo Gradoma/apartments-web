@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
-    private static final String INSERT_NEW_USER = "INSERT INTO user (idRole, login, password, firstName, lastName, birthday," +
-            " gender, phone, photo, registrationDate, mailAddress) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_NEW_USER = "INSERT INTO user (idRole, login, password, photo, registrationDate, mailAddress) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_USERS = "SELECT idUser, idRole, login, password, firstName, lastName, birthday," +
             " gender, phone, photo, registrationDate, mailAddress FROM user";
     private static final String SELECT_USER_BY_ID = "SELECT idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
@@ -30,7 +29,8 @@ public class UserDaoImpl implements UserDao {
             " photo, registrationDate, mailAddress FROM user WHERE login=?";
     private static final String UPDATE_USER = "UPDATE user SET password=?, firstName=?, lastName=?, birthday=?, gender=?, phone=?," +
             " photo=?, mailAddress=? WHERE login=?";
-    private static final String UPDATE_USER_VISIBILITY_BY_ID = "UPDATE user SET visibility=FALSE WHERE idUser=?";
+    private static final String UPDATE_USER_VISIBILITY_BY_ID = "UPDATE user SET visibility=? WHERE idUser=?";
+    private static final String DEFAULT_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\def_user.jpg";
     private static UserDaoImpl instance;
 
     private UserDaoImpl(){}
@@ -58,16 +58,11 @@ public class UserDaoImpl implements UserDao {
             statement.setString(2, user.getLoginName());
             statement.setString(3, user.getPassword());
             //FIXME(delete null fields)
-            statement.setString(4, user.getFirstName());
-            statement.setString(5, user.getLastName());
-            statement.setLong(6, user.getBirthday().getTime());
-            statement.setString(7, user.getGender().toString());
-            statement.setString(8, user.getPhone());
-            File file = user.getPhoto();
+            File file = new File(DEFAULT_PHOTO_PATH);
             fileInputStream = new FileInputStream(file);
-            statement.setBinaryStream(9, fileInputStream, (int) file.length());
-            statement.setLong(10, user.getRegistrationDate().getTime());
-            statement.setString(11, user.getMail());
+            statement.setBinaryStream(4, fileInputStream, (int) file.length());
+            statement.setLong(5, user.getRegistrationDate().getTime());
+            statement.setString(6, user.getMail());
             statement.executeUpdate();
             flag = true;
         } catch (SQLException e){
@@ -150,7 +145,9 @@ public class UserDaoImpl implements UserDao {
                 long birthday = resultSet.getLong(UserTable.BIRTHDAY.getValue());
                 user.setBirthday(new Date(birthday));
                 String gender = resultSet.getString(UserTable.GENDER.getValue());
-                user.setGender(Gender.valueOf(gender));
+                if(gender != null){
+                    user.setGender(Gender.valueOf(gender));
+                }
                 user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
                 long registrationDate = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
                 user.setRegistrationDate(new Date(registrationDate));
@@ -192,7 +189,9 @@ public class UserDaoImpl implements UserDao {
                 long birthday = resultSet.getLong(UserTable.BIRTHDAY.getValue());
                 user.setBirthday(new Date(birthday));
                 String gender = resultSet.getString(UserTable.GENDER.getValue());
-                user.setGender(Gender.valueOf(gender));
+                if(gender != null){
+                    user.setGender(Gender.valueOf(gender));
+                }
                 user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
                 long registrationDate = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
                 user.setRegistrationDate(new Date(registrationDate));
@@ -256,7 +255,33 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement statement = null;
         try{
             statement = connection.prepareStatement(UPDATE_USER_VISIBILITY_BY_ID);
-            statement.setLong(1, id);
+            statement.setBoolean(1, false);
+            statement.setLong(2, id);
+            statement.executeUpdate();
+            flag = true;
+        } catch (SQLException e){
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean changeVisibilityById(long id) throws DaoException{
+        boolean flag = false;
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            //log
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        try{
+            statement = connection.prepareStatement(UPDATE_USER_VISIBILITY_BY_ID);
+            statement.setBoolean(1, true);
+            statement.setLong(2, id);
             statement.executeUpdate();
             flag = true;
         } catch (SQLException e){

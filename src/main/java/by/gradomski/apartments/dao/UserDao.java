@@ -13,5 +13,5 @@ public interface UserDao extends BaseDao {
     Optional<User> findByLogin(String login) throws DaoException;
     User update(User user) throws DaoException;
     boolean deleteById(long id) throws DaoException;
-
+    boolean changeVisibilityById(long id) throws DaoException;
 }
