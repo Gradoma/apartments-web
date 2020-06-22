@@ -2,6 +2,7 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.exception.ServiceException;
+import by.gradomski.apartments.mail.MailSender;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ public class SignUpCommand implements Command {
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
+    private static final String MAIL_SUBJECT = "Welcome! Confirm your address by this email";
     private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
@@ -37,6 +39,9 @@ public class SignUpCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
+        String mailText = "<b>Thanks for registration!</b><br><b>Please confirm your email address - click the link below</b><br><a href=\"jsp\\sign_in.jsp\" >Confirm email</a>";
+        MailSender sender = new MailSender(email, MAIL_SUBJECT, mailText);
+        sender.send();
         log.debug("return page: " + page);
         return page;
     }
