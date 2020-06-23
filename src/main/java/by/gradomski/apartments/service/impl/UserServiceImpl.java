@@ -64,10 +64,23 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         User user = optionalUser.get();
+        if(!user.isVisible()){
+            log.debug("email doesn't confirm or user has been deleted");
+            return false;
+        }
         if (password.equals(user.getPassword())){
             return true;
         }
         log.debug("incorrect password");
         return false;
+    }
+
+    @Override
+    public void activateUser(String login) throws ServiceException {
+        try {
+            UserDaoImpl.getInstance().changeVisibilityByLogin(login);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 }

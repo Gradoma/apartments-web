@@ -12,7 +12,8 @@ public enum UserTable {
     PHONE("phone"),
     PHOTO("photo"),
     REGISTRATION_DATE("registrationDate"),
-    MAIL_ADDRESS("mailAddress");
+    MAIL_ADDRESS("mailAddress"),
+    VISIBILITY("visibility");
 
     private String value;
 

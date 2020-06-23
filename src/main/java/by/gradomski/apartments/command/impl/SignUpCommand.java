@@ -16,7 +16,9 @@ public class SignUpCommand implements Command {
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
-    private static final String MAIL_SUBJECT = "Welcome! Confirm your address by this email";
+    private static final String EMAIL_SUBJECT = "Email address confirmation";
+    private static final String EMAIL_TEXT = "<b>Thanks for registration!</b><br><p>Please confirm your email address - click the link below</p>";
+    private static final String EMAIL_LINK = "<a href=http://localhost:8080/apartments_web_war/control?command=confirm_email&login=";
     private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
@@ -30,6 +32,9 @@ public class SignUpCommand implements Command {
             if (userService.signUp(login, password, email)) {
                 request.setAttribute("user", login);
                 page = SIGN_IN;
+                String emailBody = emailBodyCreator(login);
+                MailSender sender = new MailSender(email, EMAIL_SUBJECT, emailBody);
+                sender.send();
             } else {
                 // TODO request.setAttribute()
                 log.info("incorrect login or password");
@@ -39,10 +44,17 @@ public class SignUpCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
-        String mailText = "<b>Thanks for registration!</b><br><b>Please confirm your email address - click the link below</b><br><a href=\"jsp\\sign_in.jsp\" >Confirm email</a>";
-        MailSender sender = new MailSender(email, MAIL_SUBJECT, mailText);
-        sender.send();
         log.debug("return page: " + page);
         return page;
+    }
+
+    private String emailBodyCreator(String loginParameter){
+        StringBuilder builder = new StringBuilder();
+        builder.append(EMAIL_TEXT);
+        builder.append("<br>");
+        builder.append(EMAIL_LINK);
+        builder.append(loginParameter);
+        builder.append(">Confirm your email</a>");
+        return builder.toString();
     }
 }

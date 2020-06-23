@@ -22,14 +22,14 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
     private static final String INSERT_NEW_USER = "INSERT INTO user (idRole, login, password, photo, registrationDate, mailAddress) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_USERS = "SELECT idUser, idRole, login, password, firstName, lastName, birthday," +
-            " gender, phone, photo, registrationDate, mailAddress FROM user";
+            " gender, phone, photo, registrationDate, mailAddress, visibility FROM user";
     private static final String SELECT_USER_BY_ID = "SELECT idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
-            " photo, registrationDate, mailAddress FROM user WHERE idUser=?";
+            " photo, registrationDate, mailAddress, visibility FROM user WHERE idUser=?";
     private static final String SELECT_USER_BY_LOGIN = "SELECT idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
-            " photo, registrationDate, mailAddress FROM user WHERE login=?";
+            " photo, registrationDate, mailAddress, visibility FROM user WHERE login=?";
     private static final String UPDATE_USER = "UPDATE user SET password=?, firstName=?, lastName=?, birthday=?, gender=?, phone=?," +
             " photo=?, mailAddress=? WHERE login=?";
-    private static final String UPDATE_USER_VISIBILITY_BY_ID = "UPDATE user SET visibility=? WHERE idUser=?";
+    private static final String UPDATE_USER_VISIBILITY_BY_ID = "UPDATE user SET visibility=? WHERE login=?";
     private static final String DEFAULT_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\def_user.jpg";
     private static UserDaoImpl instance;
 
@@ -108,6 +108,7 @@ public class UserDaoImpl implements UserDao {
                 long registrationDate = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
                 user.setRegistrationDate(new Date(registrationDate));
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
+                user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
                 userList.add(user);
             }
         }catch (SQLException | IncorrectRoleException e){
@@ -152,6 +153,7 @@ public class UserDaoImpl implements UserDao {
                 long registrationDate = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
                 user.setRegistrationDate(new Date(registrationDate));
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
+                user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
             }
             if(user != null) optionalUser = Optional.of(user);
         } catch (SQLException | IncorrectRoleException e){
@@ -196,6 +198,7 @@ public class UserDaoImpl implements UserDao {
                 long registrationDate = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
                 user.setRegistrationDate(new Date(registrationDate));
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
+                user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
             }
             if(user != null) optionalUser = Optional.of(user);
         } catch (SQLException | IncorrectRoleException e){
@@ -269,7 +272,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean changeVisibilityById(long id) throws DaoException{
+    public boolean changeVisibilityByLogin(String login) throws DaoException{
         boolean flag = false;
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -281,7 +284,7 @@ public class UserDaoImpl implements UserDao {
         try{
             statement = connection.prepareStatement(UPDATE_USER_VISIBILITY_BY_ID);
             statement.setBoolean(1, true);
-            statement.setLong(2, id);
+            statement.setString(2, login);
             statement.executeUpdate();
             flag = true;
         } catch (SQLException e){
