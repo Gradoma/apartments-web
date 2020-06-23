@@ -26,7 +26,7 @@ public class SignInCommand implements Command {
                 request.setAttribute("user", login);
                 page = USER_PAGE;
             } else {
-                // TODO request.setAttribute()
+                request.setAttribute("errorSignInPass", "Incorrect login or password");
                 log.info("incorrect login or password");
                 page = SIGN_IN;
             }

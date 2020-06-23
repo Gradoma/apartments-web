@@ -18,7 +18,8 @@
 <form name="Simple" action="control" method="get">
     <input type="hidden" name="command" value="sign_in"/>
     <input required name="login" placeholder=<fmt:message key="label.login"/>>
-    <input required name="password" placeholder=<fmt:message key="label.password"/>>
+    <br/><input required name="password" placeholder=<fmt:message key="label.password"/>>
+        <br/> ${errorSignInPass} <br/>
     <input type="submit" name="button" value=<fmt:message key="label.submitButton"/>>
 </form>
 <form action="control" method="get">

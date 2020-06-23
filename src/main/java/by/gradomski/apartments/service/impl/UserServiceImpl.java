@@ -9,6 +9,8 @@ import by.gradomski.apartments.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
@@ -25,9 +27,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean signUp(String login, String password, String email) throws ServiceException {
-        if(!Validator.isValid(login, password, email)){
-            return false;
+    public Map<String, String> signUp(String login, String password, String email) throws ServiceException {
+        Map<String, String> resultMap = new HashMap<>();
+        String trueValue = "true";
+        String falseValue = "false";
+        resultMap.put("login", trueValue);
+        resultMap.put("loginUniq", trueValue);
+        resultMap.put("password", trueValue);
+        resultMap.put("email", trueValue);
+        resultMap = Validator.isValid(login, password, email, new HashMap<>());
+        if(resultMap.containsValue(falseValue)){
+            return resultMap;
         }
         Optional<User> optionalUser;
         try{
@@ -37,7 +47,8 @@ public class UserServiceImpl implements UserService {
         }
         if(optionalUser.isPresent()){
             log.debug("user with this login already exist");
-            return false;
+            resultMap.put("loginUniq", falseValue);
+            return resultMap;
         }
         User user = new User(login, password, email);
         try {
@@ -45,7 +56,7 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
-        return true;
+        return resultMap;
     }
 
     @Override
@@ -60,12 +71,12 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         if(optionalUser.isEmpty()){
-            log.debug("incorrect user");
+            log.debug("user wasn't found: " + login);
             return false;
         }
         User user = optionalUser.get();
         if(!user.isVisible()){
-            log.debug("email doesn't confirm or user has been deleted");
+            log.debug(login + " - email doesn't confirm or user has been deleted");
             return false;
         }
         if (password.equals(user.getPassword())){

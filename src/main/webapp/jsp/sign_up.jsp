@@ -16,8 +16,11 @@
 <form name="Simple" action="control" method="get">
     <input type="hidden" name="command" value="sign_up">
     <input required name="login" placeholder="login"/>
+        <br/> ${loginErrorMessage} <br/>
     <input required name="password" placeholder="password"/>
+        <br/> ${passErrorMessage} <br/>
     <input required name="email" placeholder="email"/>
+        <br/> ${emailErrorMessage} <br/>
     <input type="submit" name="button" value="Sign Up"/>
 </form>
 </html>
