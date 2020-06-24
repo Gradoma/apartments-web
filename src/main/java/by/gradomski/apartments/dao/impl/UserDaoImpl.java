@@ -208,6 +208,7 @@ public class UserDaoImpl implements UserDao {
                 user.setRegistrationDate(new Date(registrationDate));
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
                 user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
+                user.setPhoto(resultSet.getBytes(UserTable.PHOTO.getValue()));
             }
             if(user != null) optionalUser = Optional.of(user);
         } catch (SQLException | IncorrectRoleException e){
@@ -228,7 +229,7 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
-        FileInputStream fileInputStream = null;
+        InputStream inputStream = null;
         try{
             statement = connection.prepareStatement(UPDATE_USER);
             statement.setString(1, user.getPassword());
@@ -243,18 +244,20 @@ public class UserDaoImpl implements UserDao {
             if (user.getPhone() != null){
                 statement.setString(6, user.getPhone());
             }
-            File file = user.getPhoto();
-            fileInputStream = new FileInputStream(file);
-            statement.setBinaryStream(7, fileInputStream, (int) file.length());
+            if(user.getPhoto() != null){
+                byte[] photoBytes = user.getPhoto();
+                inputStream = new ByteArrayInputStream(photoBytes);
+                statement.setBinaryStream(7, inputStream, photoBytes.length);
+            }
 //            statement.setString(8, user.getMail()); TODO(add change of email)
-            statement.setString(9, user.getLoginName());
+            statement.setString(8, user.getLoginName());
             statement.executeUpdate();
         } catch (SQLException e){
             throw new DaoException(e);
-        } catch (FileNotFoundException e){
-            throw new DaoException("user photo problem: ", e);
+//        } catch (FileNotFoundException e){
+//            throw new DaoException("user photo problem: ", e);
         } finally {
-            close(fileInputStream);
+            close(inputStream);
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
@@ -319,7 +322,7 @@ public class UserDaoImpl implements UserDao {
                 e.printStackTrace();
             }
         } else {
-            // log
+            log.error("inputStream can't be closed: " + inputStream);
         }
     }
 }

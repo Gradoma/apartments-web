@@ -2,7 +2,9 @@ package by.gradomski.apartments.entity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 public class User {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -17,7 +19,7 @@ public class User {
     private Date birthday;
     private Gender gender;
     private String phone;
-    private File photo;
+    private byte[] photo;
     private boolean visibility;
 
     public User(){}
@@ -120,12 +122,12 @@ public class User {
         this.phone = phone;
     }
 
-    public File getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-    public void setPhoto(File photo) {
-        this.photo = photo;
+    public void setPhoto(byte[] photoBytes) {
+        this.photo = photoBytes;
     }
 
     public void setVisibility(boolean visibility) {
@@ -156,7 +158,7 @@ public class User {
         if (gender != user.gender) return false;
         if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
         if (visibility != user.visibility) return false;
-        return photo != null ? photo.equals(user.photo) : user.photo == null;
+        return Arrays.equals(photo, user.photo);
     }
 
     @Override
@@ -172,7 +174,7 @@ public class User {
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + (photo != null ? photo.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(photo);
         result = 31 * result + (visibility ? 1 : 0);
         return result;
     }
