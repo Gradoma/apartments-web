@@ -94,4 +94,30 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
     }
+
+    @Override
+    public User getUserByLogin(String login) throws ServiceException {
+        Optional<User> optionalUser;
+        try{
+            optionalUser = UserDaoImpl.getInstance().findByLogin(login);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        if(optionalUser.isEmpty()){
+            log.error("user wasn't found: " + login);
+            throw new ServiceException("user wasn't found: " + login);
+        }
+        return optionalUser.get();
+    }
+
+    @Override
+    public User updateUser(User user) throws ServiceException {
+        User updUser = null;
+        try {
+            updUser = UserDaoImpl.getInstance().update(user);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return updUser;
+    }
 }

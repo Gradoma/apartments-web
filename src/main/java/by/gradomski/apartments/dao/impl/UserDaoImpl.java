@@ -8,6 +8,8 @@ import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.IncorrectRoleException;
 import by.gradomski.apartments.pool.ConnectionPool;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.sql.Connection;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
+    private static final Logger log = LogManager.getLogger();
     private static final String INSERT_NEW_USER = "INSERT INTO user (idRole, login, password, photo, registrationDate, mailAddress) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_USERS = "SELECT idUser, idRole, login, password, firstName, lastName, birthday," +
             " gender, phone, photo, registrationDate, mailAddress, visibility FROM user";
@@ -28,7 +31,7 @@ public class UserDaoImpl implements UserDao {
     private static final String SELECT_USER_BY_LOGIN = "SELECT idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
             " photo, registrationDate, mailAddress, visibility FROM user WHERE login=?";
     private static final String UPDATE_USER = "UPDATE user SET password=?, firstName=?, lastName=?, birthday=?, gender=?, phone=?," +
-            " photo=?, mailAddress=? WHERE login=?";
+            " photo=? WHERE login=?";
     private static final String UPDATE_USER_VISIBILITY_BY_ID = "UPDATE user SET visibility=? WHERE login=?";
     private static final String DEFAULT_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\def_user.jpg";
     private static UserDaoImpl instance;
@@ -99,7 +102,9 @@ public class UserDaoImpl implements UserDao {
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
                 long birthday = resultSet.getLong(UserTable.BIRTHDAY.getValue());
-                user.setBirthday(new Date(birthday));
+                if(birthday != 0){
+                    user.setBirthday(new Date(birthday));
+                }
                 String gender = resultSet.getString(UserTable.GENDER.getValue());
                 if(gender != null){
                     user.setGender(Gender.valueOf(gender));
@@ -144,7 +149,9 @@ public class UserDaoImpl implements UserDao {
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
                 long birthday = resultSet.getLong(UserTable.BIRTHDAY.getValue());
-                user.setBirthday(new Date(birthday));
+                if(birthday != 0){
+                    user.setBirthday(new Date(birthday));
+                }
                 String gender = resultSet.getString(UserTable.GENDER.getValue());
                 if(gender != null){
                     user.setGender(Gender.valueOf(gender));
@@ -189,7 +196,9 @@ public class UserDaoImpl implements UserDao {
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
                 long birthday = resultSet.getLong(UserTable.BIRTHDAY.getValue());
-                user.setBirthday(new Date(birthday));
+                if(birthday != 0){
+                    user.setBirthday(new Date(birthday));
+                }
                 String gender = resultSet.getString(UserTable.GENDER.getValue());
                 if(gender != null){
                     user.setGender(Gender.valueOf(gender));
@@ -225,13 +234,19 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, user.getPassword());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
-            statement.setLong(4, user.getBirthday().getTime());
-            statement.setString(5, user.getGender().toString());
-            statement.setString(6, user.getPhone());
+            if (user.getBirthday() != null){
+                statement.setLong(4, user.getBirthday().getTime());
+            }
+            if (user.getGender() != null){
+                statement.setString(5, user.getGender().toString());
+            }
+            if (user.getPhone() != null){
+                statement.setString(6, user.getPhone());
+            }
             File file = user.getPhoto();
             fileInputStream = new FileInputStream(file);
             statement.setBinaryStream(7, fileInputStream, (int) file.length());
-            statement.setString(8, user.getMail());
+//            statement.setString(8, user.getMail()); TODO(add change of email)
             statement.setString(9, user.getLoginName());
             statement.executeUpdate();
         } catch (SQLException e){
