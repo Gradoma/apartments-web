@@ -15,7 +15,7 @@
 </head>
 <body>
     <h2><fmt:message key="label.body"/></h2>
-<form name="Simple" action="control" method="get">
+<form name="Simple" action="control" method="get"> <%--    change to POST--%>
     <input type="hidden" name="command" value="sign_in"/>
     <input required name="login" placeholder=<fmt:message key="label.login"/>><br/>
     <input required name="password" placeholder=<fmt:message key="label.password"/>>
