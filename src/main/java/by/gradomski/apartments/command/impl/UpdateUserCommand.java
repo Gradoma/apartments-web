@@ -33,7 +33,7 @@ public class UpdateUserCommand implements Command {
         String firstName = request.getParameter(FIRST_NAME);
         String lastName = request.getParameter(LAST_NAME);
         String phone = request.getParameter(PHONE);
-        String birthday = request.getParameter(BIRTHDAY);
+        String birthday = request.getParameter(BIRTHDAY); // TODO(add birthday update)
         User updatedUser = new User(login, password, null);
         updatedUser.setGender(gender);
         updatedUser.setFirstName(firstName);

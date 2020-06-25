@@ -30,9 +30,8 @@ public class UserDaoImpl implements UserDao {
             " photo, registrationDate, mailAddress, visibility FROM user WHERE idUser=?";
     private static final String SELECT_USER_BY_LOGIN = "SELECT idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
             " photo, registrationDate, mailAddress, visibility FROM user WHERE login=?";
-    private static final String UPDATE_USER = "UPDATE user SET password=?, firstName=?, lastName=?, birthday=?, gender=?, phone=?," +
-            " photo=? WHERE login=?";
-    private static final String UPDATE_USER_VISIBILITY_BY_ID = "UPDATE user SET visibility=? WHERE login=?";
+    private static final String UPDATE_USER_BY_LOGIN = "UPDATE user SET password=?, firstName=?, lastName=?, gender=?, phone=? WHERE login=?";
+    private static final String UPDATE_USER_VISIBILITY_BY_LOGIN = "UPDATE user SET visibility=? WHERE login=?";
     private static final String DEFAULT_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\def_user.jpg";
     private static UserDaoImpl instance;
 
@@ -229,35 +228,35 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
-        InputStream inputStream = null;
+//        InputStream inputStream = null;
         try{
-            statement = connection.prepareStatement(UPDATE_USER);
+            statement = connection.prepareStatement(UPDATE_USER_BY_LOGIN);
             statement.setString(1, user.getPassword());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
-            if (user.getBirthday() != null){
-                statement.setLong(4, user.getBirthday().getTime());
-            }
+//            if (user.getBirthday() != null){                          // TODO(add birthday update)
+//                statement.setLong(4, user.getBirthday().getTime());
+//            }
             if (user.getGender() != null){
-                statement.setString(5, user.getGender().toString());
+                statement.setString(4, user.getGender().toString());
             }
             if (user.getPhone() != null){
-                statement.setString(6, user.getPhone());
+                statement.setString(5, user.getPhone());
             }
-            if(user.getPhoto() != null){
-                byte[] photoBytes = user.getPhoto();
-                inputStream = new ByteArrayInputStream(photoBytes);
-                statement.setBinaryStream(7, inputStream, photoBytes.length);
-            }
+//            if(user.getPhoto() != null){                              // TODO(photo upd in separate method)
+//                byte[] photoBytes = user.getPhoto();
+//                inputStream = new ByteArrayInputStream(photoBytes);
+//                statement.setBinaryStream(7, inputStream, photoBytes.length);
+//            }
 //            statement.setString(8, user.getMail()); TODO(add change of email)
-            statement.setString(8, user.getLoginName());
+            statement.setString(6, user.getLoginName());
             statement.executeUpdate();
         } catch (SQLException e){
             throw new DaoException(e);
 //        } catch (FileNotFoundException e){
 //            throw new DaoException("user photo problem: ", e);
         } finally {
-            close(inputStream);
+//            close(inputStream);
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
@@ -275,7 +274,7 @@ public class UserDaoImpl implements UserDao {
         }
         PreparedStatement statement = null;
         try{
-            statement = connection.prepareStatement(UPDATE_USER_VISIBILITY_BY_ID);
+            statement = connection.prepareStatement(UPDATE_USER_VISIBILITY_BY_LOGIN);
             statement.setBoolean(1, false);
             statement.setLong(2, id);
             statement.executeUpdate();
@@ -300,7 +299,7 @@ public class UserDaoImpl implements UserDao {
         }
         PreparedStatement statement = null;
         try{
-            statement = connection.prepareStatement(UPDATE_USER_VISIBILITY_BY_ID);
+            statement = connection.prepareStatement(UPDATE_USER_VISIBILITY_BY_LOGIN);
             statement.setBoolean(1, true);
             statement.setString(2, login);
             statement.executeUpdate();
