@@ -31,6 +31,7 @@ public class UserDaoImpl implements UserDao {
     private static final String SELECT_USER_BY_LOGIN = "SELECT idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
             " photo, registrationDate, mailAddress, visibility FROM user WHERE login=?";
     private static final String UPDATE_USER_BY_LOGIN = "UPDATE user SET password=?, firstName=?, lastName=?, gender=?, phone=? WHERE login=?";
+    private static final String UPDATE_PHOTO_BY_LOGIN = "UPDATE user SET photo=? WHERE login=?";
     private static final String UPDATE_USER_VISIBILITY_BY_LOGIN = "UPDATE user SET visibility=? WHERE login=?";
     private static final String DEFAULT_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\def_user.jpg";
     private static UserDaoImpl instance;
@@ -261,6 +262,34 @@ public class UserDaoImpl implements UserDao {
             pool.releaseConnection(connection);
         }
         return user;                        // what return??
+    }
+
+    @Override
+    public boolean updatePhoto(InputStream inputStream, String login) throws DaoException {
+        boolean flag = false;
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            //log
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        try{
+            statement = connection.prepareStatement(UPDATE_PHOTO_BY_LOGIN);
+            statement.setBinaryStream(1, inputStream);
+            statement.setString(2, login);
+            int row = statement.executeUpdate();
+            if(row > 0){
+                flag = true;
+            }
+        } catch (SQLException e){
+            throw new DaoException(e);
+        } finally {
+            close(inputStream);
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return flag;
     }
 
     @Override

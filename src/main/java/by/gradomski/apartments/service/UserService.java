@@ -3,6 +3,7 @@ package by.gradomski.apartments.service;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 
+import java.io.InputStream;
 import java.util.Map;
 
 public interface UserService {
@@ -11,4 +12,5 @@ public interface UserService {
     void activateUser(String login) throws ServiceException;
     User getUserByLogin(String login) throws ServiceException;
     User updateUser(User user) throws ServiceException;
+    User updateUserPhoto(InputStream inputStream, String login) throws ServiceException;
 }

@@ -14,7 +14,6 @@
     <title>User Page</title>
 </head>
 <body>
-
 <h3>${user.getFirstName()} ${user.getLastName()}</h3><br/>
 <form name="Simple" action="control" method="get">
     <input type="hidden" name="command" value="transition_to_settings"/>

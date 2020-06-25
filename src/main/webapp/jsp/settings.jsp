@@ -15,6 +15,11 @@
 </head>
 <body>
     <h2>${greeting}</h2>
+    <form action="fileController" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" height="70">
+        <input type="hidden" name="login" value="${user.getLoginName()}"/>
+        <input type="submit" name="button" value=<fmt:message key="setting.browseButton"/>>
+    </form>
     <form name="Simple" action="control" method="get">
         <input type="hidden" name="command" value="update_user"/>
         <input type="hidden" name="login" value="${user.getLoginName()}"/>
