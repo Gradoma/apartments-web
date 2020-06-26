@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Optional;
 
 import static by.gradomski.apartments.command.PagePath.USER_SETTINGS;
@@ -38,6 +39,11 @@ public class FileController extends HttpServlet {
         try {
             User updatedUser = UserServiceImpl.getInstance().updateUserPhoto(inputStream, login);
             request.setAttribute("user", updatedUser);
+            response.setContentType("image/gif");
+            OutputStream os = response.getOutputStream();
+            os.write(updatedUser.getPhoto());
+            os.flush();
+            os.close();
             RequestDispatcher dispatcher = request.getRequestDispatcher(USER_SETTINGS);
             dispatcher.forward(request, response);
         } catch (ServiceException e) {
