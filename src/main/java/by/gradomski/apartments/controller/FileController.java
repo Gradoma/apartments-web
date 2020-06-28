@@ -38,14 +38,15 @@ public class FileController extends HttpServlet {
         }
         try {
             User updatedUser = UserServiceImpl.getInstance().updateUserPhoto(inputStream, login);
+            byte[] photoBytes = updatedUser.getPhoto();
             request.setAttribute("user", updatedUser);
-            response.setContentType("image/gif");
+            response.setContentLength(photoBytes.length);
             OutputStream os = response.getOutputStream();
-            os.write(updatedUser.getPhoto());
-            os.flush();
-            os.close();
-            RequestDispatcher dispatcher = request.getRequestDispatcher(USER_SETTINGS);
-            dispatcher.forward(request, response);
+            os.write(photoBytes);
+//            os.flush();
+//            os.close();
+//            RequestDispatcher dispatcher = request.getRequestDispatcher(USER_SETTINGS);
+//            dispatcher.forward(request, response);
         } catch (ServiceException e) {
             log.error("file upload failed: " + e);
             throw new UnsupportedOperationException(e);

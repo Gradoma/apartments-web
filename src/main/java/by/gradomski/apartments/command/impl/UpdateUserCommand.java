@@ -10,8 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
-import static by.gradomski.apartments.command.PagePath.USER_PAGE;
+import java.text.ParseException;
+
+import static by.gradomski.apartments.command.PagePath.*;
 
 public class UpdateUserCommand implements Command {
     private static final Logger log = LogManager.getLogger();
@@ -34,18 +35,19 @@ public class UpdateUserCommand implements Command {
         String lastName = request.getParameter(LAST_NAME);
         String phone = request.getParameter(PHONE);
         String birthday = request.getParameter(BIRTHDAY); // TODO(add birthday update)
-        User updatedUser = new User(login, password, null);
-        updatedUser.setGender(gender);
-        updatedUser.setFirstName(firstName);
-        updatedUser.setLastName(lastName);
-        updatedUser.setPhone(phone);
         try {
-            User afterAdding = userService.updateUser(updatedUser);
-            request.setAttribute("user", afterAdding);
+            User afterUpdating = userService.updateUser(login, password, gender, firstName, lastName, phone, birthday);
+            request.setAttribute("user", afterUpdating);
             page = USER_PAGE;
         }catch (ServiceException e){
-            log.error(e);
-            page = ERROR_PAGE;
+            if(e.getCause().getClass().equals(ParseException.class)){
+                log.debug("caused by: " + e.getCause());
+                request.setAttribute("errorBirthday", "Invalid birthday");
+                page = USER_SETTINGS;
+            } else {
+                log.error(e);
+                page = ERROR_PAGE;
+            }
         }
         log.debug("return page: " + page);
         return page;

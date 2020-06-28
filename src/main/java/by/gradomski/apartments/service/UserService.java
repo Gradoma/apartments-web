@@ -1,5 +1,6 @@
 package by.gradomski.apartments.service;
 
+import by.gradomski.apartments.entity.Gender;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 
@@ -11,6 +12,7 @@ public interface UserService {
     boolean signIn(String login, String password) throws ServiceException;
     void activateUser(String login) throws ServiceException;
     User getUserByLogin(String login) throws ServiceException;
-    User updateUser(User user) throws ServiceException;
+    User updateUser(String login, String password, Gender gender, String firstName,
+                    String lastName, String phone, String birthday) throws ServiceException;
     User updateUserPhoto(InputStream inputStream, String login) throws ServiceException;
 }

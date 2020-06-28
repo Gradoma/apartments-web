@@ -1,6 +1,7 @@
 package by.gradomski.apartments.service.impl;
 
 import by.gradomski.apartments.dao.impl.UserDaoImpl;
+import by.gradomski.apartments.entity.Gender;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
@@ -10,6 +11,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -112,7 +116,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(User user) throws ServiceException {
+    public User updateUser(String login, String password, Gender gender, String firstName,
+                           String lastName, String phone, String birthday) throws ServiceException {
+        User user = new User(login, password, null);
+        user.setGender(gender);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPhone(phone);
+        log.debug("birthday String: " + birthday);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        if(birthday != null){
+            Date bDay;
+            try {
+                bDay = format.parse(birthday);
+                log.debug("birthday Date: " + bDay);
+            } catch (ParseException e){
+                throw new ServiceException(e);
+            }
+            user.setBirthday(bDay);
+        }
         User updatedUser = null;
         try {
             updatedUser = UserDaoImpl.getInstance().update(user);

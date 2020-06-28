@@ -12,10 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +27,7 @@ public class UserDaoImpl implements UserDao {
             " photo, registrationDate, mailAddress, visibility FROM user WHERE idUser=?";
     private static final String SELECT_USER_BY_LOGIN = "SELECT idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
             " photo, registrationDate, mailAddress, visibility FROM user WHERE login=?";
-    private static final String UPDATE_USER_BY_LOGIN = "UPDATE user SET password=?, firstName=?, lastName=?, gender=?, phone=? WHERE login=?";
+    private static final String UPDATE_USER_BY_LOGIN = "UPDATE user SET password=?, firstName=?, lastName=?, birthday=?, gender=?, phone=? WHERE login=?";
     private static final String UPDATE_PHOTO_BY_LOGIN = "UPDATE user SET photo=? WHERE login=?";
     private static final String UPDATE_USER_VISIBILITY_BY_LOGIN = "UPDATE user SET visibility=? WHERE login=?";
     private static final String DEFAULT_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\def_user.jpg";
@@ -235,14 +232,19 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, user.getPassword());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
-//            if (user.getBirthday() != null){                          // TODO(add birthday update)
-//                statement.setLong(4, user.getBirthday().getTime());
-//            }
+            if (user.getBirthday() != null){                          // TODO(add birthday update)
+                log.debug("bDay in long: " + user.getBirthday().getTime());
+                statement.setLong(4, user.getBirthday().getTime());
+            } else {
+                statement.setNull(4, Types.BIGINT);
+            }
             if (user.getGender() != null){
-                statement.setString(4, user.getGender().toString());
+                statement.setString(5, user.getGender().toString());
             }
             if (user.getPhone() != null){
-                statement.setString(5, user.getPhone());
+                statement.setString(6, user.getPhone());
+            } else {
+                statement.setNull(6, Types.VARCHAR);
             }
 //            if(user.getPhoto() != null){                              // TODO(photo upd in separate method)
 //                byte[] photoBytes = user.getPhoto();
@@ -250,7 +252,7 @@ public class UserDaoImpl implements UserDao {
 //                statement.setBinaryStream(7, inputStream, photoBytes.length);
 //            }
 //            statement.setString(8, user.getMail()); TODO(add change of email)
-            statement.setString(6, user.getLoginName());
+            statement.setString(7, user.getLoginName());
             statement.executeUpdate();
         } catch (SQLException e){
             throw new DaoException(e);
