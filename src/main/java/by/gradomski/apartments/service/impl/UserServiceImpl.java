@@ -20,6 +20,7 @@ import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
     private static UserServiceImpl instance;
+    private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private static final Logger log = LogManager.getLogger();
 
     private UserServiceImpl(){}
@@ -124,7 +125,6 @@ public class UserServiceImpl implements UserService {
         user.setLastName(lastName);
         user.setPhone(phone);
         log.debug("birthday String: " + birthday);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         if(birthday != null){
             Date bDay;
             try {

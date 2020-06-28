@@ -232,7 +232,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(1, user.getPassword());
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
-            if (user.getBirthday() != null){                          // TODO(add birthday update)
+            if (user.getBirthday() != null){
                 log.debug("bDay in long: " + user.getBirthday().getTime());
                 statement.setLong(4, user.getBirthday().getTime());
             } else {

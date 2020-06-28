@@ -34,7 +34,7 @@ public class UpdateUserCommand implements Command {
         String firstName = request.getParameter(FIRST_NAME);
         String lastName = request.getParameter(LAST_NAME);
         String phone = request.getParameter(PHONE);
-        String birthday = request.getParameter(BIRTHDAY); // TODO(add birthday update)
+        String birthday = request.getParameter(BIRTHDAY);
         try {
             User afterUpdating = userService.updateUser(login, password, gender, firstName, lastName, phone, birthday);
             request.setAttribute("user", afterUpdating);
