@@ -28,7 +28,7 @@ import static by.gradomski.apartments.command.PagePath.USER_SETTINGS;
 @MultipartConfig(fileSizeThreshold = 1024*1024, maxFileSize = 1024*1024*5, maxRequestSize = 1024*1024*5*5)
 public class FileController extends HttpServlet {
     private static final Logger log = LogManager.getLogger(FileController.class);
-
+    //TODO(display image on page)
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         InputStream inputStream = null;
@@ -53,7 +53,7 @@ public class FileController extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
     }
 }
