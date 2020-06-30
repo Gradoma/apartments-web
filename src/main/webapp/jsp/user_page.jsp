@@ -7,18 +7,21 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="ru" scope="session" />
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<fmt:setLocale value="ru"/>
 <fmt:setBundle basename="prop.pagecontent" />
 <html>
 <head>
     <title>User Page</title>
 </head>
 <body>
+<c:import url="header.jsp"/>
 <h3>${user.getFirstName()} ${user.getLastName()}</h3><br/>
 <form name="Simple" action="control" method="get">
     <input type="hidden" name="command" value="transition_to_settings"/>
     <input type="hidden" name="login" value="${user.getLoginName()}"/>
     <input type="submit" name="button" value=<fmt:message key="main.settingsButton"/>>
 </form>
+<c:import url="footer.jsp"/>
 </body>
 </html>

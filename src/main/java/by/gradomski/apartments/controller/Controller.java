@@ -35,11 +35,14 @@ public class Controller extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException{
         log.debug("start method processRequest");
+        log.debug("comand parameter from request: " + request.getParameter("command"));
         Optional<Command> optionalCommand = CommandProvider.defineCommand(request.getParameter("command"));
         String page;
         if(optionalCommand.isPresent()){
             Command command = optionalCommand.get();
+            log.debug("command: " + command);
             page = command.execute(request);
+            log.debug("page: " + page);
             RequestDispatcher dispatcher = request.getRequestDispatcher(page);
             dispatcher.forward(request, response);
         } else {
