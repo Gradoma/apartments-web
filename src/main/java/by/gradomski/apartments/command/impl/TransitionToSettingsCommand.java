@@ -9,8 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
-import static by.gradomski.apartments.command.PagePath.USER_SETTINGS;
+import static by.gradomski.apartments.command.PagePath.*;
 
 public class TransitionToSettingsCommand implements Command {
     private static final Logger log = LogManager.getLogger();
@@ -20,14 +19,19 @@ public class TransitionToSettingsCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         String page;
-        try {
-            User user = userService.getUserByLogin(request.getParameter(LOGIN));
-            request.setAttribute("user", user);
+        if(request.getSession(false) != null){
             page = USER_SETTINGS;
-        } catch (ServiceException e) {
-            log.error(e);
-            page = ERROR_PAGE;
+        } else {
+            page = SIGN_IN;
         }
+//        try {
+//            User user = userService.getUserByLogin(request.getParameter(LOGIN));
+//            request.setAttribute("user", user);
+//            page = USER_SETTINGS;
+//        } catch (ServiceException e) {
+//            log.error(e);
+//            page = ERROR_PAGE;
+//        }
         return page;
     }
 }

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import java.text.ParseException;
 import java.time.DateTimeException;
@@ -28,30 +29,37 @@ public class UpdateUserCommand implements Command {
     private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request) { //TODO(filter for encoding)
+    public String execute(HttpServletRequest request) {
         String page;
-        String login = request.getParameter(LOGIN);
-        String password = request.getParameter(PASSWORD);
-        Gender gender = Gender.valueOf(request.getParameter(GENDER));
-        String firstName = request.getParameter(FIRST_NAME);
-        log.debug("firstName: " + firstName);
-        String lastName = request.getParameter(LAST_NAME);
-        log.debug("lastName: " + lastName);
-        String phone = request.getParameter(PHONE);
-        String birthday = request.getParameter(BIRTHDAY);
-        try {
-            User afterUpdating = userService.updateUser(login, password, gender, firstName, lastName, phone, birthday);
-            request.setAttribute("user", afterUpdating);
-            page = USER_PAGE;
-        }catch (ServiceException e){
-            //TODO(remove ParseException when replace Date to LocalDate)
-            if(e.getCause().getClass().equals(ParseException.class) || e.getCause().getClass().equals(DateTimeParseException.class)){
-                log.debug("caused by: " + e.getCause());
-                request.setAttribute("errorBirthday", "Invalid birthday");
-                page = USER_SETTINGS;
-            } else {
-                log.error(e);
-                page = ERROR_PAGE;
+        HttpSession session = request.getSession(false);
+        if(session == null){
+            log.info("session timed out");
+            page = SIGN_IN;
+        } else {
+            String login = request.getParameter(LOGIN);
+            String password = request.getParameter(PASSWORD);
+            Gender gender = Gender.valueOf(request.getParameter(GENDER));
+            String firstName = request.getParameter(FIRST_NAME);
+            log.debug("firstName: " + firstName);
+            String lastName = request.getParameter(LAST_NAME);
+            log.debug("lastName: " + lastName);
+            String phone = request.getParameter(PHONE);
+            String birthday = request.getParameter(BIRTHDAY);
+            try {
+                User afterUpdating = userService.updateUser(login, password, gender, firstName, lastName, phone, birthday);
+//            request.setAttribute("user", afterUpdating);
+                session.setAttribute("user", afterUpdating);
+                page = USER_PAGE;
+            } catch (ServiceException e) {
+                //TODO(remove ParseException when replace Date to LocalDate)
+                if (e.getCause().getClass().equals(ParseException.class) || e.getCause().getClass().equals(DateTimeParseException.class)) {
+                    log.debug("caused by: " + e.getCause());
+                    request.setAttribute("errorBirthday", "Invalid birthday");
+                    page = USER_SETTINGS;
+                } else {
+                    log.error(e);
+                    page = ERROR_PAGE;
+                }
             }
         }
         log.debug("return page: " + page);

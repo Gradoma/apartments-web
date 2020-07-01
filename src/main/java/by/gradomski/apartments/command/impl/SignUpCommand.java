@@ -17,6 +17,7 @@ import static by.gradomski.apartments.command.PagePath.*;
 public class SignUpCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String LOGIN = "login";
+    private static final String UNIQ_LOGIN = "loginUniq";
     private static final String PASSWORD = "password";
     private static final String EMAIL = "email";
     private static final String EMAIL_SUBJECT = "Email address confirmation";
@@ -36,7 +37,7 @@ public class SignUpCommand implements Command {
         try {
             Map<String, String> registrationResult = userService.signUp(login, password, email);
             if (!registrationResult.containsValue(FALSE)) {
-                request.setAttribute("user", login);
+//                request.setAttribute("user", login);
                 page = SIGN_IN;
                 String emailBody = emailBodyCreator(login);
                 MailSender sender = new MailSender(email, EMAIL_SUBJECT, emailBody);
@@ -56,7 +57,7 @@ public class SignUpCommand implements Command {
                         log.debug("incorrect email: " + email);
                         request.setAttribute("emailErrorMessage","Incorrect email, check again");
                         break;
-                    case "loginUniq":
+                    case UNIQ_LOGIN:
                         log.debug(login + " - user already exist");
                         request.setAttribute("loginErrorMessage","User with this login already exist");
                         break;

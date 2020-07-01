@@ -8,8 +8,11 @@
 
 <!--<web-app>-->
   <display-name>Archetype Created Web Application</display-name>
-<!--  <error-page>-->
-<!--    <error-code>404</error-code>-->
-<!--    <location>/jsp/errors/error404.jsp</location>-->
-<!--  </error-page>-->
+  <error-page>
+    <error-code>404</error-code>
+    <location>/jsp/errors/error404.jsp</location>
+  </error-page>
+  <session-config>
+    <session-timeout>1</session-timeout>
+  </session-config>
 </web-app>

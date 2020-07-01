@@ -40,7 +40,8 @@ public class FileController extends HttpServlet {
         try {
             User updatedUser = UserServiceImpl.getInstance().updateUserPhoto(inputStream, login);
 //            byte[] photoBytes = updatedUser.getPhoto();
-            request.setAttribute("user", updatedUser);
+//            request.setAttribute("user", updatedUser);
+            request.getSession().setAttribute("user", updatedUser);
 //            response.setContentLength(photoBytes.length);
 //            OutputStream os = response.getOutputStream();
 //            os.write(photoBytes);

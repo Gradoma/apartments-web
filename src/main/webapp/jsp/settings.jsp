@@ -10,6 +10,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="ru" scope="session" />
 <fmt:setBundle basename="prop.pagecontent" />
+<c:set var="userGender" value="${user.getGender()}"/>
+<c:set var="male" value="MALE"/>
+<c:set var="female" value="FEMALE"/>
 <html>
 <head>
     <title>Settings</title>
@@ -29,8 +32,8 @@
         <fmt:message key="label.password"/> : <input required name="password" value="${user.getPassword()}"><br/>
         <fmt:message key="setting.firstName"/> : <input required name="firstName" value="${user.getFirstName()}"><br/>
         <fmt:message key="setting.lastName"/> : <input required name="lastName" value="${user.getLastName()}"><br/>
-        <fmt:message key="setting.gender"/> : <input type="radio" name="gender" value="FEMALE" checked/><fmt:message key="setting.female"/>
-        <input type="radio" name="gender" value="MALE" /><fmt:message key="setting.male"/><br/>
+        <fmt:message key="setting.gender"/> : <input type="radio" name="gender" value="FEMALE" ${userGender eq female ? 'checked' : ''}/><fmt:message key="setting.female"/>
+        <input type="radio" name="gender" value="MALE" ${userGender eq male ? 'checked' : ''}/><fmt:message key="setting.male"/><br/>
         <fmt:message key="setting.phone"/> : <input name="phone" value="${user.getPhone()}"><br/>
         <fmt:message key="setting.birthday"/> : <input type="date" name="birthday" >
         <br/> ${errorBirthday} <br/>

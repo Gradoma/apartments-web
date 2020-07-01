@@ -25,7 +25,7 @@ public class SignInCommand implements Command {
         try {
             if (userService.signIn(login, password)) {
                 User user = userService.getUserByLogin(login);
-                request.setAttribute("user", user);
+                request.getSession().setAttribute("user", user);
                 if(user.getFirstName() != null & user.getLastName() != null){
                     page = USER_PAGE;
                 } else {
