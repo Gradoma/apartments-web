@@ -3,6 +3,7 @@ package by.gradomski.apartments.controller;
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.command.CommandProvider;
 import by.gradomski.apartments.entity.User;
+import by.gradomski.apartments.exception.ImageValidationException;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -38,15 +39,15 @@ public class FileController extends HttpServlet {
         }
         try {
             User updatedUser = UserServiceImpl.getInstance().updateUserPhoto(inputStream, login);
-            byte[] photoBytes = updatedUser.getPhoto();
+//            byte[] photoBytes = updatedUser.getPhoto();
             request.setAttribute("user", updatedUser);
-            response.setContentLength(photoBytes.length);
-            OutputStream os = response.getOutputStream();
-            os.write(photoBytes);
+//            response.setContentLength(photoBytes.length);
+//            OutputStream os = response.getOutputStream();
+//            os.write(photoBytes);
 //            os.flush();
 //            os.close();
-//            RequestDispatcher dispatcher = request.getRequestDispatcher(USER_SETTINGS);
-//            dispatcher.forward(request, response);
+            RequestDispatcher dispatcher = request.getRequestDispatcher(USER_SETTINGS);
+            dispatcher.forward(request, response);
         } catch (ServiceException e) {
             log.error("file upload failed: " + e);
             throw new UnsupportedOperationException(e);

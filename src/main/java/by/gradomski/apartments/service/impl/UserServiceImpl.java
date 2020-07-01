@@ -4,12 +4,15 @@ import by.gradomski.apartments.dao.impl.UserDaoImpl;
 import by.gradomski.apartments.entity.Gender;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
+import by.gradomski.apartments.exception.ImageValidationException;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.UserService;
+import by.gradomski.apartments.service.validator.ImageValidator;
 import by.gradomski.apartments.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -164,9 +167,13 @@ public class UserServiceImpl implements UserService {
         }
         Optional<User> optionalUser;
         try {
+            if(!ImageValidator.isValid(inputStream)){
+                throw new ImageValidationException();
+            }
+            log.debug("image validation: success");
             boolean updateResult = UserDaoImpl.getInstance().updatePhoto(inputStream, login);
             optionalUser = UserDaoImpl.getInstance().findByLogin(login);
-        } catch (DaoException e) {
+        } catch (DaoException | ImageValidationException e) {
             throw new ServiceException(e);
         }
         if(optionalUser.isEmpty()){
