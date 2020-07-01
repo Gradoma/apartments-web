@@ -218,7 +218,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User update(User user) throws DaoException{
+    public User update(User user) throws DaoException{      //TODO(update every field in separate statement; here use transaction)
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){

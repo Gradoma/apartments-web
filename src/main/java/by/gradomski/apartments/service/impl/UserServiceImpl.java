@@ -13,6 +13,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -118,17 +121,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(String login, String password, Gender gender, String firstName,
-                           String lastName, String phone, String birthday) throws ServiceException {
+                           String lastName, String phone, String birthdayString) throws ServiceException {
         User user = new User(login, password, null);
         user.setGender(gender);
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPhone(phone);
-        log.debug("birthday String: " + birthday);
-        if(birthday != null){
+        log.debug("birthday String: " + birthdayString);
+        if(birthdayString != null && !birthdayString.isBlank()){
+            LocalDate today = LocalDate.now();
+            try {
+                LocalDate localBirthday = LocalDate.parse(birthdayString);
+                if (today.isBefore(localBirthday)) {
+                    log.debug("invalid birthDay: earlier than today");
+                    throw new DateTimeParseException("invalid birthday", birthdayString, 0);        // TODO(fix Exception chain)
+                }
+            } catch (DateTimeParseException pEx){
+                throw new ServiceException(pEx);
+            }
             Date bDay;
             try {
-                bDay = format.parse(birthday);
+                bDay = format.parse(birthdayString);            // TODO(replace ALL Date to LocalDate in entities and convert to milis id DAO)
                 log.debug("birthday Date: " + bDay);
             } catch (ParseException e){
                 throw new ServiceException(e);

@@ -17,6 +17,7 @@
 <body>
 <c:import url="header.jsp"/>
 <h3>${user.getFirstName()} ${user.getLastName()}</h3><br/>
+<h4>${pageContext.request.characterEncoding}</h4>
 <form name="Simple" action="control" method="get">
     <input type="hidden" name="command" value="transition_to_settings"/>
     <input type="hidden" name="login" value="${user.getLoginName()}"/>
