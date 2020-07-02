@@ -15,6 +15,7 @@ import java.io.*;
 import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -63,7 +64,9 @@ public class UserDaoImpl implements UserDao {
             File file = new File(DEFAULT_PHOTO_PATH);
             fileInputStream = new FileInputStream(file);
             statement.setBinaryStream(4, fileInputStream, (int) file.length());
-            statement.setLong(5, user.getRegistrationDate().getTime());
+            Instant instant = user.getRegistrationDate().atZone(ZoneId.systemDefault()).toInstant();
+            long registrationMillis = instant.toEpochMilli();
+            statement.setLong(5, registrationMillis);
             statement.setString(6, user.getMail());
             statement.executeUpdate();
             flag = true;
@@ -111,8 +114,9 @@ public class UserDaoImpl implements UserDao {
                     user.setGender(Gender.valueOf(gender));
                 }
                 user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
-                long registrationDate = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
-                user.setRegistrationDate(new Date(registrationDate));
+                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
+                LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                user.setRegistrationDate(registrationDate);
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
                 user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
                 userList.add(user);
@@ -160,8 +164,9 @@ public class UserDaoImpl implements UserDao {
                     user.setGender(Gender.valueOf(gender));
                 }
                 user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
-                long registrationDate = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
-                user.setRegistrationDate(new Date(registrationDate));
+                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
+                LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                user.setRegistrationDate(registrationDate);
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
                 user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
             }
@@ -209,8 +214,9 @@ public class UserDaoImpl implements UserDao {
                     user.setGender(Gender.valueOf(gender));
                 }
                 user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
-                long registrationDate = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
-                user.setRegistrationDate(new Date(registrationDate));
+                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
+                LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                user.setRegistrationDate(registrationDate);
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
                 user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
                 user.setPhoto(resultSet.getBytes(UserTable.PHOTO.getValue()));

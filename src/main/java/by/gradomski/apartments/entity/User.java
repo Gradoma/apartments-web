@@ -3,6 +3,7 @@ package by.gradomski.apartments.entity;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
@@ -14,7 +15,7 @@ public class User {
     private String password;
     private Role role;
     private String mail;
-    private Date registrationDate;
+    private LocalDateTime registrationDate;
     private String firstName;
     private String lastName;
     private LocalDate birthday;
@@ -32,7 +33,7 @@ public class User {
         this.password = password;
         this.mail = mail;
         this.role = role;
-        this.registrationDate = new Date();
+        this.registrationDate = LocalDateTime.now();
     }
 
     public long getId() {
@@ -67,11 +68,11 @@ public class User {
         this.mail = mail;
     }
 
-    public Date getRegistrationDate() {
+    public LocalDateTime getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
+    public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
     }
 

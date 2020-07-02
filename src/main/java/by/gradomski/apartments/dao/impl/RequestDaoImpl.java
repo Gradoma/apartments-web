@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
@@ -103,8 +104,9 @@ public class RequestDaoImpl implements RequestDao {
                     user.setGender(Gender.valueOf(gender));
                 }
                 user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
-                long registrationDate = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
-                user.setRegistrationDate(new Date(registrationDate));
+                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
+                LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                user.setRegistrationDate(registrationDate);
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
 
                 Apartment apartment = new Apartment();
