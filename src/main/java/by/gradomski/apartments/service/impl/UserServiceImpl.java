@@ -134,24 +134,17 @@ public class UserServiceImpl implements UserService {
         if(birthdayString != null && !birthdayString.isBlank()){
             LocalDate today = LocalDate.now();
             try {
-                LocalDate localBirthday = LocalDate.parse(birthdayString);
-                if (today.isBefore(localBirthday)) {
+                LocalDate birthday = LocalDate.parse(birthdayString);
+                if (today.isBefore(birthday)) {
                     log.debug("invalid birthDay: earlier than today");
-                    throw new DateTimeParseException("invalid birthday", birthdayString, 0);        // TODO(fix Exception chain)
+                    throw new DateTimeParseException("invalid birthday", birthdayString, 0);
                 }
+                user.setBirthday(birthday);
             } catch (DateTimeParseException pEx){
                 throw new ServiceException(pEx);
             }
-            Date bDay;
-            try {
-                bDay = format.parse(birthdayString);            // TODO(replace ALL Date to LocalDate in entities and convert to milis id DAO)
-                log.debug("birthday Date: " + bDay);
-            } catch (ParseException e){
-                throw new ServiceException(e);
-            }
-            user.setBirthday(bDay);
         }
-        User updatedUser = null;
+        User updatedUser;
         try {
             updatedUser = UserDaoImpl.getInstance().update(user);
         } catch (DaoException e) {

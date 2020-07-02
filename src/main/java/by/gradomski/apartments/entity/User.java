@@ -2,6 +2,7 @@ package by.gradomski.apartments.entity;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Objects;
@@ -16,7 +17,7 @@ public class User {
     private Date registrationDate;
     private String firstName;
     private String lastName;
-    private Date birthday;
+    private LocalDate birthday;
     private Gender gender;
     private String phone;
     private byte[] photo;
@@ -98,11 +99,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public Date getBirthday() {
+    public LocalDate getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(LocalDate birthday) {
         this.birthday = birthday;
     }
 

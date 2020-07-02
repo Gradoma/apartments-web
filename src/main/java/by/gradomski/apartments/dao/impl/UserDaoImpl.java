@@ -13,6 +13,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.sql.*;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,7 +60,6 @@ public class UserDaoImpl implements UserDao {
             statement.setInt(1, user.getRole().getValue());
             statement.setString(2, user.getLoginName());
             statement.setString(3, user.getPassword());
-            //FIXME(delete null fields)
             File file = new File(DEFAULT_PHOTO_PATH);
             fileInputStream = new FileInputStream(file);
             statement.setBinaryStream(4, fileInputStream, (int) file.length());
@@ -78,7 +80,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> findAll() throws DaoException{             // add photo!!!
+    public List<User> findAll() throws DaoException{             // TODO(add photo!!!)
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -98,9 +100,11 @@ public class UserDaoImpl implements UserDao {
                 user.setPassword(resultSet.getString(UserTable.PASSWORD.getValue()));
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
-                long birthday = resultSet.getLong(UserTable.BIRTHDAY.getValue());
-                if(birthday != 0){
-                    user.setBirthday(new Date(birthday));
+                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY.getValue());
+                if(birthdayMillis != 0){
+                    LocalDate birthday =
+                            Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                    user.setBirthday(birthday);
                 }
                 String gender = resultSet.getString(UserTable.GENDER.getValue());
                 if(gender != null){
@@ -145,9 +149,11 @@ public class UserDaoImpl implements UserDao {
                 user.setPassword(resultSet.getString(UserTable.PASSWORD.getValue()));
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
-                long birthday = resultSet.getLong(UserTable.BIRTHDAY.getValue());
-                if(birthday != 0){
-                    user.setBirthday(new Date(birthday));
+                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY.getValue());
+                if(birthdayMillis != 0){
+                    LocalDate birthday =
+                            Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                    user.setBirthday(birthday);
                 }
                 String gender = resultSet.getString(UserTable.GENDER.getValue());
                 if(gender != null){
@@ -192,9 +198,11 @@ public class UserDaoImpl implements UserDao {
                 user.setPassword(resultSet.getString(UserTable.PASSWORD.getValue()));
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
-                long birthday = resultSet.getLong(UserTable.BIRTHDAY.getValue());
-                if(birthday != 0){
-                    user.setBirthday(new Date(birthday));
+                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY.getValue());
+                if(birthdayMillis != 0){
+                    LocalDate birthday =
+                            Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                    user.setBirthday(birthday);
                 }
                 String gender = resultSet.getString(UserTable.GENDER.getValue());
                 if(gender != null){
@@ -218,7 +226,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User update(User user) throws DaoException{      //TODO(update every field in separate statement; here use transaction)
+    public User update(User user) throws DaoException{
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -233,8 +241,10 @@ public class UserDaoImpl implements UserDao {
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
             if (user.getBirthday() != null){
-                log.debug("bDay in long: " + user.getBirthday().getTime());
-                statement.setLong(4, user.getBirthday().getTime());
+                Instant instant = user.getBirthday().atStartOfDay(ZoneId.systemDefault()).toInstant();
+                long birthdayMillis = instant.toEpochMilli();
+                log.debug("bDay in long: " + birthdayMillis);
+                statement.setLong(4, birthdayMillis);
             } else {
                 statement.setNull(4, Types.BIGINT);
             }

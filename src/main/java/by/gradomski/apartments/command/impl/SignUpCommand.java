@@ -37,7 +37,6 @@ public class SignUpCommand implements Command {
         try {
             Map<String, String> registrationResult = userService.signUp(login, password, email);
             if (!registrationResult.containsValue(FALSE)) {
-//                request.setAttribute("user", login);
                 page = SIGN_IN;
                 String emailBody = emailBodyCreator(login);
                 MailSender sender = new MailSender(email, EMAIL_SUBJECT, emailBody);

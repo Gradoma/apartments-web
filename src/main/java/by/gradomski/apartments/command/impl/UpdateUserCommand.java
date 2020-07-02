@@ -47,12 +47,10 @@ public class UpdateUserCommand implements Command {
             String birthday = request.getParameter(BIRTHDAY);
             try {
                 User afterUpdating = userService.updateUser(login, password, gender, firstName, lastName, phone, birthday);
-//            request.setAttribute("user", afterUpdating);
                 session.setAttribute("user", afterUpdating);
                 page = USER_PAGE;
             } catch (ServiceException e) {
-                //TODO(remove ParseException when replace Date to LocalDate)
-                if (e.getCause().getClass().equals(ParseException.class) || e.getCause().getClass().equals(DateTimeParseException.class)) {
+                if (e.getCause().getClass().equals(DateTimeParseException.class)) {
                     log.debug("caused by: " + e.getCause());
                     request.setAttribute("errorBirthday", "Invalid birthday");
                     page = USER_SETTINGS;

@@ -14,6 +14,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -89,8 +92,12 @@ public class RequestDaoImpl implements RequestDao {
                 user.setPassword(resultSet.getString(UserTable.PASSWORD.getValue()));
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
-                long birthday = resultSet.getLong(UserTable.BIRTHDAY.getValue());
-                user.setBirthday(new Date(birthday));
+                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY.getValue());
+                if(birthdayMillis != 0){
+                    LocalDate birthday =
+                            Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                    user.setBirthday(birthday);
+                }
                 String gender = resultSet.getString(UserTable.GENDER.getValue());
                 if(gender != null){
                     user.setGender(Gender.valueOf(gender));

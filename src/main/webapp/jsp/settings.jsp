@@ -35,7 +35,7 @@
         <fmt:message key="setting.gender"/> : <input type="radio" name="gender" value="FEMALE" ${userGender eq female ? 'checked' : ''}/><fmt:message key="setting.female"/>
         <input type="radio" name="gender" value="MALE" ${userGender eq male ? 'checked' : ''}/><fmt:message key="setting.male"/><br/>
         <fmt:message key="setting.phone"/> : <input name="phone" value="${user.getPhone()}"><br/>
-        <fmt:message key="setting.birthday"/> : <input type="date" name="birthday" >
+        <fmt:message key="setting.birthday"/> : <input type="date" name="birthday" value="${user.getBirthday()}">
         <br/> ${errorBirthday} <br/>
         <input type="submit" name="button" value=<fmt:message key="setting.saveButton"/>>
     </form>

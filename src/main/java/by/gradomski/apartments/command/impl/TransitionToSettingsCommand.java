@@ -24,14 +24,6 @@ public class TransitionToSettingsCommand implements Command {
         } else {
             page = SIGN_IN;
         }
-//        try {
-//            User user = userService.getUserByLogin(request.getParameter(LOGIN));
-//            request.setAttribute("user", user);
-//            page = USER_SETTINGS;
-//        } catch (ServiceException e) {
-//            log.error(e);
-//            page = ERROR_PAGE;
-//        }
         return page;
     }
 }
