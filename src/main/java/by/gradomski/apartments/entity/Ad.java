@@ -1,6 +1,7 @@
 package by.gradomski.apartments.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Ad {
@@ -9,7 +10,7 @@ public class Ad {
     private BigDecimal price;
     private Apartment apartment;
     private User author;
-    private Date creationDate;
+    private LocalDateTime creationDate;
     private boolean visibility;
 
     public Ad(){};
@@ -19,7 +20,7 @@ public class Ad {
         this.author = author;
         this.price = price;
         this.apartment = apartment;
-        creationDate = new Date();
+        creationDate = LocalDateTime.now();
     }
 
     public long getId() {
@@ -62,11 +63,11 @@ public class Ad {
         this.author = author;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -104,5 +105,27 @@ public class Ad {
         result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
         result = 31 * result + (visibility ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(this.getClass().getName());
+        builder.append(": ");
+        builder.append("id=");
+        builder.append(id);
+        builder.append(", title=");
+        builder.append(title);
+        builder.append(", price=");
+        builder.append(price);
+        builder.append(", \napartmant=");
+        builder.append(apartment);
+        builder.append(", \nauthor=");
+        builder.append(author);
+        builder.append(", creationDate=");
+        builder.append(creationDate);
+        builder.append(", visibility=");
+        builder.append(visibility);
+        return builder.toString();
     }
 }

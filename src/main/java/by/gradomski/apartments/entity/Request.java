@@ -1,6 +1,8 @@
 package by.gradomski.apartments.entity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Request {
@@ -9,18 +11,18 @@ public class Request {
     private User applicant;
     private Apartment apartment;
     private String description;
-    private Date expectedDate;
+    private LocalDate expectedDate;
     private RequestStatus status;
-    private Date creationDate;
+    private LocalDateTime creationDate;
 
     public Request(){};
-    public Request(long id, User applicant, Apartment apartment, Date expectedDate){
+    public Request(long id, User applicant, Apartment apartment, LocalDate expectedDate){
         this.id = id;
         this.applicant = applicant;
         this.apartment = apartment;
         this.expectedDate = expectedDate;
         status = RequestStatus.CREATED;
-        creationDate = new Date();
+        creationDate = LocalDateTime.now();
     }
 
     public long getId() {
@@ -55,11 +57,11 @@ public class Request {
         this.description = description;
     }
 
-    public Date getExpectedDate() {
+    public LocalDate getExpectedDate() {
         return expectedDate;
     }
 
-    public void setExpectedDate(Date expectedDate) {
+    public void setExpectedDate(LocalDate expectedDate) {
         this.expectedDate = expectedDate;
     }
 
@@ -71,11 +73,11 @@ public class Request {
         this.status = status;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 

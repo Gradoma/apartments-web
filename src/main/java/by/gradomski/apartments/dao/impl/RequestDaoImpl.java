@@ -58,9 +58,13 @@ public class RequestDaoImpl implements RequestDao {
             statement = connection.prepareStatement(INSERT_NEW_REQUEST);
             statement.setLong(1, request.getApplicant().getId());
             statement.setLong(2, request.getApartment().getId());
-            statement.setLong(3, request.getExpectedDate().getTime());
+            Instant expectedInstant = request.getExpectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
+            long expectedMillis = expectedInstant.toEpochMilli();
+            statement.setLong(3, expectedMillis);
             statement.setString(4, request.getDescription());
-            statement.setLong(5, request.getCreationDate().getTime());
+            Instant creationInstant = request.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
+            long creationMillis = expectedInstant.toEpochMilli();
+            statement.setLong(5, creationMillis);
             statement.executeUpdate();
             flag = true;
         } catch (SQLException e){
@@ -122,10 +126,14 @@ public class RequestDaoImpl implements RequestDao {
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST.getValue()));
                 request.setApplicant(user);
                 request.setApartment(apartment);
-                long expectedDate = resultSet.getLong(RequestTable.EXPECTED_DATE.getValue());
-                request.setExpectedDate(new Date(expectedDate));
-                long creationDate = resultSet.getLong(RequestTable.CREATION_DATE.getValue());
-                request.setCreationDate(new Date(creationDate));
+                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE.getValue());
+                LocalDate expectedDate =
+                        Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                request.setExpectedDate(expectedDate);
+                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE.getValue());
+                LocalDateTime creationDate =
+                        Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                request.setCreationDate(creationDate);
                 request.setDescription(resultSet.getString(RequestTable.DESCRIPTION.getValue()));
                 long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST.getValue());
                 request.setStatus(RequestStatus.getByValue(statusId));
@@ -159,10 +167,14 @@ public class RequestDaoImpl implements RequestDao {
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST.getValue()));
                 request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT.getValue(), User.class));
                 request.setApartment(resultSet.getObject(RequestTable.ID_APARTMENT.getValue(), Apartment.class));
-                long expectedDate = resultSet.getLong(RequestTable.EXPECTED_DATE.getValue());
-                request.setExpectedDate(new Date(expectedDate));
-                long creationDate = resultSet.getLong(RequestTable.CREATION_DATE.getValue());
-                request.setCreationDate(new Date(creationDate));
+                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE.getValue());
+                LocalDate expectedDate =
+                        Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                request.setExpectedDate(expectedDate);
+                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE.getValue());
+                LocalDateTime creationDate =
+                        Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                request.setCreationDate(creationDate);
                 request.setDescription(resultSet.getString(RequestTable.DESCRIPTION.getValue()));
                 long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST.getValue());
                 request.setStatus(RequestStatus.getByValue(statusId));
@@ -196,10 +208,14 @@ public class RequestDaoImpl implements RequestDao {
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST.getValue()));
                 request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT.getValue(), User.class));
                 request.setApartment(resultSet.getObject(RequestTable.ID_APARTMENT.getValue(), Apartment.class));
-                long expectedDate = resultSet.getLong(RequestTable.EXPECTED_DATE.getValue());
-                request.setExpectedDate(new Date(expectedDate));
-                long creationDate = resultSet.getLong(RequestTable.CREATION_DATE.getValue());
-                request.setCreationDate(new Date(creationDate));
+                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE.getValue());
+                LocalDate expectedDate =
+                        Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                request.setExpectedDate(expectedDate);
+                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE.getValue());
+                LocalDateTime creationDate =
+                        Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                request.setCreationDate(creationDate);
                 request.setDescription(resultSet.getString(RequestTable.DESCRIPTION.getValue()));
                 long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST.getValue());
                 request.setStatus(RequestStatus.getByValue(statusId));
@@ -225,7 +241,9 @@ public class RequestDaoImpl implements RequestDao {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(UPDATE_REQUEST);
-            statement.setLong(1, request.getExpectedDate().getTime());
+            Instant expectedInstant = request.getExpectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
+            long expectedMillis = expectedInstant.toEpochMilli();
+            statement.setLong(1, expectedMillis);
             statement.setString(2, request.getDescription());
             statement.setLong(3, request.getStatus().getValue());
             statement.setLong(4, request.getId());

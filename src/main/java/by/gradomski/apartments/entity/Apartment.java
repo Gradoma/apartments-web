@@ -1,6 +1,7 @@
 package by.gradomski.apartments.entity;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Apartment {
@@ -19,7 +20,7 @@ public class Apartment {
     private User owner;
     private User tenant;
     private ApartmentStatus status;
-    private Date registrationDate;
+    private LocalDateTime registrationDate;
     boolean visibility;
 
     public Apartment(){};
@@ -29,6 +30,7 @@ public class Apartment {
         this.region = region;
         this.city = city;
         this.address = address;
+        registrationDate = LocalDateTime.now();
         status = ApartmentStatus.REGISTERED;
     }
 
@@ -144,11 +146,11 @@ public class Apartment {
         this.status = status;
     }
 
-    public Date getRegistrationDate() {
+    public LocalDateTime getRegistrationDate() {
         return registrationDate;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
+    public void setRegistrationDate(LocalDateTime registrationDate) {
         this.registrationDate = registrationDate;
     }
 
@@ -235,25 +237,16 @@ public class Apartment {
         builder.append(furniture);
         builder.append(", description=");
         builder.append(description);
-        builder.append(", \nowner=");
+        builder.append(", owner=");
         builder.append(owner);
-        builder.append(", \ntenant=");
+        builder.append(", tenant=");
         builder.append(tenant);
         builder.append(", status=");
         builder.append(status);
         builder.append(", registrationDate=");
-        builder.append(dateFormat.format(registrationDate));
+        builder.append(registrationDate);
         builder.append(", visibility=");
         builder.append(visibility);
-        return "Apartment{" +
-
-
-                ", description='" + description + '\'' +
-                ", owner=" + owner +
-                ", tenant=" + tenant +
-                ", status=" + status +
-                ", registrationDate=" + registrationDate +
-                ", visibility=" + visibility +
-                '}';
+        return builder.toString();
     }
 }
