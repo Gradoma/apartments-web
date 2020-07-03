@@ -8,7 +8,7 @@
 </head>
 <body>
     <h2>Gradomski apartment project</h2>
-    <form>
+    <form action="control">
         <select name="language" onchange="submit()">
             <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>
             <option value="ru" ${language == 'ru' ? 'selected' : ''}>Русский</option>

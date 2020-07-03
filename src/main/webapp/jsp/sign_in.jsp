@@ -9,7 +9,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="en" value="en"/>
-<c:set var="language" value="${not empty sessionScope.lang ? sessionScope.lang : en}"/>
+<c:set var="language" value="${not empty pageContext.session.getAttribute('locale') ? pageContext.session.getAttribute('locale') : en}"/>
 <fmt:setLocale value="${language}"/>
 <fmt:setBundle basename="prop.pagecontent" />
 <html>
