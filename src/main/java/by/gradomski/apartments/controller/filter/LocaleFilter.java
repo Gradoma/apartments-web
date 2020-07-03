@@ -37,8 +37,10 @@ public class LocaleFilter implements Filter {
             respHttp.sendRedirect(reqHttp.getHeader("referer"));
         } else if(localeString == null ){
             session.setAttribute("locale", "en");
-            log.debug("redirect to: " + reqHttp.getHeader("referer"));
-            respHttp.sendRedirect(reqHttp.getHeader("referer"));
+//            log.debug("redirect to: " + reqHttp.getHeader("referer"));
+//            respHttp.sendRedirect(reqHttp.getHeader("referer"));
+            log.debug("local set to default: " + session.getAttribute("locale"));
+            chain.doFilter(req, resp);
         } else {
             log.debug("lang wasn't changed");
             chain.doFilter(req, resp);

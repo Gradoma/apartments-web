@@ -1,4 +1,4 @@
-package by.gradomski.apartments.dao.impl.constant;
+package by.gradomski.apartments.constant;
 
 public enum RequestTable {
     ID_REQUEST("idRequest"),

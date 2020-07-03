@@ -1,9 +1,9 @@
 package by.gradomski.apartments.dao.impl;
 
 import by.gradomski.apartments.dao.RequestDao;
-import by.gradomski.apartments.dao.impl.constant.ApartmentTable;
-import by.gradomski.apartments.dao.impl.constant.RequestTable;
-import by.gradomski.apartments.dao.impl.constant.UserTable;
+import by.gradomski.apartments.constant.ApartmentTable;
+import by.gradomski.apartments.constant.RequestTable;
+import by.gradomski.apartments.constant.UserTable;
 import by.gradomski.apartments.entity.*;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.IncorrectRoleException;
@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class RequestDaoImpl implements RequestDao {

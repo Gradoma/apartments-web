@@ -14,5 +14,6 @@
             <option value="ru" ${language == 'ru' ? 'selected' : ''}>Русский</option>
         </select>
     </form>
+<hr/>
 </body>
 </html>

@@ -1,7 +1,7 @@
 package by.gradomski.apartments.dao.impl;
 
 import by.gradomski.apartments.dao.UserDao;
-import by.gradomski.apartments.dao.impl.constant.UserTable;
+import by.gradomski.apartments.constant.UserTable;
 import by.gradomski.apartments.entity.Gender;
 import by.gradomski.apartments.entity.Role;
 import by.gradomski.apartments.entity.User;
@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 

@@ -14,6 +14,7 @@
     <title>Footer</title>
 </head>
 <body>
+<hr/>
     <fmt:message key="footer.copyright"/>
 </body>
 </html>
