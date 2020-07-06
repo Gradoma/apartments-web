@@ -123,6 +123,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(long id) throws ServiceException {
+        Optional<User> optionalUser;
+        try{
+            optionalUser = UserDaoImpl.getInstance().findById(id);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        if(optionalUser.isEmpty()){
+            log.error("user " + id + " wasn't found");
+            throw new ServiceException("user wasn't found, id: " + id);
+        }
+        return optionalUser.get();
+    }
+
+    @Override
     public User updateUser(String login, String password, Gender gender, String firstName,
                            String lastName, String phone, String birthdayString) throws ServiceException {
         User user = new User(login, password, null);

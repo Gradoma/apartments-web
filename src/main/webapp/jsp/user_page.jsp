@@ -23,6 +23,10 @@
     <input type="hidden" name="login" value="${user.getLoginName()}"/>
     <input type="submit" name="button" value=<fmt:message key="main.settingsButton"/>>
 </form>
+<form action="control" method="get">
+    <input type="hidden" name="command" value="transition_to_estate"/>
+    <input type="submit" name="button" value="<fmt:message key="main.estateButton"/>">
+</form>
 <c:import url="footer.jsp"/>
 </body>
 </html>

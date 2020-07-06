@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Locale;
 
 @WebFilter(filterName = "LocaleFilter", urlPatterns = {"/control"})
 public class LocaleFilter implements Filter {
@@ -37,8 +36,6 @@ public class LocaleFilter implements Filter {
             respHttp.sendRedirect(reqHttp.getHeader("referer"));
         } else if(localeString == null ){
             session.setAttribute("locale", "en");
-//            log.debug("redirect to: " + reqHttp.getHeader("referer"));
-//            respHttp.sendRedirect(reqHttp.getHeader("referer"));
             log.debug("local set to default: " + session.getAttribute("locale"));
             chain.doFilter(req, resp);
         } else {

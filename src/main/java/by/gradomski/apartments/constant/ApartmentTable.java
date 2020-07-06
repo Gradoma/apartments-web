@@ -1,8 +1,7 @@
 package by.gradomski.apartments.constant;
 
 public enum ApartmentTable {
-    NAME("appartment"),
-    ID_APARTMENT("idAppartment"),
+    ID_APARTMENT("idApartment"),
     REGION("region"),
     CITY("city"),
     ADDRESS("address"),
@@ -11,8 +10,12 @@ public enum ApartmentTable {
     FLOOR ("floor"),
     AGE("age"),
     YEAR("year"),
-    FURNITURE("furniture");
-
+    FURNITURE("furniture"),
+    DESCRIPTION("description"),
+    ID_TENANT("idTenant"),
+    ID_STATUS("idStatus"),
+    REGISTRATION_DATE("registrationDate"),
+    VISIBILITY("visibility");
 
     private String value;
 

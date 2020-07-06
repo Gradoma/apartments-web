@@ -14,7 +14,7 @@ public class Apartment {
     private int floor;
     private int rooms;
     private double square;
-    private Date year;
+    private String year;
     private boolean furniture;
     private String description;
     private User owner;
@@ -24,14 +24,16 @@ public class Apartment {
     boolean visibility;
 
     public Apartment(){};
-    public Apartment(long id, User owner, String region, String city, String address){
-        this.id = id;
+    public Apartment(User owner, String region, String city, String address){
+        this(owner, region, city, address, ApartmentStatus.REGISTERED);
+    }
+    public Apartment(User owner, String region, String city, String address, ApartmentStatus status){
         this.owner = owner;
         this.region = region;
         this.city = city;
         this.address = address;
+        this.status = status;
         registrationDate = LocalDateTime.now();
-        status = ApartmentStatus.REGISTERED;
     }
 
     public long getId() {
@@ -98,15 +100,15 @@ public class Apartment {
         this.square = square;
     }
 
-    public Date getYear() {
+    public String getYear() {
         return year;
     }
 
-    public void setYear(Date year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
-    public boolean isFurniture() {
+    public boolean hasFurniture() {
         return furniture;
     }
 

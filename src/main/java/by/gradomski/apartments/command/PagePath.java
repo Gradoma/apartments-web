@@ -6,6 +6,8 @@ public class PagePath {
     public static final String SIGN_UP = "/jsp/sign_up.jsp";
     public static final String USER_PAGE = "/jsp/user_page.jsp";
     public static final String USER_SETTINGS = "/jsp/settings.jsp";
+    public static final String ESTATE = "/jsp/estate.jsp";
+    public static final String NEW_ESTATE = "/jsp/new_estate.jsp";
 
     private PagePath(){}
 }

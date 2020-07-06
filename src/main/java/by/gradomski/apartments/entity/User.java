@@ -197,13 +197,13 @@ public class User {
         builder.append(", mail=");
         builder.append(mail);
         builder.append(", reg.Date=");
-        builder.append(dateFormat.format(registrationDate));
+        builder.append(registrationDate);
         builder.append(", firstName=");
         builder.append(firstName);
         builder.append(", lastName=");
         builder.append(lastName);
         builder.append(", b.Day=");
-        builder.append(dateFormat.format(birthday));
+        builder.append(birthday);
         builder.append(", gender=");
         builder.append(gender);
         builder.append(", phone=");
