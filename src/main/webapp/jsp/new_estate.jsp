@@ -20,10 +20,10 @@
     <fmt:message key="newEstate.rooms"/> : <input required type="number" name="rooms">
     ${roomsErrorMessage}<br/>
     <fmt:message key="newEstate.floor"/> : <input type="number" name="floor"><br/>
-    <fmt:message key="newEstate.square"/> : <input type="text" pattern="\d+(\.\d{2})?" name="square"><br/>
-    <fmt:message key="newEstate.year"/> : <input type="number" pattern="\d{4}" name="year"><br/>
+    <fmt:message key="newEstate.square"/> : <input type="text" pattern="\d+(\.\d{1})?" name="square"><br/>
+    <fmt:message key="newEstate.year"/> : <input type="text" pattern="\d{4}" name="year"><br/>
     <fmt:message key="newEstate.furniture"/> :
-        <input type="radio" name="furniture" value="true" /><fmt:message key="newEstate.yes"/><br/>
+        <input type="checkbox" name="furniture" value="true" /><fmt:message key="newEstate.yes"/><br/>
     <fmt:message key="newEstate.description"/> : <input name="description" ><br/>
     <input type="submit" name="button" value="<fmt:message key="setting.saveButton"/>"/>
 </form>
