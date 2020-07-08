@@ -29,6 +29,7 @@ public class AddNewApartmentCommand implements Command {
     private static final String FURNITURE = "furniture";
     private static final String DESCRIPTION = "description";
     private static final String FALSE = "false";
+    private ApartmentServiceImpl apartmentService = ApartmentServiceImpl.getInstance();
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -51,7 +52,7 @@ public class AddNewApartmentCommand implements Command {
             String furniture = request.getParameter(FURNITURE);
             String description = request.getParameter(DESCRIPTION);
             try {
-                Map<String, String> addingResult = ApartmentServiceImpl.getInstance().addApartment(currentUser, region, city, address, rooms, floor, square, year,
+                Map<String, String> addingResult = apartmentService.addApartment(currentUser, region, city, address, rooms, floor, square, year,
                         furniture, description);
                 if (!addingResult.containsValue(FALSE)) {
                     page = CommandType.TRANSITION_TO_ESTATE.getCommand().execute(request);
@@ -73,6 +74,18 @@ public class AddNewApartmentCommand implements Command {
                         case ROOMS:
                             log.debug("incorrect rooms: " + rooms);
                             request.setAttribute("roomsErrorMessage","Required filed, more 0");
+                            break;
+                        case FLOOR:
+                            log.debug("incorrect floor: " + floor);
+                            request.setAttribute("floorErrorMessage","Should be more 0");
+                            break;
+                        case SQUARE:
+                            log.debug("incorrect square: " + square);
+                            request.setAttribute("squareErrorMessage","Incorrect format or less 0");
+                            break;
+                        case YEAR:
+                            log.debug("incorrect year: " + year);
+                            request.setAttribute("yearErrorMessage","Invalid year build");
                             break;
                     }
                     page = NEW_ESTATE;

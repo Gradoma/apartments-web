@@ -31,28 +31,26 @@ public class ApartmentServiceImpl implements ApartmentService {
     public Map<String, String> addApartment(User owner, String region, String city, String address, String rooms, String floor,
                                             String square, String year, String furniture, String description) throws ServiceException {
         log.debug("owner " + owner);
-        Map<String, String> validationResult = ApartmentValidator.isValid(region, city, address, rooms);
+        Map<String, String> validationResult = ApartmentValidator.isValid(region, city, address, rooms, floor, square, year);
         if(validationResult.containsValue(FALSE)){
             return validationResult;
         }
         Apartment apartment = new Apartment(owner, region, city, address);
         apartment.setRooms(Integer.parseInt(rooms));
-        log.warn("floor: " + floor);                    //DELETE!!!!
         if(!floor.isBlank()){
-            apartment.setFloor(Integer.parseInt(floor));        //TODO(can set minus values)  SOLVE!!!!
+            apartment.setFloor(Integer.parseInt(floor));
         }
         if(!square.isBlank()){
-            log.debug("square for parsing: " + square);
             apartment.setSquare(Double.parseDouble(square));
         }
-        if(!year.isBlank()){                //TODO(check year - 4 digit)
+        if(!year.isBlank()){
             apartment.setYear(year);
         }
         if(!year.isBlank()){
-            apartment.setFurniture(Boolean.parseBoolean(furniture));        //TODO(Don't set false)
+            apartment.setFurniture(Boolean.parseBoolean(furniture));
         }
         if(!description.isBlank()){
-            apartment.setDescription(description);        //TODO(Don't set false)
+            apartment.setDescription(description);
         }
         try{
             boolean result = ApartmentDaoImpl.getInstance().add(apartment);

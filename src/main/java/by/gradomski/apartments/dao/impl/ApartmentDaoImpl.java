@@ -89,7 +89,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
             statement.setLong(12, apartment.getOwner().getId());
             int rows = statement.executeUpdate();
             if(rows == 0){
-                log.warn(rows + " lines updated in DB, table apartment");
+                log.warn("table apartment wasn't updated, check database");
             } else {
                 flag = true;
             }
@@ -101,7 +101,6 @@ public class ApartmentDaoImpl implements ApartmentDao {
         }
         return flag;
     }
-
 
     @Override
     public List<Apartment> findApartmentsByOwner(long id) throws DaoException{

@@ -19,7 +19,8 @@
     ${addressErrorMessage}<br/>
     <fmt:message key="newEstate.rooms"/> : <input required type="number" name="rooms">
     ${roomsErrorMessage}<br/>
-    <fmt:message key="newEstate.floor"/> : <input type="number" name="floor"><br/>
+    <fmt:message key="newEstate.floor"/> : <input type="number" name="floor">
+    ${floorErrorMessage}<br/>
     <fmt:message key="newEstate.square"/> : <input type="text" pattern="\d+(\.\d{1})?" name="square"><br/>
     <fmt:message key="newEstate.year"/> : <input type="text" pattern="\d{4}" name="year"><br/>
     <fmt:message key="newEstate.furniture"/> :
