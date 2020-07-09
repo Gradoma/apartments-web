@@ -1,8 +1,8 @@
 package by.gradomski.apartments.dao.impl;
 
-import by.gradomski.apartments.constant.ApartmentTable;
-import by.gradomski.apartments.constant.UserTable;
 import by.gradomski.apartments.dao.ApartmentDao;
+import by.gradomski.apartments.dao.column.ApartmentTable;
+import by.gradomski.apartments.dao.column.UserTable;
 import by.gradomski.apartments.entity.*;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.IncorrectRoleException;
@@ -45,7 +45,6 @@ public class ApartmentDaoImpl implements ApartmentDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            log.error("connection pool returned null connection");
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -107,7 +106,6 @@ public class ApartmentDaoImpl implements ApartmentDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            log.error("connection pool returned null connection");
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -119,49 +117,49 @@ public class ApartmentDaoImpl implements ApartmentDao {
             log.debug("execute query - ok");
             while (resultSet.next()){
                 Apartment apartment = new Apartment();
-//                apartment.setId(resultSet.getLong(ApartmentTable.ID_APARTMENT.getValue()));
-//                log.debug("res set get long id - ok");
-                apartment.setRegion(resultSet.getString(ApartmentTable.REGION.getValue()));
-                apartment.setCity(resultSet.getString(ApartmentTable.CITY.getValue()));
-                apartment.setAddress(resultSet.getString(ApartmentTable.ADDRESS.getValue()));
-                apartment.setRooms(resultSet.getInt(ApartmentTable.ROOMS.getValue()));
-                apartment.setFloor(resultSet.getInt(ApartmentTable.FLOOR.getValue()));
-                apartment.setSquare(resultSet.getDouble(ApartmentTable.SQUARE.getValue()));
-                apartment.setYear(resultSet.getString(ApartmentTable.AGE.getValue()));
-                apartment.setFurniture(resultSet.getBoolean(ApartmentTable.FURNITURE.getValue()));
-                apartment.setDescription(resultSet.getString(ApartmentTable.DESCRIPTION.getValue()));
-                long apartmentStatus = resultSet.getLong(ApartmentTable.ID_STATUS.getValue());
+                apartment.setId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
+                log.debug("res set get long id - ok");
+                apartment.setRegion(resultSet.getString(ApartmentTable.REGION));
+                apartment.setCity(resultSet.getString(ApartmentTable.CITY));
+                apartment.setAddress(resultSet.getString(ApartmentTable.ADDRESS));
+                apartment.setRooms(resultSet.getInt(ApartmentTable.ROOMS));
+                apartment.setFloor(resultSet.getInt(ApartmentTable.FLOOR));
+                apartment.setSquare(resultSet.getDouble(ApartmentTable.SQUARE));
+                apartment.setYear(resultSet.getString(ApartmentTable.AGE));
+                apartment.setFurniture(resultSet.getBoolean(ApartmentTable.FURNITURE));
+                apartment.setDescription(resultSet.getString(ApartmentTable.DESCRIPTION));
+                long apartmentStatus = resultSet.getLong(ApartmentTable.ID_STATUS);
                 apartment.setStatus(ApartmentStatus.getByValue(apartmentStatus));
-                long registrationMillis = resultSet.getLong(ApartmentTable.REGISTRATION_DATE.getValue());
+                long registrationMillis = resultSet.getLong(ApartmentTable.REGISTRATION_DATE);
                 LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 apartment.setRegistrationDate(registrationDate);
-                apartment.setVisibility(resultSet.getBoolean(ApartmentTable.VISIBILITY.getValue()));
+                apartment.setVisibility(resultSet.getBoolean(ApartmentTable.VISIBILITY));
 
-                long tenantId = resultSet.getLong(UserTable.ID_USER.getValue());
+                long tenantId = resultSet.getLong(UserTable.ID_USER);
                 if(tenantId != 0){
                     User tenant = new User();
                     tenant.setId(tenantId);
-                    tenant.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE.getValue())));
-                    tenant.setLoginName(resultSet.getString(UserTable.LOGIN.getValue()));
-                    tenant.setPassword(resultSet.getString(UserTable.PASSWORD.getValue()));
-                    tenant.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
-                    tenant.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
-                    long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY.getValue());
+                    tenant.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
+                    tenant.setLoginName(resultSet.getString(UserTable.LOGIN));
+                    tenant.setPassword(resultSet.getString(UserTable.PASSWORD));
+                    tenant.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
+                    tenant.setLastName(resultSet.getString(UserTable.LAST_NAME));
+                    long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
                     if(birthdayMillis != 0){
                         LocalDate birthday =
                                 Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                         tenant.setBirthday(birthday);
                     }
-                    String gender = resultSet.getString(UserTable.GENDER.getValue());
+                    String gender = resultSet.getString(UserTable.GENDER);
                     if(gender != null){
                         tenant.setGender(Gender.valueOf(gender));
                     }
-                    tenant.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
-                    long tenantRegisterMillis = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
+                    tenant.setPhone(resultSet.getString(UserTable.PHONE));
+                    long tenantRegisterMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
                     LocalDateTime tenantRegistrationDate = Instant.ofEpochMilli(tenantRegisterMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                     tenant.setRegistrationDate(tenantRegistrationDate);
-                    tenant.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
-                    tenant.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
+                    tenant.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
+                    tenant.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
                     log.debug("tenant: " + tenant);
                     apartment.setTenant(tenant);
                 }

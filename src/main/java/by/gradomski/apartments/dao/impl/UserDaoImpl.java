@@ -1,7 +1,7 @@
 package by.gradomski.apartments.dao.impl;
 
 import by.gradomski.apartments.dao.UserDao;
-import by.gradomski.apartments.constant.UserTable;
+import by.gradomski.apartments.dao.column.UserTable;
 import by.gradomski.apartments.entity.Gender;
 import by.gradomski.apartments.entity.Role;
 import by.gradomski.apartments.entity.User;
@@ -86,7 +86,6 @@ public class UserDaoImpl implements UserDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -96,28 +95,28 @@ public class UserDaoImpl implements UserDao {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 User user = new User();
-                user.setId(resultSet.getLong(UserTable.ID_USER.getValue()));
-                user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE.getValue())));
-                user.setLoginName(resultSet.getString(UserTable.LOGIN.getValue()));
-                user.setPassword(resultSet.getString(UserTable.PASSWORD.getValue()));
-                user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
-                user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
-                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY.getValue());
+                user.setId(resultSet.getLong(UserTable.ID_USER));
+                user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
+                user.setLoginName(resultSet.getString(UserTable.LOGIN));
+                user.setPassword(resultSet.getString(UserTable.PASSWORD));
+                user.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
+                user.setLastName(resultSet.getString(UserTable.LAST_NAME));
+                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
                 if(birthdayMillis != 0){
                     LocalDate birthday =
                             Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                     user.setBirthday(birthday);
                 }
-                String gender = resultSet.getString(UserTable.GENDER.getValue());
+                String gender = resultSet.getString(UserTable.GENDER);
                 if(gender != null){
                     user.setGender(Gender.valueOf(gender));
                 }
-                user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
-                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
+                user.setPhone(resultSet.getString(UserTable.PHONE));
+                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
                 LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 user.setRegistrationDate(registrationDate);
-                user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
-                user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
+                user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
+                user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
                 userList.add(user);
             }
         }catch (SQLException | IncorrectRoleException e){
@@ -130,11 +129,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findById(long id) throws DaoException{          // add photo!!
+    public Optional<User> findById(long id) throws DaoException{          // TODO(add photo!!!)
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -146,28 +144,28 @@ public class UserDaoImpl implements UserDao {
             User user = null;
             while (resultSet.next()) {
                 user = new User();
-                user.setId(resultSet.getLong(UserTable.ID_USER.getValue()));
-                user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE.getValue())));
-                user.setLoginName(resultSet.getString(UserTable.LOGIN.getValue()));
-                user.setPassword(resultSet.getString(UserTable.PASSWORD.getValue()));
-                user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
-                user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
-                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY.getValue());
+                user.setId(resultSet.getLong(UserTable.ID_USER));
+                user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
+                user.setLoginName(resultSet.getString(UserTable.LOGIN));
+                user.setPassword(resultSet.getString(UserTable.PASSWORD));
+                user.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
+                user.setLastName(resultSet.getString(UserTable.LAST_NAME));
+                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
                 if(birthdayMillis != 0){
                     LocalDate birthday =
                             Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                     user.setBirthday(birthday);
                 }
-                String gender = resultSet.getString(UserTable.GENDER.getValue());
+                String gender = resultSet.getString(UserTable.GENDER);
                 if(gender != null){
                     user.setGender(Gender.valueOf(gender));
                 }
-                user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
-                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
+                user.setPhone(resultSet.getString(UserTable.PHONE));
+                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
                 LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 user.setRegistrationDate(registrationDate);
-                user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
-                user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
+                user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
+                user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
             }
             if(user != null) optionalUser = Optional.of(user);
         } catch (SQLException | IncorrectRoleException e){
@@ -180,11 +178,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findByLogin(String login) throws DaoException {
+    public Optional<User> findByLogin(String login) throws DaoException {   // TODO(add photo!!!)
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -196,29 +193,29 @@ public class UserDaoImpl implements UserDao {
             User user = null;
             while (resultSet.next()) {
                 user = new User();
-                user.setId(resultSet.getLong(UserTable.ID_USER.getValue()));
-                user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE.getValue())));
-                user.setLoginName(resultSet.getString(UserTable.LOGIN.getValue()));
-                user.setPassword(resultSet.getString(UserTable.PASSWORD.getValue()));
-                user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
-                user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
-                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY.getValue());
+                user.setId(resultSet.getLong(UserTable.ID_USER));
+                user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
+                user.setLoginName(resultSet.getString(UserTable.LOGIN));
+                user.setPassword(resultSet.getString(UserTable.PASSWORD));
+                user.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
+                user.setLastName(resultSet.getString(UserTable.LAST_NAME));
+                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
                 if(birthdayMillis != 0){
                     LocalDate birthday =
                             Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                     user.setBirthday(birthday);
                 }
-                String gender = resultSet.getString(UserTable.GENDER.getValue());
+                String gender = resultSet.getString(UserTable.GENDER);
                 if(gender != null){
                     user.setGender(Gender.valueOf(gender));
                 }
-                user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
-                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
+                user.setPhone(resultSet.getString(UserTable.PHONE));
+                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
                 LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 user.setRegistrationDate(registrationDate);
-                user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
-                user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY.getValue()));
-                user.setPhoto(resultSet.getBytes(UserTable.PHOTO.getValue()));
+                user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
+                user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
+                user.setPhoto(resultSet.getBytes(UserTable.PHOTO));
             }
             if(user != null) optionalUser = Optional.of(user);
         } catch (SQLException | IncorrectRoleException e){
@@ -235,11 +232,9 @@ public class UserDaoImpl implements UserDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
-//        InputStream inputStream = null;
         try{
             statement = connection.prepareStatement(UPDATE_USER_BY_LOGIN);
             statement.setString(1, user.getPassword());
@@ -261,24 +256,15 @@ public class UserDaoImpl implements UserDao {
             } else {
                 statement.setNull(6, Types.VARCHAR);
             }
-//            if(user.getPhoto() != null){                              // TODO(photo upd in separate method)
-//                byte[] photoBytes = user.getPhoto();
-//                inputStream = new ByteArrayInputStream(photoBytes);
-//                statement.setBinaryStream(7, inputStream, photoBytes.length);
-//            }
-//            statement.setString(8, user.getMail()); TODO(add change of email)
             statement.setString(7, user.getLoginName());
             statement.executeUpdate();
         } catch (SQLException e){
             throw new DaoException(e);
-//        } catch (FileNotFoundException e){
-//            throw new DaoException("user photo problem: ", e);
         } finally {
-//            close(inputStream);
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return user;                        // what return??
+        return user;                        // TODO(what return?? new or old user)
     }
 
     @Override
@@ -287,7 +273,6 @@ public class UserDaoImpl implements UserDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -315,7 +300,6 @@ public class UserDaoImpl implements UserDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -340,7 +324,6 @@ public class UserDaoImpl implements UserDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;

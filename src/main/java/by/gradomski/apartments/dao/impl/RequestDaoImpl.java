@@ -1,9 +1,9 @@
 package by.gradomski.apartments.dao.impl;
 
 import by.gradomski.apartments.dao.RequestDao;
-import by.gradomski.apartments.constant.ApartmentTable;
-import by.gradomski.apartments.constant.RequestTable;
-import by.gradomski.apartments.constant.UserTable;
+import by.gradomski.apartments.dao.column.ApartmentTable;
+import by.gradomski.apartments.dao.column.RequestTable;
+import by.gradomski.apartments.dao.column.UserTable;
 import by.gradomski.apartments.entity.*;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.IncorrectRoleException;
@@ -49,7 +49,6 @@ public class RequestDaoImpl implements RequestDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -80,7 +79,6 @@ public class RequestDaoImpl implements RequestDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -90,51 +88,51 @@ public class RequestDaoImpl implements RequestDao {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
                 User user = new User();
-                user.setId(resultSet.getLong(RequestTable.ID_APPLICANT.getValue()));
-                user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE.getValue())));
-                user.setLoginName(resultSet.getString(UserTable.LOGIN.getValue()));
-                user.setPassword(resultSet.getString(UserTable.PASSWORD.getValue()));
-                user.setFirstName(resultSet.getString(UserTable.FIRST_NAME.getValue()));
-                user.setLastName(resultSet.getString(UserTable.LAST_NAME.getValue()));
-                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY.getValue());
+                user.setId(resultSet.getLong(RequestTable.ID_APPLICANT));
+                user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
+                user.setLoginName(resultSet.getString(UserTable.LOGIN));
+                user.setPassword(resultSet.getString(UserTable.PASSWORD));
+                user.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
+                user.setLastName(resultSet.getString(UserTable.LAST_NAME));
+                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
                 if(birthdayMillis != 0){
                     LocalDate birthday =
                             Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                     user.setBirthday(birthday);
                 }
-                String gender = resultSet.getString(UserTable.GENDER.getValue());
+                String gender = resultSet.getString(UserTable.GENDER);
                 if(gender != null){
                     user.setGender(Gender.valueOf(gender));
                 }
-                user.setPhone(resultSet.getString(UserTable.PHONE.getValue()));
-                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE.getValue());
+                user.setPhone(resultSet.getString(UserTable.PHONE));
+                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
                 LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 user.setRegistrationDate(registrationDate);
-                user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS.getValue()));
+                user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
 
                 Apartment apartment = new Apartment();
-                apartment.setId(resultSet.getLong(ApartmentTable.ID_APARTMENT.getValue()));
-                apartment.setRegion(resultSet.getString(ApartmentTable.REGION.getValue()));
-                apartment.setCity(resultSet.getString(ApartmentTable.CITY.getValue()));
-                apartment.setAddress(resultSet.getString(ApartmentTable.ADDRESS.getValue()));
-                apartment.setRooms(resultSet.getInt(ApartmentTable.ROOMS.getValue()));
-                apartment.setSquare(resultSet.getDouble(ApartmentTable.SQUARE.getValue()));
-                apartment.setFloor(resultSet.getInt(ApartmentTable.FLOOR.getValue()));
+                apartment.setId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
+                apartment.setRegion(resultSet.getString(ApartmentTable.REGION));
+                apartment.setCity(resultSet.getString(ApartmentTable.CITY));
+                apartment.setAddress(resultSet.getString(ApartmentTable.ADDRESS));
+                apartment.setRooms(resultSet.getInt(ApartmentTable.ROOMS));
+                apartment.setSquare(resultSet.getDouble(ApartmentTable.SQUARE));
+                apartment.setFloor(resultSet.getInt(ApartmentTable.FLOOR));
 
                 Request request = new Request();
-                request.setId(resultSet.getLong(RequestTable.ID_REQUEST.getValue()));
+                request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
                 request.setApplicant(user);
                 request.setApartment(apartment);
-                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE.getValue());
+                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                 request.setExpectedDate(expectedDate);
-                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE.getValue());
+                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE);
                 LocalDateTime creationDate =
                         Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 request.setCreationDate(creationDate);
-                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION.getValue()));
-                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST.getValue());
+                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION));
+                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST);
                 request.setStatus(RequestStatus.getByValue(statusId));
                 requestList.add(request);
             }
@@ -152,7 +150,6 @@ public class RequestDaoImpl implements RequestDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -163,19 +160,19 @@ public class RequestDaoImpl implements RequestDao {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Request request = new Request();
-                request.setId(resultSet.getLong(RequestTable.ID_REQUEST.getValue()));
-                request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT.getValue(), User.class));
-                request.setApartment(resultSet.getObject(RequestTable.ID_APARTMENT.getValue(), Apartment.class));
-                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE.getValue());
+                request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
+                request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT, User.class));
+                request.setApartment(resultSet.getObject(RequestTable.ID_APARTMENT, Apartment.class));
+                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                 request.setExpectedDate(expectedDate);
-                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE.getValue());
+                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE);
                 LocalDateTime creationDate =
                         Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 request.setCreationDate(creationDate);
-                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION.getValue()));
-                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST.getValue());
+                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION));
+                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST);
                 request.setStatus(RequestStatus.getByValue(statusId));
                 requestList.add(request);
             }
@@ -193,7 +190,6 @@ public class RequestDaoImpl implements RequestDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
@@ -204,19 +200,19 @@ public class RequestDaoImpl implements RequestDao {
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Request request = new Request();
-                request.setId(resultSet.getLong(RequestTable.ID_REQUEST.getValue()));
-                request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT.getValue(), User.class));
-                request.setApartment(resultSet.getObject(RequestTable.ID_APARTMENT.getValue(), Apartment.class));
-                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE.getValue());
+                request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
+                request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT, User.class));
+                request.setApartment(resultSet.getObject(RequestTable.ID_APARTMENT, Apartment.class));
+                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
                 request.setExpectedDate(expectedDate);
-                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE.getValue());
+                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE);
                 LocalDateTime creationDate =
                         Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 request.setCreationDate(creationDate);
-                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION.getValue()));
-                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST.getValue());
+                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION));
+                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST);
                 request.setStatus(RequestStatus.getByValue(statusId));
                 requestList.add(request);
             }
@@ -234,7 +230,6 @@ public class RequestDaoImpl implements RequestDao {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
-            //log
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
