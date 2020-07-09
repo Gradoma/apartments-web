@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
         user.setGender(gender);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setPhone(phone);
+        user.setPhone(phone);           // TODO (validation phone)
         log.debug("birthday String: " + birthdayString);
         if(birthdayString != null && !birthdayString.isBlank()){
             LocalDate today = LocalDate.now();

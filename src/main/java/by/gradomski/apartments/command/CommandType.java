@@ -11,7 +11,9 @@ public enum CommandType {
     TRANSITION_TO_SETTINGS(new TransitionToSettingsCommand()),
     TRANSITION_TO_ESTATE(new TransitionToEstateCommand()),
     TRANSITION_TO_NEW_ESTATE(new TransitionToNewEstateCommand()),
-    ADD_NEW_APARTMENT(new AddNewApartmentCommand());
+    ADD_NEW_APARTMENT(new AddNewApartmentCommand()),
+    TRANSITION_TO_ESTATE_EDIT(new TransitionToEstateEditCommand()),
+    EDIT_APARTMENT(new EditApartmentCommand());
 
     private Command command;
 

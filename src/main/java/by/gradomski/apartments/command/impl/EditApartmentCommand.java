@@ -1,7 +1,6 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
-import by.gradomski.apartments.command.CommandType;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
@@ -18,9 +17,10 @@ import java.util.Optional;
 
 import static by.gradomski.apartments.command.PagePath.*;
 
-public class AddNewApartmentCommand implements Command {
+public class EditApartmentCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String USER = "user";
+    private static final String APARTMENT_ID = "apartmentId";
     private static final String REGION = "region";
     private static final String CITY = "city";
     private static final String ADDRESS = "address";
@@ -33,17 +33,15 @@ public class AddNewApartmentCommand implements Command {
     private static final String FALSE = "false";
     private ApartmentServiceImpl apartmentService = ApartmentServiceImpl.getInstance();
 
-    @Override
     public String execute(HttpServletRequest request) {
-        log.debug("start execute method");
         String page;
         HttpSession session = request.getSession(false);
         if(session == null) {
             log.info("session timed out");
             page = SIGN_IN;
         } else {
-            User currentUser = (User) session.getAttribute(USER);      // FIXME (user==null sometimes)
-            log.debug("owner: " + currentUser);
+            User currentUser = (User) session.getAttribute(USER);
+            long id = Long.parseLong(request.getParameter(APARTMENT_ID));
             String region = request.getParameter(REGION);
             String city = request.getParameter(CITY);
             String address = request.getParameter(ADDRESS);
@@ -54,45 +52,54 @@ public class AddNewApartmentCommand implements Command {
             String furniture = request.getParameter(FURNITURE);
             String description = request.getParameter(DESCRIPTION);
             try {
-                Map<String, String> addingResult = apartmentService.addApartment(currentUser, region, city, address,
+                Map<String, String> updateResult = apartmentService.updateApartment(id, region, city, address,
                         rooms, floor, square, year, furniture, description);
-                if (!addingResult.containsValue(FALSE)) {
+                if (!updateResult.containsValue(FALSE)) {
                     List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(currentUser.getId());
                     session.setAttribute("apartmentList", updatedApartmentList);
+                    session.removeAttribute("apartmentId");
+                    session.removeAttribute("region");
+                    session.removeAttribute("city");
+                    session.removeAttribute("rooms");
+                    session.removeAttribute("floor");
+                    session.removeAttribute("square");
+                    session.removeAttribute("year");
+                    session.removeAttribute("furniture");
+                    session.removeAttribute("description");
                     page = ESTATE;
                 } else {
-                    String failReason = defineFalseKey(addingResult);
-                    switch (failReason){
+                    String failReason = defineFalseKey(updateResult);
+                    switch (failReason) {
                         case REGION:
                             log.debug("incorrect region: " + region);
-                            request.setAttribute("regionErrorMessage","Required filed");
+                            request.setAttribute("regionErrorMessage", "Required filed");
                             break;
                         case CITY:
                             log.debug("incorrect city: " + city);
-                            request.setAttribute("cityErrorMessage","Required filed");
+                            request.setAttribute("cityErrorMessage", "Required filed");
                             break;
                         case ADDRESS:
                             log.debug("incorrect address: " + address);
-                            request.setAttribute("addressErrorMessage","Required filed");
+                            request.setAttribute("addressErrorMessage", "Required filed");
                             break;
                         case ROOMS:
                             log.debug("incorrect rooms: " + rooms);
-                            request.setAttribute("roomsErrorMessage","Required filed, more 0");
+                            request.setAttribute("roomsErrorMessage", "Required filed, more 0");
                             break;
                         case FLOOR:
                             log.debug("incorrect floor: " + floor);
-                            request.setAttribute("floorErrorMessage","Should be more 0");
+                            request.setAttribute("floorErrorMessage", "Should be more 0");
                             break;
                         case SQUARE:
                             log.debug("incorrect square: " + square);
-                            request.setAttribute("squareErrorMessage","Incorrect format or less 0");
+                            request.setAttribute("squareErrorMessage", "Incorrect format or less 0");
                             break;
                         case YEAR:
                             log.debug("incorrect year: " + year);
-                            request.setAttribute("yearErrorMessage","Invalid year build");
+                            request.setAttribute("yearErrorMessage", "Invalid year build");
                             break;
                     }
-                    page = NEW_ESTATE;
+                    page = EDIT_ESTATE;
                 }
             } catch (ServiceException e) {
                 log.error(e);

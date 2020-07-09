@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ApartmentDaoImpl implements ApartmentDao {
     private static final Logger log = LogManager.getLogger();
@@ -25,9 +26,11 @@ public class ApartmentDaoImpl implements ApartmentDao {
     private static final String INSERT_NEW_APARTMENT = "INSERT INTO apartment (region, city, address, rooms, square, floor, " +
             "age, furniture, description, idStatus, registrationDate, idOwner) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SELECT_APARTMENT_BY_OWNER_ID = "SELECT idApartment, region, city, address, rooms, square, floor," +
-                        "age, furniture, description, idTenant, idStatus, apartment.registrationDate, apartment.visibility, idUser, idRole, login, password, " +
+                        "age, furniture, description, idTenant, idStatus, apartment.registrationDate, apartment.visibility, idUser, idRole, login, " +
                         "firstName, lastName, birthday, gender, phone, photo, user.registrationDate, mailAddress, user.visibility " +
                         "FROM apartment LEFT JOIN user on idTenant=idUser WHERE idOwner=?";//TODO(choose except DELETED status)
+    private static final String UPDATE_APARTMENT_BY_ID = "UPDATE apartment SET region=?, city=?, address=?, rooms=?, square=?, " +
+            "floor=?, age=?, furniture=?, description=? WHERE idApartment=?";
 
 
     private ApartmentDaoImpl(){}
@@ -114,11 +117,9 @@ public class ApartmentDaoImpl implements ApartmentDao {
             statement = connection.prepareStatement(SELECT_APARTMENT_BY_OWNER_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
-            log.debug("execute query - ok");
             while (resultSet.next()){
                 Apartment apartment = new Apartment();
                 apartment.setId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
-                log.debug("res set get long id - ok");
                 apartment.setRegion(resultSet.getString(ApartmentTable.REGION));
                 apartment.setCity(resultSet.getString(ApartmentTable.CITY));
                 apartment.setAddress(resultSet.getString(ApartmentTable.ADDRESS));
@@ -141,7 +142,6 @@ public class ApartmentDaoImpl implements ApartmentDao {
                     tenant.setId(tenantId);
                     tenant.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
                     tenant.setLoginName(resultSet.getString(UserTable.LOGIN));
-                    tenant.setPassword(resultSet.getString(UserTable.PASSWORD));
                     tenant.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
                     tenant.setLastName(resultSet.getString(UserTable.LAST_NAME));
                     long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
@@ -160,7 +160,6 @@ public class ApartmentDaoImpl implements ApartmentDao {
                     tenant.setRegistrationDate(tenantRegistrationDate);
                     tenant.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
                     tenant.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
-                    log.debug("tenant: " + tenant);
                     apartment.setTenant(tenant);
                 }
 
@@ -187,8 +186,52 @@ public class ApartmentDaoImpl implements ApartmentDao {
     }
 
     @Override
-    public Apartment update(Apartment apartment) throws DaoException {
-        return null;
+    public void update(Apartment apartment) throws DaoException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        try{
+            statement = connection.prepareStatement(UPDATE_APARTMENT_BY_ID);
+            statement.setString(1, apartment.getRegion());
+            statement.setString(2, apartment.getCity());
+            statement.setString(3, apartment.getAddress());
+            statement.setInt(4, apartment.getRooms());
+            double square = apartment.getSquare();
+            if(Double.compare(square, 0.0) == 0){
+                statement.setNull(5, Types.DOUBLE);
+            } else {
+                statement.setDouble(5, square);
+            }
+            int floor = apartment.getFloor();
+            if(floor != 0){
+                statement.setInt(6, floor);
+            } else {
+                statement.setNull(6, Types.INTEGER);
+            }
+            String age = apartment.getYear();
+            if(age != null){
+                statement.setString(7, age);
+            } else {
+                statement.setNull(7, Types.VARCHAR);
+            }
+            statement.setBoolean(8, apartment.hasFurniture());
+            String description = apartment.getDescription();
+            if(description != null){
+                statement.setString(9, description);
+            } else {
+                statement.setNull(9, Types.VARCHAR);
+            }
+            statement.setLong(10, apartment.getId());
+            statement.executeUpdate();
+        } catch (SQLException e){
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }// TODO(what return??)
     }
 
     @Override

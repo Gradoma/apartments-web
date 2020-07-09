@@ -78,4 +78,39 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
         return apartmentList;
     }
+
+    @Override
+    public Map<String, String> updateApartment(long id, String region, String city, String address, String rooms,
+                                               String floor, String square, String year, String furniture,
+                                               String description) throws ServiceException {
+        Map<String, String> validationResult = ApartmentValidator.isValid(region, city, address, rooms, floor, square, year);
+        if(validationResult.containsValue(FALSE)){
+            return validationResult;
+        }
+        User owner = null;
+        Apartment apartment = new Apartment(owner, region, city, address);
+        apartment.setId(id);
+        apartment.setRooms(Integer.parseInt(rooms));
+        if(!floor.isBlank()){
+            apartment.setFloor(Integer.parseInt(floor));
+        }
+        if(!square.isBlank()){
+            apartment.setSquare(Double.parseDouble(square));
+        }
+        if(!year.isBlank()){
+            apartment.setYear(year);
+        }
+        if(!year.isBlank()){
+            apartment.setFurniture(Boolean.parseBoolean(furniture));
+        }
+        if(!description.isBlank()){
+            apartment.setDescription(description);
+        }
+        try{
+            ApartmentDaoImpl.getInstance().update(apartment);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return validationResult;
+    }
 }

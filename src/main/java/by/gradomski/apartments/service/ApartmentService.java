@@ -11,4 +11,6 @@ public interface ApartmentService {
     Map<String, String> addApartment(User owner, String region, String city, String address, String rooms, String floor,
                                      String square, String year, String furniture, String description) throws ServiceException;
     List<Apartment> getApartmentsByOwner(long id) throws ServiceException;
+    Map<String, String> updateApartment(long id, String region, String city, String address, String rooms, String floor,
+                                        String square, String year, String furniture, String description) throws ServiceException;
 }
