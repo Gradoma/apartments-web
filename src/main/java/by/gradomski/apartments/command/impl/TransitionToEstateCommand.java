@@ -31,6 +31,9 @@ public class TransitionToEstateCommand implements Command {
             long userId = user.getId();
             try {
                 List<Apartment> apartmentList = ApartmentServiceImpl.getInstance().getApartmentsByOwner(userId);
+                if(apartmentList.isEmpty()){
+                    request.setAttribute("noAppartmentsMessage", "You haven’t added any estate yet...");
+                }
                 session.setAttribute("apartmentList", apartmentList);
                 page = ESTATE;
             } catch (ServiceException e) {
