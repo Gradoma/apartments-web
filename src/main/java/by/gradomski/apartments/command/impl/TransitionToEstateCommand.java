@@ -31,7 +31,7 @@ public class TransitionToEstateCommand implements Command {
             long userId = user.getId();
             try {
                 List<Apartment> apartmentList = ApartmentServiceImpl.getInstance().getApartmentsByOwner(userId);
-                request.setAttribute("apartmentList", apartmentList);
+                session.setAttribute("apartmentList", apartmentList);
                 page = ESTATE;
             } catch (ServiceException e) {
                 log.error(e);

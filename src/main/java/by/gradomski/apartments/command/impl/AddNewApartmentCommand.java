@@ -2,6 +2,7 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.command.CommandType;
+import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
@@ -11,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -55,7 +57,9 @@ public class AddNewApartmentCommand implements Command {
                 Map<String, String> addingResult = apartmentService.addApartment(currentUser, region, city, address, rooms, floor, square, year,
                         furniture, description);
                 if (!addingResult.containsValue(FALSE)) {
-                    page = CommandType.TRANSITION_TO_ESTATE.getCommand().execute(request);
+                    List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(currentUser.getId());
+                    session.setAttribute("apartmentList", updatedApartmentList);
+                    page = ESTATE;
                 } else {
                     String failReason = defineFalseKey(addingResult);
                     switch (failReason){
