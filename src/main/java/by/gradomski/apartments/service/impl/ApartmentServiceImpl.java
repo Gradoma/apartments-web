@@ -2,6 +2,7 @@ package by.gradomski.apartments.service.impl;
 
 import by.gradomski.apartments.dao.impl.ApartmentDaoImpl;
 import by.gradomski.apartments.entity.Apartment;
+import by.gradomski.apartments.entity.ApartmentStatus;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
@@ -112,5 +113,30 @@ public class ApartmentServiceImpl implements ApartmentService {
             throw new ServiceException(e);
         }
         return validationResult;
+    }
+
+    @Override
+    public boolean deleteApartment(long id) throws ServiceException {
+        boolean flag = false;
+        try {
+            ApartmentStatus currentStatus = ApartmentDaoImpl.getInstance().findStatusByApartmentId(id);
+            switch (currentStatus){
+                case REGISTERED:
+                    flag = ApartmentDaoImpl.getInstance().updateStatusByApartmentId(id, ApartmentStatus.DELETED);
+                    break;
+                case IN_DEMAND:
+                    //TODO(requestService - getAllRequests - iterate: request.changeStatus(DECLINE) + adService - deleteAd)
+                    break;
+                case RENT:
+                    log.warn("try to delete rent apartment");
+                    break;
+                case DELETED:
+                    log.warn("impossible operation: apartment already has been deleted: id = " + id);
+                    break;
+            }
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return flag;
     }
 }

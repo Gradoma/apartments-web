@@ -42,6 +42,7 @@
                     <input type="submit" name="button" value="<fmt:message key="estate.editButton"/>">
                 </form>
             </td>
+            <td><h4>${errorDeleteMessage}</h4></td>
         </tr>
     </c:forEach>
 </table>

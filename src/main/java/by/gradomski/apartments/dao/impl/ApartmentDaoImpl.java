@@ -25,13 +25,14 @@ public class ApartmentDaoImpl implements ApartmentDao {
     private static ApartmentDaoImpl instance;
     private static final String INSERT_NEW_APARTMENT = "INSERT INTO apartment (region, city, address, rooms, square, floor, " +
             "age, furniture, description, idStatus, registrationDate, idOwner) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_STATUS_BY_APARTMENT_ID = "SELECT idStatus FROM apartment WHERE idApartment=?";
     private static final String SELECT_APARTMENT_BY_OWNER_ID = "SELECT idApartment, region, city, address, rooms, square, floor," +
                         "age, furniture, description, idTenant, idStatus, apartment.registrationDate, apartment.visibility, idUser, idRole, login, " +
                         "firstName, lastName, birthday, gender, phone, photo, user.registrationDate, mailAddress, user.visibility " +
-                        "FROM apartment LEFT JOIN user on idTenant=idUser WHERE idOwner=?";//TODO(choose except DELETED status)
+                        "FROM apartment LEFT JOIN user on idTenant=idUser WHERE idOwner=? AND idStatus!=4";//TODO(choose except DELETED status)
     private static final String UPDATE_APARTMENT_BY_ID = "UPDATE apartment SET region=?, city=?, address=?, rooms=?, square=?, " +
             "floor=?, age=?, furniture=?, description=? WHERE idApartment=?";
-
+    private static final String UPDATE_STATUS_BY_APARTMENT_ID = "UPDATE apartment SET idStatus=? WHERE idApartment=?";
 
     private ApartmentDaoImpl(){}
 
@@ -235,7 +236,54 @@ public class ApartmentDaoImpl implements ApartmentDao {
     }
 
     @Override
-    public boolean deleteApartmentById(long id) throws DaoException {
-        return false;
+    public ApartmentStatus findStatusByApartmentId(long id) throws DaoException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        ApartmentStatus status = null;
+        try{
+            statement = connection.prepareStatement(SELECT_STATUS_BY_APARTMENT_ID);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                long statusId = resultSet.getLong(ApartmentTable.ID_STATUS);
+                status = ApartmentStatus.getByValue(statusId);
+            }
+        } catch (SQLException | IncorrectStatusException e) {
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return status;
+    }
+
+    @Override
+    public boolean updateStatusByApartmentId(long id, ApartmentStatus status) throws DaoException {
+        boolean flag = false;
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(UPDATE_STATUS_BY_APARTMENT_ID);
+            statement.setInt(1, status.getValue());
+            statement.setLong(2, id);
+            int rows = statement.executeUpdate();
+            if(rows == 1){
+                flag = true;
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return flag;
     }
 }
