@@ -8,6 +8,7 @@ import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.IncorrectRoleException;
 import by.gradomski.apartments.pool.ConnectionPool;
+import by.gradomski.apartments.util.PasswordEncoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -59,7 +60,8 @@ public class UserDaoImpl implements UserDao {
             statement = connection.prepareStatement(INSERT_NEW_USER);
             statement.setInt(1, user.getRole().getValue());
             statement.setString(2, user.getLoginName());
-            statement.setString(3, user.getPassword());
+            String encodedPass = PasswordEncoder.encode(user.getPassword());
+            statement.setString(3, encodedPass);
             File file = new File(DEFAULT_PHOTO_PATH);
             fileInputStream = new FileInputStream(file);
             statement.setBinaryStream(4, fileInputStream, (int) file.length());
@@ -98,7 +100,8 @@ public class UserDaoImpl implements UserDao {
                 user.setId(resultSet.getLong(UserTable.ID_USER));
                 user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
                 user.setLoginName(resultSet.getString(UserTable.LOGIN));
-                user.setPassword(resultSet.getString(UserTable.PASSWORD));
+                String decodedPass = resultSet.getString(UserTable.PASSWORD);
+                user.setPassword(PasswordEncoder.decode(decodedPass));
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME));
                 long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
@@ -147,7 +150,8 @@ public class UserDaoImpl implements UserDao {
                 user.setId(resultSet.getLong(UserTable.ID_USER));
                 user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
                 user.setLoginName(resultSet.getString(UserTable.LOGIN));
-                user.setPassword(resultSet.getString(UserTable.PASSWORD));
+                String decodedPass = resultSet.getString(UserTable.PASSWORD);
+                user.setPassword(PasswordEncoder.decode(decodedPass));
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME));
                 long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
@@ -196,7 +200,8 @@ public class UserDaoImpl implements UserDao {
                 user.setId(resultSet.getLong(UserTable.ID_USER));
                 user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
                 user.setLoginName(resultSet.getString(UserTable.LOGIN));
-                user.setPassword(resultSet.getString(UserTable.PASSWORD));
+                String decodedPass = resultSet.getString(UserTable.PASSWORD);
+                user.setPassword(PasswordEncoder.decode(decodedPass));
                 user.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
                 user.setLastName(resultSet.getString(UserTable.LAST_NAME));
                 long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
@@ -237,7 +242,8 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement statement = null;
         try{
             statement = connection.prepareStatement(UPDATE_USER_BY_LOGIN);
-            statement.setString(1, user.getPassword());
+            String encodedPass = PasswordEncoder.encode(user.getPassword());
+            statement.setString(1, encodedPass);
             statement.setString(2, user.getFirstName());
             statement.setString(3, user.getLastName());
             if (user.getBirthday() != null){

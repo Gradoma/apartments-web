@@ -29,7 +29,6 @@
     <form name="Simple" action="control" method="post">
         <input type="hidden" name="command" value="update_user"/>
         <input type="hidden" name="login" value="${user.getLoginName()}"/>
-        <fmt:message key="label.password"/> : <input required name="password" value="${user.getPassword()}"><br/>
         <fmt:message key="setting.firstName"/> : <input required name="firstName" value="${user.getFirstName()}"><br/>
         <fmt:message key="setting.lastName"/> : <input required name="lastName" value="${user.getLastName()}"><br/>
         <fmt:message key="setting.gender"/> : <input type="radio" name="gender" value="FEMALE" ${userGender eq female ? 'checked' : ''}/><fmt:message key="setting.female"/>
