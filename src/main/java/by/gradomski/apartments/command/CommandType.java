@@ -14,7 +14,8 @@ public enum CommandType {
     ADD_NEW_APARTMENT(new AddNewApartmentCommand()),
     TRANSITION_TO_ESTATE_EDIT(new TransitionToEstateEditCommand()),
     EDIT_APARTMENT(new EditApartmentCommand()),
-    DELETE_APARTMENT(new DeleteApartmentCommand());
+    DELETE_APARTMENT(new DeleteApartmentCommand()),
+    TRANSITION_TO_USER_PAGE(new TransitionToUserPage());
 
     private Command command;
 
