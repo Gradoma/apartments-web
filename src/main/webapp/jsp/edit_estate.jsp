@@ -8,7 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<fmt:setLocale value="ru" scope="session" />
+<fmt:setLocale value="${pageContext.session.getAttribute('locale')}"  />
 <fmt:setBundle basename="prop.pagecontent" />
 <c:set var="apartmentFurniture" value="${furniture}"/>
 <html>
