@@ -27,6 +27,10 @@
     <input type="hidden" name="command" value="transition_to_estate"/>
     <input type="submit" name="button" value="<fmt:message key="main.estateButton"/>">
 </form>
+<form action="control" method="get">
+    <input type="hidden" name="command" value="log_out"/>
+    <input type="submit" name="button" value="<fmt:message key="main.logoutButton"/>">
+</form>
 <c:import url="footer.jsp"/>
 </body>
 </html>
