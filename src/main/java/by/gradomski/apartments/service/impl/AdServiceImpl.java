@@ -27,24 +27,31 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public boolean addAdvertisement(String title, User author, String price, long apartmentId) throws ServiceException {
-        boolean result;
+    public long addAdvertisement(String title, User author, String price, long apartmentId) throws ServiceException {
+        long generatedId;
         if(title == null || title.isBlank() || price == null || price.isBlank()){
             log.debug("title or price null or blank");
-            return false;
+            return -1;
         }
         BigDecimal decimalPrice = new BigDecimal(price);
         Ad newAd = new Ad(title, author, decimalPrice, apartmentId);
         try{
-            result = AdDaoImpl.getInstance().add(newAd);
-            log.debug("add new Ad result: " + result);
-            if(result){
-                ApartmentServiceImpl.getInstance().updateApartmentStatus(apartmentId, ApartmentStatus.IN_DEMAND);
-            }
+            generatedId = AdDaoImpl.getInstance().add(newAd);
+//            if(advertisementId > 0){
+//                boolean updateStatusResult = ApartmentServiceImpl.getInstance().
+//                        updateApartmentStatus(apartmentId, ApartmentStatus.IN_DEMAND);
+//                if(!updateStatusResult){
+//                    log.warn("cant update apartment status: apartmentId=" + apartmentId);
+//                    boolean deleteAdvertisementResult = AdDaoImpl.getInstance().deleteById(advertisementId);
+//                    if(!deleteAdvertisementResult){
+//                        result = false;
+//                    }
+//                }
+//            }
         } catch (DaoException e){
             throw new ServiceException(e);
         }
-        return result;
+        return generatedId;
     }
 
     @Override
@@ -59,6 +66,12 @@ public class AdServiceImpl implements AdService {
 
     @Override
     public boolean deleteAd(long id) throws ServiceException {
-        return false;
+        boolean flag;
+        try{
+            flag = AdDaoImpl.getInstance().deleteById(id);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return flag;
     }
 }

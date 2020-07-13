@@ -14,6 +14,6 @@ public interface ApartmentService {
     List<Apartment> getApartmentsByOwner(long id) throws ServiceException;
     Map<String, String> updateApartment(long id, String region, String city, String address, String rooms, String floor,
                                         String square, String year, String furniture, String description) throws ServiceException;
-    void updateApartmentStatus(long id, ApartmentStatus status) throws ServiceException;
+    boolean updateApartmentStatus(long id, ApartmentStatus status) throws ServiceException;
     boolean deleteApartment(long id) throws ServiceException;
 }

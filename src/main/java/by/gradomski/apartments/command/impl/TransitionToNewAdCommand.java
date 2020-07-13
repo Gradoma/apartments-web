@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import static by.gradomski.apartments.command.PagePath.*;
 
@@ -15,10 +16,9 @@ public class TransitionToNewAdCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         String page;
-        if(request.getSession(false) != null){
-            String id = request.getParameter(APARTMENT_ID);    //TODO(through session attribute) maybe?!
-            log.debug("id= " + id);
-            request.setAttribute(APARTMENT_ID, id);
+        HttpSession session = request.getSession(false);
+        if(session != null){
+            session.setAttribute(APARTMENT_ID, request.getParameter(APARTMENT_ID));//TODO(through session attribute) maybe?!
             page = NEW_AD;
         } else {
             page = SIGN_IN;

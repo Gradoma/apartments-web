@@ -2,6 +2,7 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.entity.Apartment;
+import by.gradomski.apartments.entity.ApartmentStatus;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
@@ -35,18 +36,31 @@ public class NewAdCommand implements Command {
             User adAuthor = (User) session.getAttribute(USER);
             String title = request.getParameter(TITLE);
             String price = request.getParameter(PRICE);
-            long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
+            long apartmentId = Long.parseLong((String) session.getAttribute(APARTMENT_ID));
+            AdServiceImpl adService = AdServiceImpl.getInstance();
+            ApartmentServiceImpl apartmentService = ApartmentServiceImpl.getInstance();
             try {
-                boolean result = AdServiceImpl.getInstance().addAdvertisement(title, adAuthor, price, apartmentId);
-                if(!result){
-                    request.setAttribute("newAdErrorMessage", "Title and price are required fields. Try again");
-                    request.setAttribute(APARTMENT_ID, apartmentId);
-                    page = NEW_AD;
+                long newAdvertisementId = adService.addAdvertisement(title, adAuthor, price, apartmentId);
+                if(newAdvertisementId > 0){
+                    boolean updateStatusResult = apartmentService.
+                            updateApartmentStatus(apartmentId, ApartmentStatus.IN_DEMAND);
+                    if(updateStatusResult){
+                        List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(adAuthor.getId());
+                        session.removeAttribute(APARTMENT_ID);
+                        session.setAttribute("apartmentList", updatedApartmentList);
+                        page = ESTATE;
+                    } else {
+                        log.info("Advertisement was added; can't change apartment status");
+                        boolean deleteResult = adService.deleteAd(newAdvertisementId);
+                        if(!deleteResult){
+                            log.info("can't delete ad: id=" + newAdvertisementId);
+                        }
+                        request.setAttribute("newAdErrorMessage", "Some errors occurred. Try again");
+                        page = NEW_AD;
+                    }
                 } else {
-                    ApartmentServiceImpl apartmentService = ApartmentServiceImpl.getInstance();
-                    List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(adAuthor.getId());
-                    session.setAttribute("apartmentList", updatedApartmentList);
-                    page = ESTATE;
+                    request.setAttribute("newAdErrorMessage", "Title and price are required fields. Try again");
+                    page = NEW_AD;
                 }
             } catch (ServiceException e) {
                 log.error(e);

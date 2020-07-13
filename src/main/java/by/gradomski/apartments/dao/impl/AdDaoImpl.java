@@ -7,9 +7,7 @@ import by.gradomski.apartments.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.List;
@@ -19,6 +17,7 @@ public class AdDaoImpl implements AdDao {
     private static AdDaoImpl instance;
     private static final String INSERT_NEW_AD = "INSERT INTO ad (title, price, idAuthor, idAppartment, issueDate," +
             "visibility) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String DELETE_AD_BY_ID = "DELETE FROM ad WHERE idAd=?";
 
     private AdDaoImpl(){}
 
@@ -30,8 +29,8 @@ public class AdDaoImpl implements AdDao {
     }
 
     @Override
-    public boolean add(Ad ad) throws DaoException{
-        boolean flag = false;
+    public long add(Ad ad) throws DaoException{
+        long key = -1;
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -39,7 +38,7 @@ public class AdDaoImpl implements AdDao {
         }
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement(INSERT_NEW_AD);
+            statement = connection.prepareStatement(INSERT_NEW_AD, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, ad.getTitle());
             statement.setBigDecimal(2, ad.getPrice());
             statement.setLong(3, ad.getAuthor().getId());
@@ -48,11 +47,10 @@ public class AdDaoImpl implements AdDao {
             long creationMillis = instant.toEpochMilli();
             statement.setLong(5, creationMillis);
             statement.setBoolean(6, ad.isVisible());
-            int rows = statement.executeUpdate();
-            if(rows == 0){
-                log.warn("table apartment wasn't updated, check database");
-            } else {
-                flag = true;
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet != null && resultSet.next()) {
+                key = resultSet.getLong(1);
             }
         } catch (SQLException e){
             throw new DaoException(e);
@@ -60,7 +58,7 @@ public class AdDaoImpl implements AdDao {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return flag;
+        return key;
     }
 
     @Override
@@ -79,7 +77,25 @@ public class AdDaoImpl implements AdDao {
     }
 
     @Override
-    public boolean deleteById(long id) {
-        return false;
+    public boolean deleteById(long id) throws DaoException{
+        boolean result;
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(DELETE_AD_BY_ID);
+            statement.setLong(1, id);
+            int rows = statement.executeUpdate();
+            result = rows!=0;
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return result;
     }
 }
