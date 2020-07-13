@@ -11,8 +11,6 @@
 </head>
 <body>
     <h2>Gradomski apartment project</h2>
-    <h3>Locale : ${pageContext.session.getAttribute('locale')}<h3/>
-        <h3>Language : ${language}<h3/>
     <form action="control">
         <select name="language" onchange="submit()">
             <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>

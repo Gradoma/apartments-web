@@ -28,9 +28,10 @@
     ${addressErrorMessage}<br/>
     <fmt:message key="newEstate.rooms"/> : <input required type="number" name="rooms" value="${rooms}">
     ${roomsErrorMessage}<br/>
-    <fmt:message key="newEstate.floor"/> : <input type="number" name="floor" value="${floor}">
+    <fmt:message key="newEstate.floor"/> : <input type="number" name="floor" value="${floor!=0 ? floor : null}">
     ${floorErrorMessage}<br/>
-    <fmt:message key="newEstate.square"/> : <input type="text" pattern="\d+(\.\d{1})?" name="square" value="${square}"><br/>
+    <fmt:message key="newEstate.square"/> : <input type="text" pattern="\d+(\.\d{1})?" name="square"
+                                                   value="${square!=0.0 ? square : null}"><br/>
     <fmt:message key="newEstate.year"/> : <input type="text" pattern="\d{4}" name="year" value="${year}"><br/>
     <fmt:message key="newEstate.furniture"/> :
     <input type="checkbox" name="furniture" value="true" ${apartmentFurniture eq true ? 'checked' : ''}/><fmt:message key="newEstate.yes"/><br/>

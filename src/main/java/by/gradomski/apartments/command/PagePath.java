@@ -9,6 +9,7 @@ public class PagePath {
     public static final String ESTATE = "/jsp/estate.jsp";
     public static final String NEW_ESTATE = "/jsp/new_estate.jsp";
     public static final String EDIT_ESTATE = "/jsp/edit_estate.jsp";
+    public static final String NEW_AD = "/jsp/new_ad.jsp";
 
     private PagePath(){}
 }

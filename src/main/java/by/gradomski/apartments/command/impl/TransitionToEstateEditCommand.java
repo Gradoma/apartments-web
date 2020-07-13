@@ -19,7 +19,7 @@ public class TransitionToEstateEditCommand implements Command{
         String page;
         HttpSession session = request.getSession(false);
         if(session != null){
-            session.setAttribute("apartmentId", request.getParameter("apartmentId"));
+            session.setAttribute("apartmentId", request.getParameter("apartmentId")); //TODO(constant as fields)
             session.setAttribute("region", request.getParameter("region"));
             session.setAttribute("city", request.getParameter("city"));
             session.setAttribute("address", request.getParameter("address"));

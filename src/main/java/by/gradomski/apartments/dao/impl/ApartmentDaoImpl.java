@@ -29,7 +29,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
     private static final String SELECT_APARTMENT_BY_OWNER_ID = "SELECT idApartment, region, city, address, rooms, square, floor," +
                         "age, furniture, description, idTenant, idStatus, apartment.registrationDate, apartment.visibility, idUser, idRole, login, " +
                         "firstName, lastName, birthday, gender, phone, photo, user.registrationDate, mailAddress, user.visibility " +
-                        "FROM apartment LEFT JOIN user on idTenant=idUser WHERE idOwner=? AND idStatus!=4";//TODO(choose except DELETED status)
+                        "FROM apartment LEFT JOIN user on idTenant=idUser WHERE idOwner=? AND idStatus!=4";
     private static final String UPDATE_APARTMENT_BY_ID = "UPDATE apartment SET region=?, city=?, address=?, rooms=?, square=?, " +
             "floor=?, age=?, furniture=?, description=? WHERE idApartment=?";
     private static final String UPDATE_STATUS_BY_APARTMENT_ID = "UPDATE apartment SET idStatus=? WHERE idApartment=?";

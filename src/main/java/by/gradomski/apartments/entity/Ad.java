@@ -8,19 +8,20 @@ public class Ad {
     private long id;
     private String title;
     private BigDecimal price;
-    private Apartment apartment;
+//    private Apartment apartment;    //TODO(long id or full object?)
+    private long apartmentId;
     private User author;
     private LocalDateTime creationDate;
     private boolean visibility;
 
     public Ad(){};
-    public Ad(long id, String title, User author, BigDecimal price, Apartment apartment){
-        this.id = id;
+    public Ad(String title, User author, BigDecimal price, long apartmentId){
         this.title = title;
         this.author = author;
         this.price = price;
-        this.apartment = apartment;
+        this.apartmentId = apartmentId;
         creationDate = LocalDateTime.now();
+        visibility = true;
     }
 
     public long getId() {
@@ -47,12 +48,12 @@ public class Ad {
         this.price = price;
     }
 
-    public Apartment getAppartment() {
-        return apartment;
+    public long getApartmentId() {
+        return apartmentId;
     }
 
-    public void setAppartment(Apartment apartment) {
-        this.apartment = apartment;
+    public void setApartmentId(long apartmentId) {
+        this.apartmentId = apartmentId;
     }
 
     public User getAuthor() {
@@ -87,11 +88,11 @@ public class Ad {
         Ad ad = (Ad) o;
 
         if (id != ad.id) return false;
+        if (apartmentId != ad.apartmentId) return false;
+        if (visibility != ad.visibility) return false;
         if (title != null ? !title.equals(ad.title) : ad.title != null) return false;
         if (price != null ? !price.equals(ad.price) : ad.price != null) return false;
-        if (apartment != null ? !apartment.equals(ad.apartment) : ad.apartment != null) return false;
         if (author != null ? !author.equals(ad.author) : ad.author != null) return false;
-        if (visibility != apartment.visibility) return false;
         return creationDate != null ? creationDate.equals(ad.creationDate) : ad.creationDate == null;
     }
 
@@ -100,7 +101,7 @@ public class Ad {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
-        result = 31 * result + (apartment != null ? apartment.hashCode() : 0);
+        result = 31 * result + (int) (apartmentId ^ (apartmentId >>> 32));
         result = 31 * result + (author != null ? author.hashCode() : 0);
         result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
         result = 31 * result + (visibility ? 1 : 0);
@@ -118,8 +119,8 @@ public class Ad {
         builder.append(title);
         builder.append(", price=");
         builder.append(price);
-        builder.append(", \napartmant=");
-        builder.append(apartment);
+        builder.append(", apartment id=");
+        builder.append(apartmentId);
         builder.append(", \nauthor=");
         builder.append(author);
         builder.append(", creationDate=");

@@ -116,6 +116,18 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
+    public void updateApartmentStatus(long id, ApartmentStatus status) throws ServiceException {
+        try{
+            boolean result = ApartmentDaoImpl.getInstance().updateStatusByApartmentId(id, status);
+            if(!result){
+                throw new ServiceException("id=" + id + ": status wasn't change: tried changed to " + status);
+            }
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public boolean deleteApartment(long id) throws ServiceException {
         boolean flag = false;
         try {
