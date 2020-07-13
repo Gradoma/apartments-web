@@ -8,14 +8,13 @@ public class Ad {
     private long id;
     private String title;
     private BigDecimal price;
-//    private Apartment apartment;    //TODO(long id or full object?)
     private long apartmentId;
     private User author;
     private LocalDateTime creationDate;
     private boolean visibility;
 
     public Ad(){};
-    public Ad(String title, User author, BigDecimal price, long apartmentId){
+    public Ad(String title, User author, BigDecimal price, long apartmentId){       //TODO(author just id)
         this.title = title;
         this.author = author;
         this.price = price;

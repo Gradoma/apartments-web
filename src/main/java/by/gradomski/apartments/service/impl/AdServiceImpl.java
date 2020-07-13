@@ -12,6 +12,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdServiceImpl implements AdService {
     private static final Logger log = LogManager.getLogger();
@@ -57,6 +59,17 @@ public class AdServiceImpl implements AdService {
     @Override
     public Ad getAdByApartmentId(long id) throws ServiceException {
         return null;
+    }
+
+    @Override
+    public List<Ad> getAllVisible() throws ServiceException {
+        List<Ad> resultList;
+        try{
+            resultList = AdDaoImpl.getInstance().findAllVisible();
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return resultList;
     }
 
     @Override

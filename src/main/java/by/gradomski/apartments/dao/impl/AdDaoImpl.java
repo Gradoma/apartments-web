@@ -1,15 +1,19 @@
 package by.gradomski.apartments.dao.impl;
 
 import by.gradomski.apartments.dao.AdDao;
+import by.gradomski.apartments.dao.column.AdTable;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdDaoImpl implements AdDao {
@@ -17,6 +21,8 @@ public class AdDaoImpl implements AdDao {
     private static AdDaoImpl instance;
     private static final String INSERT_NEW_AD = "INSERT INTO ad (title, price, idAuthor, idAppartment, issueDate," +
             "visibility) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_ALL_VISIBLE = "SELECT idAd, title, price, idAuthor, idAppartment, issueDate," +
+            " FROM ad WHERE visibility=1";
     private static final String DELETE_AD_BY_ID = "DELETE FROM ad WHERE idAd=?";
 
     private AdDaoImpl(){}
@@ -64,6 +70,40 @@ public class AdDaoImpl implements AdDao {
     @Override
     public List<Ad> findAll() {
         return null;
+    }
+
+    @Override
+    public List<Ad> findAllVisible() throws DaoException {
+        List<Ad> listAd = new ArrayList<>();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null; // TODO(usual statement)
+        try{
+            statement = connection.prepareStatement(SELECT_ALL_VISIBLE);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                String title = resultSet.getString(AdTable.TITLE);
+                long authorId = resultSet.getLong(AdTable.ID_AUTHOR);
+                BigDecimal price = new BigDecimal(resultSet.getString(AdTable.PRICE));
+                long apartmentId = resultSet.getLong(AdTable.ID_APARTMENT);
+                Ad ad = new Ad(title,null, price, apartmentId);
+                ad.setId(resultSet.getLong(AdTable.ID_AD));
+                long creationMillis = resultSet.getLong(AdTable.ISSUE_DATE);
+                LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).
+                        toLocalDateTime();
+                ad.setCreationDate(creationDate);
+                listAd.add(ad);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return listAd;
     }
 
     @Override

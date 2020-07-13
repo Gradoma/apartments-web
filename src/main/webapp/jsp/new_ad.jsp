@@ -20,7 +20,6 @@ ${newAdErrorMessage}
 <form name="Ad" action="control" method="get">
     <input type="hidden" name="command" value="new_ad">
     <input type="hidden" name="apartmentId" value="${apartmentId}">
-    Id : ${apartmentId}
     <fmt:message key="newAd.title"/> : <input required name="title" ><br/>
     <fmt:message key="newAd.price"/> : <input type="number" required name="price" ><br/>
     <input type="submit" name="button" value="<fmt:message key="newAd.postButton"/>"/>

@@ -18,7 +18,8 @@ public enum CommandType {
     TRANSITION_TO_USER_PAGE(new TransitionToUserPage()),
     LOG_OUT(new LogOutCommand()),
     TRANSITION_TO_NEW_AD(new TransitionToNewAdCommand()),
-    NEW_AD(new NewAdCommand());
+    NEW_AD(new NewAdCommand()),
+    TRANSITION_FROM_INDEX(new TransitionFromIndex());
 
     private Command command;
 

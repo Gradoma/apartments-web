@@ -5,6 +5,7 @@ public class AdTable {
     public static final String TITLE = "title";
     public static final String PRICE = "price";
     public static final String ID_AUTHOR = "idAuthor";
+    public static final String ID_APARTMENT = "idAppartment";
     public static final String ISSUE_DATE = "issueDate";
     public static final String VISIBILITY = "visibility";
 
