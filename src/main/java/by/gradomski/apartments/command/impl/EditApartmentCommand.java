@@ -20,6 +20,7 @@ import static by.gradomski.apartments.command.PagePath.*;
 public class EditApartmentCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String USER = "user";
+    private static final String APARTMENT_LIST = "apartmentList";
     private static final String APARTMENT_ID = "apartmentId";
     private static final String REGION = "region";
     private static final String CITY = "city";
@@ -56,16 +57,16 @@ public class EditApartmentCommand implements Command {
                         rooms, floor, square, year, furniture, description);
                 if (!updateResult.containsValue(FALSE)) {
                     List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(currentUser.getId());
-                    session.setAttribute("apartmentList", updatedApartmentList);
-                    session.removeAttribute("apartmentId");
-                    session.removeAttribute("region");
-                    session.removeAttribute("city");
-                    session.removeAttribute("rooms");
-                    session.removeAttribute("floor");
-                    session.removeAttribute("square");
-                    session.removeAttribute("year");
-                    session.removeAttribute("furniture");
-                    session.removeAttribute("description");
+                    session.setAttribute(APARTMENT_LIST, updatedApartmentList);
+                    session.removeAttribute(APARTMENT_ID);
+                    session.removeAttribute(REGION);
+                    session.removeAttribute(CITY);
+                    session.removeAttribute(ROOMS);
+                    session.removeAttribute(FLOOR);
+                    session.removeAttribute(SQUARE);
+                    session.removeAttribute(YEAR);
+                    session.removeAttribute(FURNITURE);
+                    session.removeAttribute(DESCRIPTION);
                     page = ESTATE;
                 } else {
                     String failReason = defineFalseKey(updateResult);

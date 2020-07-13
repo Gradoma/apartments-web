@@ -13,22 +13,32 @@ import static by.gradomski.apartments.command.PagePath.SIGN_IN;
 
 public class TransitionToEstateEditCommand implements Command{
     private static final Logger log = LogManager.getLogger();
+    private static final String APARTMENT_ID = "apartmentId";
+    private static final String REGION = "region";
+    private static final String CITY = "city";
+    private static final String ADDRESS = "address";
+    private static final String ROOMS = "rooms";
+    private static final String FLOOR = "floor";
+    private static final String SQUARE = "square";
+    private static final String YEAR = "year";
+    private static final String FURNITURE = "furniture";
+    private static final String DESCRIPTION = "description";
 
     @Override
     public String execute(HttpServletRequest request) {
         String page;
         HttpSession session = request.getSession(false);
         if(session != null){
-            session.setAttribute("apartmentId", request.getParameter("apartmentId")); //TODO(constant as fields)
-            session.setAttribute("region", request.getParameter("region"));
-            session.setAttribute("city", request.getParameter("city"));
-            session.setAttribute("address", request.getParameter("address"));
-            session.setAttribute("rooms", request.getParameter("rooms"));
-            session.setAttribute("floor", request.getParameter("floor"));
-            session.setAttribute("square", request.getParameter("square"));
-            session.setAttribute("year", request.getParameter("year"));
-            session.setAttribute("furniture", request.getParameter("furniture"));
-            session.setAttribute("description", request.getParameter("description"));
+            session.setAttribute(APARTMENT_ID, request.getParameter(APARTMENT_ID));
+            session.setAttribute(REGION, request.getParameter(REGION));
+            session.setAttribute(CITY, request.getParameter(CITY));
+            session.setAttribute(ADDRESS, request.getParameter(ADDRESS));
+            session.setAttribute(ROOMS, request.getParameter(ROOMS));
+            session.setAttribute(FLOOR, request.getParameter(FLOOR));
+            session.setAttribute(SQUARE, request.getParameter(SQUARE));
+            session.setAttribute(YEAR, request.getParameter(YEAR));
+            session.setAttribute(FURNITURE, request.getParameter(FURNITURE));
+            session.setAttribute(DESCRIPTION, request.getParameter(DESCRIPTION));
             page = EDIT_ESTATE;
         } else {
             page = SIGN_IN;
