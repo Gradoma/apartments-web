@@ -21,7 +21,7 @@ public class AdDaoImpl implements AdDao {
     private static AdDaoImpl instance;
     private static final String INSERT_NEW_AD = "INSERT INTO ad (title, price, idAuthor, idAppartment, issueDate," +
             "visibility) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL_VISIBLE = "SELECT idAd, title, price, idAuthor, idAppartment, issueDate," +
+    private static final String SELECT_ALL_VISIBLE = "SELECT idAd, title, price, idAuthor, idAppartment, issueDate" +
             " FROM ad WHERE visibility=1";
     private static final String DELETE_AD_BY_ID = "DELETE FROM ad WHERE idAd=?";
 

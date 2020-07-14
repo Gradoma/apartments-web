@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--<%@ taglib prefix="ctg" uri="/WEB-INF/custom/custom.tld" %>--%>
 <c:set var="en" value="en"/>
 <c:set var="language" value="${not empty pageContext.session.getAttribute('locale') ? pageContext.session.getAttribute('locale') : en}"/>
 <fmt:setLocale value="${language}"/>
@@ -33,11 +34,13 @@
     <table>
         <c:forEach var="ad" items="${advertisementList}" varStatus="status">
             <tr>
-                <td><c:out value="${ status.count }" /></td>
-                <td><img src="fileController" width="50" height="50"></td>
-                <td><c:out value="${ ad.getTitle() }" /></td>
-                <td><c:out value="${ ad.getPrice() }" /></td>
-                <td><c:out value="${ ad.getCreationDate() }" /></td>
+                <td><img src="fileController" width="80" height="80"></td>
+                <td><c:out value="${ad.getTitle() }" /></td>
+                <td><c:out value="${ad.getPrice() }" /></td>
+            </tr>
+            <tr>
+<%--                <td><ctg:dateTime dateTimeValue="${ad.getCreationDate()}"/></td>    //TODO(format tag)--%>
+                <td><c:out value="${ad.getCreationDate() }" /></td>
             </tr>
         </c:forEach>
     </table>

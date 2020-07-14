@@ -1,8 +1,5 @@
 <html>
 <body>
-<%--<jsp:forward page="/jsp/sign_in.jsp"></jsp:forward>--%>
-<form action="control" method="get" >
-    <input type="hidden" name="command" value="transition_from_index"/>
-</form>
+<jsp:forward page="/control?command=transition_from_index"></jsp:forward>
 </body>
 </html>
