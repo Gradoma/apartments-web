@@ -42,7 +42,7 @@ public class AddNewApartmentCommand implements Command {
             log.info("session timed out");
             page = SIGN_IN;
         } else {
-            User currentUser = (User) session.getAttribute(USER);      // FIXME (user==null sometimes)
+            User currentUser = (User) session.getAttribute(USER);
             log.debug("owner: " + currentUser);
             String region = request.getParameter(REGION);
             String city = request.getParameter(CITY);

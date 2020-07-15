@@ -11,6 +11,7 @@ public class PagePath {
     public static final String EDIT_ESTATE = "/jsp/edit_estate.jsp";
     public static final String NEW_AD = "/jsp/new_ad.jsp";
     public static final String ADVERTISEMENT = "/jsp/advertisement.jsp";
+    public static final String NEW_REQUEST = "/jsp/new_request.jsp";
 
     private PagePath(){}
 }

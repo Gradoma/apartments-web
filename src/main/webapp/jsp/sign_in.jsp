@@ -20,6 +20,7 @@
 <body>
     <c:import url="header.jsp"/>
     <h3><fmt:message key="label.body"/></h3>
+    <br/> ${errorAccess} <br/>
 <form name="Simple" action="control" method="post">
     <input type="hidden" name="command" value="sign_in"/>
     <input required name="login" placeholder=<fmt:message key="label.login"/>><br/>

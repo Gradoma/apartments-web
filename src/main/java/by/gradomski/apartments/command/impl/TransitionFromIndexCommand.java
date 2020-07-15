@@ -14,7 +14,7 @@ import java.util.List;
 import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
 import static by.gradomski.apartments.command.PagePath.SIGN_IN;
 
-public class TransitionFromIndex implements Command {
+public class TransitionFromIndexCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String ADVERTISEMENT_LIST = "advertisementList";
 

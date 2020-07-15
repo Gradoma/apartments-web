@@ -35,6 +35,8 @@
                 <fmt:message key="setting.birthday"/> : ${owner.getBirthday()}<br/>
                 <form action="control" method="get">
                     <input type="hidden" name="command" value="transition_to_request"/>
+                    <input type="hidden" name="advertisementId" value="${advertisement.getId()}">
+                    <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>
                     <input type="submit" name="button" value="<fmt:message key="advertisement.wantToRentButton"/>">
                 </form>
             </td>

@@ -10,10 +10,7 @@ import by.gradomski.apartments.exception.IncorrectRoleException;
 import by.gradomski.apartments.exception.IncorrectStatusException;
 import by.gradomski.apartments.pool.ConnectionPool;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +20,7 @@ import java.util.List;
 
 public class RequestDaoImpl implements RequestDao {
     private static final String INSERT_NEW_REQUEST = "INSERT INTO request (idApplicant, idApartment, expectedDate, description," +
-            " creationDate) VALUES (?, ?, ?, ?, ?)";
+            " creationDate, idStatusReq) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_REQUESTS = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
             " request.description, idStatusReq, idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
             "user.registrationDate, mailAddress, idAppartment, region, city, address, rooms, square, floor FROM request JOIN user ON idApplicant=idUser JOIN appartment ON idApartment=idAppartment";
@@ -55,16 +52,23 @@ public class RequestDaoImpl implements RequestDao {
         try {
             statement = connection.prepareStatement(INSERT_NEW_REQUEST);
             statement.setLong(1, request.getApplicant().getId());
-            statement.setLong(2, request.getApartment().getId());
+            statement.setLong(2, request.getApartmentId());
             Instant expectedInstant = request.getExpectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
             long expectedMillis = expectedInstant.toEpochMilli();
             statement.setLong(3, expectedMillis);
-            statement.setString(4, request.getDescription());
+            if(request.getDescription() != null){
+                statement.setString(4, request.getDescription());
+            } else {
+                statement.setNull(4, Types.VARCHAR);
+            }
             Instant creationInstant = request.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
             long creationMillis = expectedInstant.toEpochMilli();
             statement.setLong(5, creationMillis);
-            statement.executeUpdate();
-            flag = true;
+            statement.setLong(6, request.getStatus().getValue());
+            int rows = statement.executeUpdate();
+            if(rows != 0){
+                flag = true;
+            }
         } catch (SQLException e){
             throw new DaoException(e);
         } finally {
@@ -110,19 +114,10 @@ public class RequestDaoImpl implements RequestDao {
                 user.setRegistrationDate(registrationDate);
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
 
-                Apartment apartment = new Apartment();
-                apartment.setId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
-                apartment.setRegion(resultSet.getString(ApartmentTable.REGION));
-                apartment.setCity(resultSet.getString(ApartmentTable.CITY));
-                apartment.setAddress(resultSet.getString(ApartmentTable.ADDRESS));
-                apartment.setRooms(resultSet.getInt(ApartmentTable.ROOMS));
-                apartment.setSquare(resultSet.getDouble(ApartmentTable.SQUARE));
-                apartment.setFloor(resultSet.getInt(ApartmentTable.FLOOR));
-
                 Request request = new Request();
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
                 request.setApplicant(user);
-                request.setApartment(apartment);
+                request.setApartmentId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
                 long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
@@ -162,7 +157,7 @@ public class RequestDaoImpl implements RequestDao {
                 Request request = new Request();
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
                 request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT, User.class));
-                request.setApartment(resultSet.getObject(RequestTable.ID_APARTMENT, Apartment.class));
+//                request.setApartmentId(resultSet.getObject(RequestTable.ID_APARTMENT, Apartment.class));
                 long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
@@ -202,7 +197,7 @@ public class RequestDaoImpl implements RequestDao {
                 Request request = new Request();
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
                 request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT, User.class));
-                request.setApartment(resultSet.getObject(RequestTable.ID_APARTMENT, Apartment.class));
+//                request.setApartmentId(resultSet.getObject(RequestTable.ID_APARTMENT, Apartment.class));
                 long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();

@@ -150,7 +150,7 @@ public class UserServiceImpl implements UserService {
             try {
                 LocalDate birthday = LocalDate.parse(birthdayString);
                 if (today.isBefore(birthday)) {
-                    log.debug("invalid birthDay: earlier than today");
+                    log.debug("invalid birthDay: later than today");
                     throw new DateTimeParseException("invalid birthday", birthdayString, 0);
                 }
                 user.setBirthday(birthday);

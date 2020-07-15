@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import static by.gradomski.apartments.command.PagePath.ADVERTISEMENT;
 import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
 
-public class TransitionToAdvertisement implements Command {
+public class TransitionToAdvertisementCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String ID = "id";
 

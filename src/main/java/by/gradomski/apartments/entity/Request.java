@@ -9,17 +9,16 @@ public class Request {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private long id;
     private User applicant;
-    private Apartment apartment;
+    private long apartmentId;
     private String description;
     private LocalDate expectedDate;
     private RequestStatus status;
     private LocalDateTime creationDate;
 
     public Request(){};
-    public Request(long id, User applicant, Apartment apartment, LocalDate expectedDate){
-        this.id = id;
+    public Request(User applicant, long apartmentId, LocalDate expectedDate){
         this.applicant = applicant;
-        this.apartment = apartment;
+        this.apartmentId = apartmentId;
         this.expectedDate = expectedDate;
         status = RequestStatus.CREATED;
         creationDate = LocalDateTime.now();
@@ -41,12 +40,12 @@ public class Request {
         this.applicant = applicant;
     }
 
-    public Apartment getApartment() {
-        return apartment;
+    public long getApartmentId() {
+        return apartmentId;
     }
 
-    public void setApartment(Apartment apartment) {
-        this.apartment = apartment;
+    public void setApartmentId(long apartmentId) {
+        this.apartmentId = apartmentId;
     }
 
     public String getDescription() {
@@ -89,8 +88,8 @@ public class Request {
         Request request = (Request) o;
 
         if (id != request.id) return false;
+        if (apartmentId != request.apartmentId) return false;
         if (applicant != null ? !applicant.equals(request.applicant) : request.applicant != null) return false;
-        if (apartment != null ? !apartment.equals(request.apartment) : request.apartment != null) return false;
         if (description != null ? !description.equals(request.description) : request.description != null) return false;
         if (expectedDate != null ? !expectedDate.equals(request.expectedDate) : request.expectedDate != null)
             return false;
@@ -102,7 +101,7 @@ public class Request {
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (applicant != null ? applicant.hashCode() : 0);
-        result = 31 * result + (apartment != null ? apartment.hashCode() : 0);
+        result = 31 * result + (int) (apartmentId ^ (apartmentId >>> 32));
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (expectedDate != null ? expectedDate.hashCode() : 0);
         result = 31 * result + (status != null ? status.hashCode() : 0);
@@ -119,8 +118,8 @@ public class Request {
         builder.append(id);
         builder.append(", \napplicant=");
         builder.append(applicant);
-        builder.append(", \napartment=");
-        builder.append(apartment);
+        builder.append(", \napartmentId=");
+        builder.append(apartmentId);
         builder.append(", description=");
         builder.append(description);
         builder.append(", expectedDate=");
