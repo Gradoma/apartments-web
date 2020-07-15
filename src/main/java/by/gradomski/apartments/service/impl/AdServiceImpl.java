@@ -1,6 +1,7 @@
 package by.gradomski.apartments.service.impl;
 
 import by.gradomski.apartments.dao.impl.AdDaoImpl;
+import by.gradomski.apartments.dao.impl.ApartmentDaoImpl;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.ApartmentStatus;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class AdServiceImpl implements AdService {
     private static final Logger log = LogManager.getLogger();
@@ -59,6 +61,20 @@ public class AdServiceImpl implements AdService {
     @Override
     public Ad getAdByApartmentId(long id) throws ServiceException {
         return null;
+    }
+
+    @Override
+    public Ad getAdById(long id) throws ServiceException {
+        Optional<Ad> optionalAd;
+        try {
+            optionalAd = AdDaoImpl.getInstance().findById(id);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        if(optionalAd.isEmpty()){
+            throw new ServiceException("ad wasn't found, id: " + id);
+        }
+        return optionalAd.get();
     }
 
     @Override

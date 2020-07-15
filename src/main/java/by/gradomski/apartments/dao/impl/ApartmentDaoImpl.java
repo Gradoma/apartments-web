@@ -25,6 +25,10 @@ public class ApartmentDaoImpl implements ApartmentDao {
     private static ApartmentDaoImpl instance;
     private static final String INSERT_NEW_APARTMENT = "INSERT INTO apartment (region, city, address, rooms, square, floor, " +
             "age, furniture, description, idStatus, registrationDate, idOwner) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_APARTMENT_BY_ID_JOIN_OWNER = "SELECT region, city, address, rooms, square, floor," +
+            "age, furniture, description, idOwner, idStatus, apartment.registrationDate, apartment.visibility, " +
+            "idUser, idRole, login, firstName, lastName, birthday, gender, phone, photo, user.registrationDate, mailAddress, " +
+            "user.visibility FROM apartment LEFT JOIN user on idOwner=idUser WHERE idApartment=?";
     private static final String SELECT_STATUS_BY_APARTMENT_ID = "SELECT idStatus FROM apartment WHERE idApartment=?";
     private static final String SELECT_APARTMENT_BY_OWNER_ID = "SELECT idApartment, region, city, address, rooms, square, floor," +
                         "age, furniture, description, idTenant, idStatus, apartment.registrationDate, apartment.visibility, idUser, idRole, login, " +
@@ -103,6 +107,79 @@ public class ApartmentDaoImpl implements ApartmentDao {
             pool.releaseConnection(connection);
         }
         return flag;
+    }
+
+    @Override
+    public Optional<Apartment> findApartmentByIdWithOwner(long id) throws DaoException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        Optional<Apartment> optionalApartment = Optional.empty();
+        try {
+            statement = connection.prepareStatement(SELECT_APARTMENT_BY_ID_JOIN_OWNER);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            Apartment apartment = null;
+            while (resultSet.next()){
+                apartment = new Apartment();
+                apartment.setId(id);
+                apartment.setRegion(resultSet.getString(ApartmentTable.REGION));
+                apartment.setCity(resultSet.getString(ApartmentTable.CITY));
+                apartment.setAddress(resultSet.getString(ApartmentTable.ADDRESS));
+                apartment.setRooms(resultSet.getInt(ApartmentTable.ROOMS));
+                apartment.setFloor(resultSet.getInt(ApartmentTable.FLOOR));
+                apartment.setSquare(resultSet.getDouble(ApartmentTable.SQUARE));
+                apartment.setYear(resultSet.getString(ApartmentTable.AGE));
+                apartment.setFurniture(resultSet.getBoolean(ApartmentTable.FURNITURE));
+                apartment.setDescription(resultSet.getString(ApartmentTable.DESCRIPTION));
+                long apartmentStatus = resultSet.getLong(ApartmentTable.ID_STATUS);
+                apartment.setStatus(ApartmentStatus.getByValue(apartmentStatus));
+                long registrationMillis = resultSet.getLong(ApartmentTable.REGISTRATION_DATE);
+                LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                apartment.setRegistrationDate(registrationDate);
+                apartment.setVisibility(resultSet.getBoolean(ApartmentTable.VISIBILITY));
+
+                long ownerId = resultSet.getLong(UserTable.ID_USER);
+                if(ownerId != 0){
+                    User owner = new User();
+                    owner.setId(ownerId);
+                    owner.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
+                    owner.setLoginName(resultSet.getString(UserTable.LOGIN));
+                    owner.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
+                    owner.setLastName(resultSet.getString(UserTable.LAST_NAME));
+                    long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
+                    if(birthdayMillis != 0){
+                        LocalDate birthday =
+                                Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                        owner.setBirthday(birthday);
+                    }
+                    String gender = resultSet.getString(UserTable.GENDER);
+                    if(gender != null){
+                        owner.setGender(Gender.valueOf(gender));
+                    }
+                    owner.setPhone(resultSet.getString(UserTable.PHONE));
+                    long tenantRegisterMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
+                    LocalDateTime tenantRegistrationDate = Instant.ofEpochMilli(tenantRegisterMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    owner.setRegistrationDate(tenantRegistrationDate);
+                    owner.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
+                    owner.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
+                    apartment.setOwner(owner);
+                }
+            }
+            if(apartment != null){
+                optionalApartment = Optional.of(apartment);
+            }
+        } catch (SQLException | IncorrectStatusException | IncorrectRoleException e){
+            e.printStackTrace();
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return optionalApartment;
     }
 
     @Override

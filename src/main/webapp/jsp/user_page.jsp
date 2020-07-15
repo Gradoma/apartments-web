@@ -34,11 +34,14 @@
 <table>
     <c:forEach var="ad" items="${advertisementList}" varStatus="status">
         <tr>
-            <td><c:out value="${ status.count }" /></td>
-            <td><img src="fileController" width="50" height="50"></td>
-            <td><c:out value="${ ad.getTitle() }" /></td>
-            <td><c:out value="${ ad.getPrice() }" /></td>
-            <td><c:out value="${ ad.getCreationDate() }" /></td>
+            <td><img src="fileController" width="80" height="80"></td>
+            <td><a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement>${ad.getTitle()}</a></td>
+<%--            <td><c:out value="${ad.getTitle() }" /></td>--%>
+            <td><c:out value="${ad.getPrice() }" /></td>
+        </tr>
+        <tr>
+                <%--                <td><ctg:dateTime dateTimeValue="${ad.getCreationDate()}"/></td>    //TODO(format tag)--%>
+            <td><c:out value="${ad.getCreationDate() }" /></td>
         </tr>
     </c:forEach>
 </table>

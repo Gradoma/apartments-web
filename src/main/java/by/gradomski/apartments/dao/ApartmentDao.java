@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface ApartmentDao extends BaseDao {
     boolean add(Apartment apartment) throws DaoException;
+    Optional<Apartment> findApartmentByIdWithOwner(long id) throws DaoException;
     List<Apartment> findApartmentsByOwner(long id) throws DaoException;
     List<Apartment> findApartmentsByTenant(long id) throws DaoException;
     List<Apartment> findAll() throws DaoException;

@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ApartmentServiceImpl implements ApartmentService {
     private static final Logger log = LogManager.getLogger();
@@ -78,6 +79,20 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartment.setOwner(owner);
         }
         return apartmentList;
+    }
+
+    @Override
+    public Apartment getApartmentByIdWithOwner(long id) throws ServiceException {
+        Optional<Apartment> optionalApartment;
+        try {
+            optionalApartment = ApartmentDaoImpl.getInstance().findApartmentByIdWithOwner(id);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        if(optionalApartment.isEmpty()){
+            throw new ServiceException("apartment wasn't found, id: " + id);
+        }
+        return optionalApartment.get();
     }
 
     @Override

@@ -131,7 +131,6 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException(e);
         }
         if(optionalUser.isEmpty()){
-            log.error("user " + id + " wasn't found");
             throw new ServiceException("user wasn't found, id: " + id);
         }
         return optionalUser.get();
