@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.ApartmentStatus;
 import by.gradomski.apartments.entity.User;
@@ -23,6 +24,7 @@ public class NewAdCommand implements Command {
     private static final String APARTMENT_ID = "apartmentId";
     private static final String TITLE = "title";
     private static final String PRICE = "price";
+    private static final String ADVERTISEMENT_LIST = "advertisementList";
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -47,7 +49,11 @@ public class NewAdCommand implements Command {
                     if(updateStatusResult){
                         List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(adAuthor.getId());
                         session.removeAttribute(APARTMENT_ID);
-                        session.setAttribute("apartmentList", updatedApartmentList);
+                        session.setAttribute("apartmentList", updatedApartmentList); //TODO(change to request.attr?)
+                        Ad newAd = AdServiceImpl.getInstance().getAdById(newAdvertisementId);
+                        List<Ad> adList = (List<Ad>) request.getServletContext().getAttribute(ADVERTISEMENT_LIST);
+                        adList.add(newAd);
+                        request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
                         page = ESTATE;
                     } else {
                         log.info("Advertisement was added; can't change apartment status");

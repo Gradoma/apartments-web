@@ -25,8 +25,7 @@ public class NewRequestCommand implements Command {
         String page;
         HttpSession session = request.getSession(false);
         User currentUser = (User) session.getAttribute(USER);
-        String apartmentIdString = request.getParameter(APARTMENT_ID);
-//        String apartmentIdString = (String) session.getAttribute(APARTMENT_ID);
+        String apartmentIdString = (String) session.getAttribute(APARTMENT_ID);
         String expectedDateString = request.getParameter(EXPECTED_DATE);
         String description = request.getParameter(DESCRIPTION);
         try{
@@ -36,7 +35,7 @@ public class NewRequestCommand implements Command {
                 request.setAttribute("error", "Request wasn't created, please try again.");
                 page = NEW_REQUEST;
             } else {
-//                session.removeAttribute(APARTMENT_ID);
+                session.removeAttribute(APARTMENT_ID);
                 page = USER_PAGE;
             }
         } catch (ServiceException e){

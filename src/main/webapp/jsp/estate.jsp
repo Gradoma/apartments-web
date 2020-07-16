@@ -55,6 +55,7 @@
                     </c:when>
                     <c:when test="${elem.getStatus() == demand}">
                         <h5><fmt:message key="estate.demandMessage"/></h5>
+                        <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_request_list&apartmentId=${elem.getId()}><fmt:message key="estate.requests"/> </a>
                     </c:when>
                     <c:when test="${elem.getStatus() == rent}">
                         <h5><fmt:message key="estate.rentedMessage"/></h5>

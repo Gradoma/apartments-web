@@ -22,12 +22,14 @@ public class RequestDaoImpl implements RequestDao {
     private static final String INSERT_NEW_REQUEST = "INSERT INTO request (idApplicant, idApartment, expectedDate, description," +
             " creationDate, idStatusReq) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_REQUESTS = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
-            " request.description, idStatusReq, idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
+            " request.description, idStatusReq, idUser, idRole, login, firstName, lastName, birthday, gender, phone," +
             "user.registrationDate, mailAddress, idAppartment, region, city, address, rooms, square, floor FROM request JOIN user ON idApplicant=idUser JOIN appartment ON idApartment=idAppartment";
     private static final String SELECT_REQUEST_BY_APPLICANT = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
-            " description, idStatusReq FROM request WHERE idApplicant=?";
-    private static final String SELECT_REQUEST_BY_APARTMENT = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
-            " description, idStatusReq FROM request WHERE idApartment=?";
+            " request.description, idStatusReq, idUser, idRole, login, firstName, lastName, birthday, gender, phone," +
+            "user.registrationDate, mailAddress FROM request WHERE idApplicant=? AND idStatusReq!=4";
+    private static final String SELECT_REQUEST_BY_APARTMENT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, " +
+            "creationDate, request.description, idStatusReq, idUser, firstName, lastName, birthday, gender, phone, " +
+            "registrationDate FROM request JOIN user ON idApplicant=idUser WHERE idApartment=? AND idStatusReq!=4;";
     private static final String UPDATE_REQUEST = "UPDATE request SET expectedDate=?, description=?, idStatusReq=? WHERE idRequest=?";
     private static RequestDaoImpl instance;
 
@@ -190,14 +192,13 @@ public class RequestDaoImpl implements RequestDao {
         PreparedStatement statement = null;
         List<Request> requestList = new ArrayList<>();
         try{
-            statement = connection.prepareStatement(SELECT_REQUEST_BY_APARTMENT);
+            statement = connection.prepareStatement(SELECT_REQUEST_BY_APARTMENT_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Request request = new Request();
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
-                request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT, User.class));
-//                request.setApartmentId(resultSet.getObject(RequestTable.ID_APARTMENT, Apartment.class));
+                request.setApartmentId(resultSet.getLong(RequestTable.ID_APARTMENT));
                 long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
@@ -209,6 +210,28 @@ public class RequestDaoImpl implements RequestDao {
                 request.setDescription(resultSet.getString(RequestTable.DESCRIPTION));
                 long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST);
                 request.setStatus(RequestStatus.getByValue(statusId));
+
+                long applicantId = resultSet.getLong(RequestTable.ID_APPLICANT);
+                User applicant = new User();
+                applicant.setId(resultSet.getLong(UserTable.ID_USER));
+                applicant.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
+                applicant.setLastName(resultSet.getString(UserTable.LAST_NAME));
+                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
+                if(birthdayMillis != 0){
+                    LocalDate birthday =
+                            Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                    applicant.setBirthday(birthday);
+                }
+                String gender = resultSet.getString(UserTable.GENDER);
+                if(gender != null){
+                    applicant.setGender(Gender.valueOf(gender));
+                }
+                applicant.setPhone(resultSet.getString(UserTable.PHONE));
+                long applicantRegisterMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
+                LocalDateTime tenantRegistrationDate = Instant.ofEpochMilli(applicantRegisterMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                applicant.setRegistrationDate(tenantRegistrationDate);
+
+                request.setApplicant(applicant);
                 requestList.add(request);
             }
         } catch (SQLException | IncorrectStatusException e){

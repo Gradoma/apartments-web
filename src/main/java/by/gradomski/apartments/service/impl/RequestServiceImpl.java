@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 public class RequestServiceImpl implements RequestService {
     private static final Logger log = LogManager.getLogger();
@@ -53,5 +54,16 @@ public class RequestServiceImpl implements RequestService {
             throw new ServiceException(pEx);
         }
         return flag;
+    }
+
+    @Override
+    public List<Request> getRequestsByApartmentId(long id) throws ServiceException {
+        List<Request> resultList;
+        try{
+            resultList = RequestDaoImpl.getInstance().findByApartment(id);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return resultList;
     }
 }
