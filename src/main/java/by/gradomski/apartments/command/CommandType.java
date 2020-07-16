@@ -23,7 +23,8 @@ public enum CommandType {
     TRANSITION_TO_ADVERTISEMENT(new TransitionToAdvertisementCommand()),
     TRANSITION_TO_NEW_REQUEST(new TransitionToNewRequestCommand()),
     NEW_REQUEST(new NewRequestCommand()),
-    TRANSITION_TO_REQUEST_LIST(new TransitionToRequestsCommand());
+    TRANSITION_TO_REQUEST_LIST(new TransitionToRequestsCommand()),
+    APPROVE_REQUEST(new ApproveRequestCommand());
 
     private Command command;
 

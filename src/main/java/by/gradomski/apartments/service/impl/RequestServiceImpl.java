@@ -2,6 +2,7 @@ package by.gradomski.apartments.service.impl;
 
 import by.gradomski.apartments.dao.impl.RequestDaoImpl;
 import by.gradomski.apartments.entity.Request;
+import by.gradomski.apartments.entity.RequestStatus;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Optional;
 
 public class RequestServiceImpl implements RequestService {
     private static final Logger log = LogManager.getLogger();
@@ -65,5 +67,49 @@ public class RequestServiceImpl implements RequestService {
             throw new ServiceException(e);
         }
         return resultList;
+    }
+
+    @Override
+    public boolean approveRequest(long approvingRequestId, List<Request> apartmentRequestList) throws ServiceException {
+        boolean flag;
+        Optional<Request> optionalRequest = containsRequest(apartmentRequestList, approvingRequestId);
+        if(optionalRequest.isPresent()) {
+            Request requestForApproving = optionalRequest.get();
+            apartmentRequestList.remove(requestForApproving);
+            try {
+                boolean approvingResult = RequestDaoImpl.getInstance()
+                        .updateStatusById(requestForApproving.getId(), RequestStatus.APPROVED);
+                if(!approvingResult){
+                    return false;
+                }
+                if(!apartmentRequestList.isEmpty()) {
+                    log.debug("request list not empty");
+                    for (Request request : apartmentRequestList) {
+                        if (request.getStatus() != RequestStatus.CANCELED) {
+                            boolean refusingResult = RequestDaoImpl.getInstance()
+                                    .updateStatusById(request.getId(), RequestStatus.REFUSED);
+                            if (!refusingResult) {
+                                log.warn("can't refuse : requestID=" + request.getId());
+                                return false;
+                            }
+                        }
+                    }
+                }
+                log.debug("end method body");
+                flag = true;
+            } catch (DaoException e){
+                throw new ServiceException(e);
+            }
+        } else {
+            flag = false;
+        }
+        return flag;
+    }
+
+    private Optional<Request> containsRequest(List<Request> requestList, long requestId){
+        Optional<Request> optionalRequest = requestList.stream()
+                .filter(request -> request.getId() == requestId)
+                .findFirst();
+        return optionalRequest;
     }
 }

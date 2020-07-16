@@ -154,6 +154,7 @@ public class ApartmentServiceImpl implements ApartmentService {
                     //TODO(requestService - getAllRequests - iterate: request.changeStatus(DECLINE) + adService - deleteAd)
                     break;
                 case RENT:
+                    // TODO
                     log.warn("try to delete rent apartment");
                     break;
                 case DELETED:

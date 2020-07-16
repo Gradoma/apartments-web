@@ -17,7 +17,8 @@ import static by.gradomski.apartments.command.PagePath.*;
 
 public class TransitionToEstateCommand implements Command {
     private static final Logger log = LogManager.getLogger();
-
+    private static final String USER = "user";
+    private static final String APARTMENT_LIST = "apartmentList";
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -27,14 +28,14 @@ public class TransitionToEstateCommand implements Command {
             log.info("session timed out");
             page = SIGN_IN;
         } else {
-            User user = (User) session.getAttribute("user");
+            User user = (User) session.getAttribute(USER);
             long userId = user.getId();
             try {
                 List<Apartment> apartmentList = ApartmentServiceImpl.getInstance().getApartmentsByOwner(userId);
                 if(apartmentList.isEmpty()){
                     request.setAttribute("noAppartmentsMessage", "You haven’t added any estate yet...");
                 }
-                session.setAttribute("apartmentList", apartmentList);
+                request.setAttribute(APARTMENT_LIST, apartmentList);
                 page = ESTATE;
             } catch (ServiceException e) {
                 log.error(e);

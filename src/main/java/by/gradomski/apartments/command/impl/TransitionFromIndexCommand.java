@@ -24,7 +24,6 @@ public class TransitionFromIndexCommand implements Command {
         try{
             List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
             request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
-            log.debug("adList: " + adList);
             page = SIGN_IN;
         } catch (ServiceException e){
             log.error(e);

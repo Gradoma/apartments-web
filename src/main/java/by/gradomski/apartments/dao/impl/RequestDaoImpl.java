@@ -31,6 +31,7 @@ public class RequestDaoImpl implements RequestDao {
             "creationDate, request.description, idStatusReq, idUser, firstName, lastName, birthday, gender, phone, " +
             "registrationDate FROM request JOIN user ON idApplicant=idUser WHERE idApartment=? AND idStatusReq!=4;";
     private static final String UPDATE_REQUEST = "UPDATE request SET expectedDate=?, description=?, idStatusReq=? WHERE idRequest=?";
+    private static final String UPDATE_STATUS_BY_ID = "UPDATE request SET idStatusReq=? WHERE idRequest=?";
     private static RequestDaoImpl instance;
 
     private RequestDaoImpl(){}
@@ -267,5 +268,31 @@ public class RequestDaoImpl implements RequestDao {
             pool.releaseConnection(connection);
         }
         return request;
+    }
+
+    @Override
+    public boolean updateStatusById(long id, RequestStatus status) throws DaoException {
+        boolean flag = false;
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        try{
+            statement = connection.prepareStatement(UPDATE_STATUS_BY_ID);
+            statement.setLong(1, status.getValue());
+            statement.setLong(2, id);
+            int rows = statement.executeUpdate();
+            if(rows != 0){
+                flag = true;
+            }
+        } catch (SQLException e){
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return flag;
     }
 }
