@@ -24,7 +24,8 @@ public enum CommandType {
     TRANSITION_TO_NEW_REQUEST(new TransitionToNewRequestCommand()),
     NEW_REQUEST(new NewRequestCommand()),
     TRANSITION_TO_REQUEST_LIST(new TransitionToRequestsCommand()),
-    APPROVE_REQUEST(new ApproveRequestCommand());
+    APPROVE_REQUEST(new ApproveRequestCommand()),
+    REFUSE_REQUEST(new RefuseRequestCommand());
 
     private Command command;
 

@@ -106,6 +106,17 @@ public class RequestServiceImpl implements RequestService {
         return flag;
     }
 
+    @Override
+    public boolean refuseRequest(long id) throws ServiceException {
+        boolean flag = false;
+        try{
+            flag = RequestDaoImpl.getInstance().updateStatusById(id, RequestStatus.REFUSED);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return flag;
+    }
+
     private Optional<Request> containsRequest(List<Request> requestList, long requestId){
         Optional<Request> optionalRequest = requestList.stream()
                 .filter(request -> request.getId() == requestId)

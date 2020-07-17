@@ -12,4 +12,5 @@ public interface RequestService {
                        String description) throws ServiceException;
     List<Request> getRequestsByApartmentId(long id) throws ServiceException;
     boolean approveRequest(long approvingRequestId, List<Request> apartmentRequestList) throws ServiceException;
+    boolean refuseRequest(long id) throws ServiceException;
 }
