@@ -70,6 +70,17 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    public List<Request> getRequestsByApplicantId(long id) throws ServiceException {
+        List<Request> resultList;
+        try{
+            resultList = RequestDaoImpl.getInstance().findByApplicant(id);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return resultList;
+    }
+
+    @Override
     public boolean approveRequest(long approvingRequestId, List<Request> apartmentRequestList) throws ServiceException {
         boolean flag;
         Optional<Request> optionalRequest = containsRequest(apartmentRequestList, approvingRequestId);

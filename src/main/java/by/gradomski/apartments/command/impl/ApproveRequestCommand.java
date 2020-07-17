@@ -30,6 +30,7 @@ public class ApproveRequestCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {     //TODO(make through transaction)
+        //TODO(change ad visibility to 0)
         String page;
         long requestId = Long.parseLong(request.getParameter(REQUEST_ID));
         long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));

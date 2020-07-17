@@ -9,6 +9,8 @@ import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.IncorrectRoleException;
 import by.gradomski.apartments.exception.IncorrectStatusException;
 import by.gradomski.apartments.pool.ConnectionPool;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.time.Instant;
@@ -19,14 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestDaoImpl implements RequestDao {
+    private static final Logger log = LogManager.getLogger();
     private static final String INSERT_NEW_REQUEST = "INSERT INTO request (idApplicant, idApartment, expectedDate, description," +
             " creationDate, idStatusReq) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_REQUESTS = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
             " request.description, idStatusReq, idUser, idRole, login, firstName, lastName, birthday, gender, phone," +
             "user.registrationDate, mailAddress, idAppartment, region, city, address, rooms, square, floor FROM request JOIN user ON idApplicant=idUser JOIN appartment ON idApartment=idAppartment";
-    private static final String SELECT_REQUEST_BY_APPLICANT = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
-            " request.description, idStatusReq, idUser, idRole, login, firstName, lastName, birthday, gender, phone," +
-            "user.registrationDate, mailAddress FROM request WHERE idApplicant=? AND idStatusReq!=4";
+    private static final String SELECT_REQUEST_BY_APPLICANT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
+            " request.description, idStatusReq FROM request WHERE idApplicant=?";
     private static final String SELECT_REQUEST_BY_APARTMENT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, " +
             "creationDate, request.description, idStatusReq, idUser, firstName, lastName, birthday, gender, phone, " +
             "registrationDate FROM request JOIN user ON idApplicant=idUser WHERE idApartment=? AND idStatusReq!=4;";
@@ -153,14 +155,13 @@ public class RequestDaoImpl implements RequestDao {
         PreparedStatement statement = null;
         List<Request> requestList = new ArrayList<>();
         try{
-            statement = connection.prepareStatement(SELECT_REQUEST_BY_APPLICANT);
+            statement = connection.prepareStatement(SELECT_REQUEST_BY_APPLICANT_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Request request = new Request();
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
-                request.setApplicant(resultSet.getObject(RequestTable.ID_APPLICANT, User.class));
-//                request.setApartmentId(resultSet.getObject(RequestTable.ID_APARTMENT, Apartment.class));
+                request.setApartmentId(resultSet.getLong(RequestTable.ID_APARTMENT));
                 long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
