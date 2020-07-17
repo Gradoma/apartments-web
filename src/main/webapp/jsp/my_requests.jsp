@@ -20,6 +20,7 @@
 </head>
 <body>
 <c:import url="header.jsp"/>
+${errorMessage}
 <c:choose>
     <c:when test="${requestList == null}">
         <fmt:message key="myRequests.messageNoRequests"/>
@@ -56,11 +57,27 @@
                     <td>
                         <c:choose>
                             <c:when test="${advertisement.isVisible() == 'true'}">
-                                <form action="control" method="get">
-                                    <input type="hidden" name="command" value="cancel_request"/>
-                                    <input type="hidden" name="requestId" value="${ request.getId() }"/>
-                                    <input type="submit" name="button" value="<fmt:message key="myRequests.cancelButton"/>">
-                                </form>
+                                <c:choose>
+                                    <c:when test="${request.getStatus() == created}">
+                                        <form action="control" method="get">
+                                            <input type="hidden" name="command" value="cancel_request"/>
+                                            <input type="hidden" name="requestId" value="${ request.getId() }"/>
+                                            <input type="submit" name="button" value="<fmt:message key="myRequests.cancelButton"/>">
+                                        </form>
+                                    </c:when>
+                                    <c:when test="${request.getStatus() == approved}">
+                                        <form action="control" method="get">
+                                            <input type="hidden" name="command" value="accept"/>
+                                            <input type="hidden" name="requestId" value="${ request.getId() }"/>
+                                            <input type="submit" name="button" value="<fmt:message key="myRequests.acceptButton"/>">
+                                        </form>
+                                        <form action="control" method="get">
+                                            <input type="hidden" name="command" value="decline"/>
+                                            <input type="hidden" name="requestId" value="${ request.getId() }"/>
+                                            <input type="submit" name="button" value="<fmt:message key="myRequests.declineButton"/>">
+                                        </form>
+                                    </c:when>
+                                </c:choose>
                             </c:when>
                             <c:otherwise>
                                 <fmt:message key="myRequests.advetisementStatus"/>

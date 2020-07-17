@@ -38,7 +38,6 @@ public class TransitionToMyRequestsCommand implements Command {
             for(Request req : requestList){
                 long apartmentId = req.getApartmentId();
                 Ad ad = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
-                log.debug("ad: " + ad.getId() + ", visible=" + ad.isVisible());
                 advertisementMap.put(req.getId(), ad);
             }
             request.setAttribute(ADVERTISEMENT_MAP, advertisementMap);
