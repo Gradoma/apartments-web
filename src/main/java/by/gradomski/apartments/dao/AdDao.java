@@ -13,6 +13,6 @@ public interface AdDao extends BaseDao {
     List<Ad> findAllVisible() throws DaoException;
     List<Ad> findByAuthor(long id) throws DaoException;
     Optional<Ad> findByApartmentId(long id) throws DaoException;
-    Ad update(Ad ad) throws DaoException;
+    boolean update(Ad ad) throws DaoException;
     boolean deleteById(long id) throws DaoException;
 }

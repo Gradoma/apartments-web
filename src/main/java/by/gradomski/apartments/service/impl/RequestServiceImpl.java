@@ -59,7 +59,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<Request> getRequestsByApartmentId(long id) throws ServiceException {
+    public List<Request> getActiveRequestsByApartmentId(long id) throws ServiceException {
         List<Request> resultList;
         try{
             resultList = RequestDaoImpl.getInstance().findByApartment(id);
@@ -81,7 +81,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public boolean approveRequest(long approvingRequestId, List<Request> apartmentRequestList) throws ServiceException {
+    public boolean approveRequestFromList(long approvingRequestId, List<Request> apartmentRequestList) throws ServiceException {
         boolean flag;
         Optional<Request> optionalRequest = containsRequest(apartmentRequestList, approvingRequestId);
         if(optionalRequest.isPresent()) {
@@ -93,19 +93,19 @@ public class RequestServiceImpl implements RequestService {
                 if(!approvingResult){
                     return false;
                 }
-                if(!apartmentRequestList.isEmpty()) {
-                    log.debug("request list not empty");
-                    for (Request request : apartmentRequestList) {
-                        if (request.getStatus() != RequestStatus.CANCELED) {
-                            boolean refusingResult = RequestDaoImpl.getInstance()
-                                    .updateStatusById(request.getId(), RequestStatus.REFUSED);
-                            if (!refusingResult) {
-                                log.warn("can't refuse : requestID=" + request.getId());
-                                return false;
-                            }
-                        }
-                    }
-                }
+//                if(!apartmentRequestList.isEmpty()) {
+//                    log.debug("request list not empty");
+//                    for (Request request : apartmentRequestList) {
+//                        if (request.getStatus() != RequestStatus.CANCELED) {
+//                            boolean refusingResult = RequestDaoImpl.getInstance()
+//                                    .updateStatusById(request.getId(), RequestStatus.REFUSED);
+//                            if (!refusingResult) {
+//                                log.warn("can't refuse : requestID=" + request.getId());
+//                                return false;
+//                            }
+//                        }
+//                    }
+//                }
                 log.debug("end method body");
                 flag = true;
             } catch (DaoException e){

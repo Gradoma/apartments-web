@@ -1,12 +1,9 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
-import by.gradomski.apartments.command.PagePath;
-import by.gradomski.apartments.entity.Apartment;
-import by.gradomski.apartments.entity.ApartmentStatus;
-import by.gradomski.apartments.entity.Request;
-import by.gradomski.apartments.entity.User;
+import by.gradomski.apartments.entity.*;
 import by.gradomski.apartments.exception.ServiceException;
+import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import by.gradomski.apartments.service.impl.RequestServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -14,10 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.security.Provider;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import static by.gradomski.apartments.command.PagePath.*;
 
@@ -35,12 +29,15 @@ public class ApproveRequestCommand implements Command {
         long requestId = Long.parseLong(request.getParameter(REQUEST_ID));
         long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
         try{
-            List<Request> requestList = RequestServiceImpl.getInstance().getRequestsByApartmentId(apartmentId);
-            boolean approvingResult = RequestServiceImpl.getInstance().approveRequest(requestId, requestList);
+            List<Request> requestList = RequestServiceImpl.getInstance().getActiveRequestsByApartmentId(apartmentId);
+            boolean approvingResult = RequestServiceImpl.getInstance().approveRequestFromList(requestId, requestList);
             if(approvingResult){
-                boolean apartmentResult = ApartmentServiceImpl.getInstance()
-                        .updateApartmentStatus(apartmentId, ApartmentStatus.RENT);
-                if(apartmentResult){
+//                boolean apartmentResult = ApartmentServiceImpl.getInstance()
+//                        .updateApartmentStatus(apartmentId, ApartmentStatus.RENT);
+                Ad advertisement = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
+                long advertisementId = advertisement.getId();
+                boolean advertisementVisibilityChanging = AdServiceImpl.getInstance().changeVisibility(advertisementId);
+                if(advertisementVisibilityChanging){
                     HttpSession session = request.getSession(false);
                     User user = (User) session.getAttribute(USER);
                     long userId = user.getId();

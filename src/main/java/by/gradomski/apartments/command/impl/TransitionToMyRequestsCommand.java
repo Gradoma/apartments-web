@@ -26,7 +26,7 @@ public class TransitionToMyRequestsCommand implements Command {
     private static final String ADVERTISEMENT_MAP = "advertisementMap";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public String execute(HttpServletRequest request) {     // FIXME(bug ad wasn't found sometimes)
         String page;
         HttpSession session = request.getSession(false);
         User currentUser = (User) session.getAttribute(USER);

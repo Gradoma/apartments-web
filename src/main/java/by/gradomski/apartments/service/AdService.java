@@ -13,5 +13,6 @@ public interface AdService {
     Ad getAdById(long id) throws ServiceException;
     List<Ad> getAllVisible() throws ServiceException;
     boolean updateAd(long id) throws ServiceException;
+    boolean changeVisibility(long id) throws ServiceException;
     boolean deleteAd(long id) throws ServiceException;
 }

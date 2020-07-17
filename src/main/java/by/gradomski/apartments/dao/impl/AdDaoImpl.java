@@ -28,6 +28,7 @@ public class AdDaoImpl implements AdDao {
             " FROM ad WHERE idAppartment=?";
     private static final String SELECT_ALL_VISIBLE_AD = "SELECT idAd, title, price, idAuthor, idAppartment, issueDate" +
             " FROM ad WHERE visibility=1";
+    private static final String UPDATE_AD_BY_ID = "UPDATE ad SET title=?, price=?, issueDate=?, visibility=? WHERE idAd=?";
     private static final String DELETE_AD_BY_ID = "DELETE FROM ad WHERE idAd=?";
 
     private AdDaoImpl(){}
@@ -194,8 +195,34 @@ public class AdDaoImpl implements AdDao {
     }
 
     @Override
-    public Ad update(Ad ad) {
-        return null;
+    public boolean update(Ad ad) throws DaoException{
+        boolean result = false;
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        try{
+            statement = connection.prepareStatement(UPDATE_AD_BY_ID);
+            statement.setString(1, ad.getTitle());
+            statement.setBigDecimal(2, ad.getPrice());
+            Instant instant = ad.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
+            long creationMillis = instant.toEpochMilli();
+            statement.setLong(3, creationMillis);
+            statement.setBoolean(4, ad.isVisible());
+            statement.setLong(5, ad.getId());
+            int rows = statement.executeUpdate();
+            if(rows != 0){
+                result = true;
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return result;
     }
 
     @Override

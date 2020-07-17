@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -100,6 +101,23 @@ public class AdServiceImpl implements AdService {
     @Override
     public boolean updateAd(long id) throws ServiceException {
         return false;
+    }
+
+    @Override
+    public boolean changeVisibility(long id) throws ServiceException {
+        boolean flag;
+        try{
+            Ad ad = getAdById(id);
+            boolean currentVisibility = ad.isVisible();
+            if(!currentVisibility){
+                ad.setCreationDate(LocalDateTime.now());
+            }
+            ad.setVisibility(!currentVisibility);
+            flag = AdDaoImpl.getInstance().update(ad);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return flag;
     }
 
     @Override

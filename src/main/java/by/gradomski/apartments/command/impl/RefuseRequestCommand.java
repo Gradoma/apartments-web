@@ -31,7 +31,7 @@ public class RefuseRequestCommand implements Command {
             if(!refusingResult){
                 request.setAttribute("refuseErrorMessage", "Error, try again.");
             }
-            List<Request> requestList = RequestServiceImpl.getInstance().getRequestsByApartmentId(apartmentId);
+            List<Request> requestList = RequestServiceImpl.getInstance().getActiveRequestsByApartmentId(apartmentId);
             if(!requestList.isEmpty()) {
                 request.setAttribute(REQUEST_LIST, requestList);
             } else {

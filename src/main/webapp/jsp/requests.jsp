@@ -11,6 +11,7 @@
 <fmt:setLocale value="${pageContext.session.getAttribute('locale')}"  />
 <fmt:setBundle basename="prop.pagecontent" />
 <c:set var="refused" value="REFUSED"/>
+<c:set var="approved" value="APPROVED"/>
 <html>
 <head>
     <title>Requests</title>
@@ -41,22 +42,36 @@
                         <td><fmt:message key="requests.expectedDate"/> ${ request.getExpectedDate() }" </td>
                         <td>
                             <c:choose>
-                                <c:when test="${request.getStatus() == refused}">
-                                    <h5><fmt:message key="requests.statusRefused"/></h5>
+                                <c:when test="${containsApproved == 'true'}">
+                                    <c:choose>
+                                        <c:when test="${request.getStatus() == approved}">
+                                            <h5><fmt:message key="requests.statusApproved"/></h5>
+                                        </c:when>
+                                        <c:when test="${request.getStatus() == refused}">
+                                            <h5><fmt:message key="requests.statusRefused"/></h5>
+                                        </c:when>
+                                    </c:choose>
                                 </c:when>
                                 <c:otherwise>
-                                    <form action="control" method="get">
-                                        <input type="hidden" name="command" value="approve_request"/>
-                                        <input type="hidden" name="requestId" value="${ request.getId() }"/>
-                                        <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>
-                                        <input type="submit" name="button" value="<fmt:message key="requests.approveButton"/>">
-                                    </form>
-                                    <form action="control" method="get">
-                                        <input type="hidden" name="command" value="refuse_request"/>
-                                        <input type="hidden" name="requestId" value="${ request.getId() }"/>
-                                        <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>
-                                        <input type="submit" name="button" value="<fmt:message key="requests.refuseButton"/>">
-                                    </form>
+                                    <c:choose>
+                                        <c:when test="${request.getStatus() == refused}">
+                                            <h5><fmt:message key="requests.statusRefused"/></h5>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <form action="control" method="get">
+                                                <input type="hidden" name="command" value="approve_request"/>
+                                                <input type="hidden" name="requestId" value="${ request.getId() }"/>
+                                                <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>
+                                                <input type="submit" name="button" value="<fmt:message key="requests.approveButton"/>">
+                                            </form>
+                                            <form action="control" method="get">
+                                                <input type="hidden" name="command" value="refuse_request"/>
+                                                <input type="hidden" name="requestId" value="${ request.getId() }"/>
+                                                <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>
+                                                <input type="submit" name="button" value="<fmt:message key="requests.refuseButton"/>">
+                                            </form>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </c:otherwise>
                             </c:choose>
                         </td>

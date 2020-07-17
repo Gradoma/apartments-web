@@ -65,6 +65,11 @@ ${errorMessage}
                                             <input type="submit" name="button" value="<fmt:message key="myRequests.cancelButton"/>">
                                         </form>
                                     </c:when>
+
+                                </c:choose>
+                            </c:when>
+                            <c:otherwise>
+                                <c:choose>
                                     <c:when test="${request.getStatus() == approved}">
                                         <form action="control" method="get">
                                             <input type="hidden" name="command" value="accept"/>
@@ -77,10 +82,10 @@ ${errorMessage}
                                             <input type="submit" name="button" value="<fmt:message key="myRequests.declineButton"/>">
                                         </form>
                                     </c:when>
+                                    <c:otherwise>
+                                        <fmt:message key="myRequests.advetisementStatus"/>
+                                    </c:otherwise>
                                 </c:choose>
-                            </c:when>
-                            <c:otherwise>
-                                <fmt:message key="myRequests.advetisementStatus"/>
                             </c:otherwise>
                         </c:choose>
                     </td>
