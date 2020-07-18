@@ -2,10 +2,12 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.entity.Ad;
+import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
+import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import by.gradomski.apartments.service.impl.RequestServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +28,7 @@ public class TransitionToMyRequestsCommand implements Command {
     private static final String ADVERTISEMENT_MAP = "advertisementMap";
 
     @Override
-    public String execute(HttpServletRequest request) {     // FIXME(bug ad wasn't found sometimes)
+    public String execute(HttpServletRequest request) {
         String page;
         HttpSession session = request.getSession(false);
         User currentUser = (User) session.getAttribute(USER);
@@ -39,6 +41,8 @@ public class TransitionToMyRequestsCommand implements Command {
                 long apartmentId = req.getApartmentId();
                 Ad ad = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
                 advertisementMap.put(req.getId(), ad);
+
+
             }
             request.setAttribute(ADVERTISEMENT_MAP, advertisementMap);
             page = MY_REQUESTS;

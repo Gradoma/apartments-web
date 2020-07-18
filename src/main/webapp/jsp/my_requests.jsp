@@ -71,9 +71,13 @@ ${errorMessage}
                             <c:otherwise>
                                 <c:choose>
                                     <c:when test="${request.getStatus() == approved}">
+                                        <c:choose>
+                                            <c:when test=""></c:when>
+                                        </c:choose>
                                         <form action="control" method="get">
                                             <input type="hidden" name="command" value="accept_invitation"/>
                                             <input type="hidden" name="requestId" value="${ request.getId() }"/>
+                                            <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>
                                             <input type="submit" name="button" value="<fmt:message key="myRequests.acceptButton"/>">
                                         </form>
                                         <form action="control" method="get">

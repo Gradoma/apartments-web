@@ -20,8 +20,8 @@ import java.util.Optional;
 public class AdDaoImpl implements AdDao {
     private static final Logger log = LogManager.getLogger();
     private static AdDaoImpl instance;
-    private static final String INSERT_NEW_AD = "INSERT INTO ad (title, price, idAuthor, idAppartment, issueDate," +
-            "visibility) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_NEW_AD = "INSERT INTO ad (title, price, idAuthor, idAppartment, issueDate) " +
+            "VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_AD_BY_ID = "SELECT title, price, idAuthor, idAppartment, issueDate, visibility" +
             " FROM ad WHERE idAd=?";
     private static final String SELECT_AD_BY_APARTMENT_ID = "SELECT idAd, title, price, idAuthor, issueDate, visibility" +
@@ -58,7 +58,6 @@ public class AdDaoImpl implements AdDao {
             Instant instant = ad.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
             long creationMillis = instant.toEpochMilli();
             statement.setLong(5, creationMillis);
-            statement.setBoolean(6, ad.isVisible());
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet != null && resultSet.next()) {

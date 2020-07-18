@@ -20,26 +20,26 @@ public class LocaleFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         //TODO(fix)
-        log.debug("start doFilter");
-        log.debug("req: " + req + ", resp: " + resp);
+//        log.debug("start doFilter");
+//        log.debug("req: " + req + ", resp: " + resp);
         HttpServletRequest reqHttp = (HttpServletRequest) req;
         String userLanguageChoice = reqHttp.getParameter("language");
-        log.debug("user choose locale: " + userLanguageChoice);
+//        log.debug("user choose locale: " + userLanguageChoice);
         HttpServletResponse respHttp = (HttpServletResponse) resp;
         HttpSession session = reqHttp.getSession(true);
-        log.debug("session id: " + session.getId());
+//        log.debug("session id: " + session.getId());
         String localeString = (String) session.getAttribute("locale");
-        log.debug("current locale: " + localeString);
+//        log.debug("current locale: " + localeString);
         if(userLanguageChoice != null){
             session.setAttribute("locale", userLanguageChoice);
-            log.debug("redirect to: " + reqHttp.getHeader("referer"));
+//            log.debug("redirect to: " + reqHttp.getHeader("referer"));
             respHttp.sendRedirect(reqHttp.getHeader("referer"));
         } else if(localeString == null ){
             session.setAttribute("locale", "en");
-            log.debug("local set to default: " + session.getAttribute("locale"));
+//            log.debug("local set to default: " + session.getAttribute("locale"));
             chain.doFilter(req, resp);
         } else {
-            log.debug("lang wasn't changed");
+//            log.debug("lang wasn't changed");
             chain.doFilter(req, resp);
         }
     }
