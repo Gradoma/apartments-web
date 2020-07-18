@@ -21,10 +21,10 @@ public class ApproveRequestCommand implements Command {
     private static final String REQUEST_ID = "requestId";
     private static final String APARTMENT_ID = "apartmentId";
     private static final String APARTMENT_LIST = "apartmentList";
+    private static final String ADVERTISEMENT_LIST = "advertisementList";
 
     @Override
     public String execute(HttpServletRequest request) {     //TODO(make through transaction)
-        //TODO(change ad visibility to 0)
         String page;
         long requestId = Long.parseLong(request.getParameter(REQUEST_ID));
         long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
@@ -38,6 +38,8 @@ public class ApproveRequestCommand implements Command {
                 long advertisementId = advertisement.getId();
                 boolean advertisementVisibilityChanging = AdServiceImpl.getInstance().changeVisibility(advertisementId);
                 if(advertisementVisibilityChanging){
+                    List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
+                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList); //TODO(ASK: rewrite or should remove?)
                     HttpSession session = request.getSession(false);
                     User user = (User) session.getAttribute(USER);
                     long userId = user.getId();

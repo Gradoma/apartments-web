@@ -20,7 +20,6 @@ public class Ad {
         this.price = price;
         this.apartmentId = apartmentId;
         creationDate = LocalDateTime.now();
-        visibility = true;
     }
 
     public long getId() {

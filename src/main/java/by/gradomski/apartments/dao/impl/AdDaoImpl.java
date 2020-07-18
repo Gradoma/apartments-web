@@ -22,7 +22,7 @@ public class AdDaoImpl implements AdDao {
     private static AdDaoImpl instance;
     private static final String INSERT_NEW_AD = "INSERT INTO ad (title, price, idAuthor, idAppartment, issueDate," +
             "visibility) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_AD_BY_ID = "SELECT title, price, idAuthor, idAppartment, issueDate" +
+    private static final String SELECT_AD_BY_ID = "SELECT title, price, idAuthor, idAppartment, issueDate, visibility" +
             " FROM ad WHERE idAd=?";
     private static final String SELECT_AD_BY_APARTMENT_ID = "SELECT idAd, title, price, idAuthor, issueDate, visibility" +
             " FROM ad WHERE idAppartment=?";
@@ -97,6 +97,7 @@ public class AdDaoImpl implements AdDao {
                 LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).
                         toLocalDateTime();
                 ad.setCreationDate(creationDate);
+                ad.setVisibility(resultSet.getBoolean(AdTable.VISIBILITY));
             }
             if(ad != null){
                 optionalAd = Optional.of(ad);

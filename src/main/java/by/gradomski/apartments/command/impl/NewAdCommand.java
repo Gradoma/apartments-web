@@ -51,7 +51,9 @@ public class NewAdCommand implements Command {
                         session.removeAttribute(APARTMENT_ID);
                         session.setAttribute("apartmentList", updatedApartmentList); //TODO(change to request.attr?)
                         Ad newAd = AdServiceImpl.getInstance().getAdById(newAdvertisementId);
-                        List<Ad> adList = (List<Ad>) request.getServletContext().getAttribute(ADVERTISEMENT_LIST);
+                        Object obj = request.getServletContext().getAttribute(ADVERTISEMENT_LIST);
+                        log.debug("obj from servletContext ADVERTISEMENT_LIST: " + obj);    //FIXME(if this first ad -> obj == null?)
+                        List<Ad> adList = (List<Ad>) obj;
                         adList.add(newAd);
                         request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
                         page = ESTATE;

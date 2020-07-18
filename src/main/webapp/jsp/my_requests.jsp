@@ -72,15 +72,17 @@ ${errorMessage}
                                 <c:choose>
                                     <c:when test="${request.getStatus() == approved}">
                                         <form action="control" method="get">
-                                            <input type="hidden" name="command" value="accept"/>
+                                            <input type="hidden" name="command" value="accept_invitation"/>
                                             <input type="hidden" name="requestId" value="${ request.getId() }"/>
                                             <input type="submit" name="button" value="<fmt:message key="myRequests.acceptButton"/>">
                                         </form>
                                         <form action="control" method="get">
-                                            <input type="hidden" name="command" value="decline"/>
+                                            <input type="hidden" name="command" value="decline_invitation"/>
                                             <input type="hidden" name="requestId" value="${ request.getId() }"/>
+                                            <input type="hidden" name="advertisementId" value="${ advertisement.getId() }"/>
                                             <input type="submit" name="button" value="<fmt:message key="myRequests.declineButton"/>">
                                         </form>
+                                        <br/>
                                     </c:when>
                                     <c:otherwise>
                                         <fmt:message key="myRequests.advetisementStatus"/>
