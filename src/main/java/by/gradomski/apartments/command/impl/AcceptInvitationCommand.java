@@ -76,6 +76,10 @@ public class AcceptInvitationCommand implements Command {
                     }
                 }
             }
+            boolean apartmentTenantUpd = ApartmentServiceImpl.getInstance().updateTenant(apartmentId, currentUser.getId());
+            if(!apartmentTenantUpd){
+                log.error("can't upd apartment tenant: id=" + apartmentId);
+            }
             boolean apartmentStatusUpd = ApartmentServiceImpl.getInstance()
                     .updateApartmentStatus(apartmentId, ApartmentStatus.RENT);
             if(!apartmentStatusUpd){

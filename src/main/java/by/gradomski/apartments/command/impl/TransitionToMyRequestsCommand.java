@@ -6,6 +6,7 @@ import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
+import by.gradomski.apartments.service.ApartmentService;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import by.gradomski.apartments.service.impl.RequestServiceImpl;
@@ -26,6 +27,7 @@ public class TransitionToMyRequestsCommand implements Command {
     private static final String USER = "user";
     private static final String REQUEST_LIST = "requestList";
     private static final String ADVERTISEMENT_MAP = "advertisementMap";
+    private static final String APARTMENT_MAP = "apartmentMap";
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -37,14 +39,16 @@ public class TransitionToMyRequestsCommand implements Command {
             List<Request> requestList = RequestServiceImpl.getInstance().getRequestsByApplicantId(userId);
             request.setAttribute(REQUEST_LIST, requestList);
             Map<Long, Ad> advertisementMap = new HashMap<>();
+            Map<Long, Apartment> apartmentMap = new HashMap<>();
             for(Request req : requestList){
                 long apartmentId = req.getApartmentId();
                 Ad ad = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
                 advertisementMap.put(req.getId(), ad);
-
-
+                Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
+                apartmentMap.put(req.getId(), apartment);
             }
             request.setAttribute(ADVERTISEMENT_MAP, advertisementMap);
+            request.setAttribute(APARTMENT_MAP, apartmentMap);
             page = MY_REQUESTS;
         } catch (ServiceException e){
             log.error(e);

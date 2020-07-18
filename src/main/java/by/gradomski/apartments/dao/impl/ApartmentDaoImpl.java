@@ -34,9 +34,14 @@ public class ApartmentDaoImpl implements ApartmentDao {
                         "age, furniture, description, idTenant, idStatus, apartment.registrationDate, apartment.visibility, idUser, idRole, login, " +
                         "firstName, lastName, birthday, gender, phone, photo, user.registrationDate, mailAddress, user.visibility " +
                         "FROM apartment LEFT JOIN user on idTenant=idUser WHERE idOwner=? AND idStatus!=4";
+    private static final String SELECT_APARTMENT_BY_TENANT_ID = "SELECT idApartment, region, city, address, rooms, square, floor," +
+            "age, furniture, description, idOwner, idStatus, apartment.registrationDate, apartment.visibility, idUser, idRole, login, " +
+            "firstName, lastName, birthday, gender, phone, photo, user.registrationDate, mailAddress, user.visibility " +
+            "FROM apartment JOIN user on idOwner=idUser WHERE idTenant=? AND idStatus!=4";
     private static final String UPDATE_APARTMENT_BY_ID = "UPDATE apartment SET region=?, city=?, address=?, rooms=?, square=?, " +
             "floor=?, age=?, furniture=?, description=? WHERE idApartment=?";
     private static final String UPDATE_STATUS_BY_APARTMENT_ID = "UPDATE apartment SET idStatus=? WHERE idApartment=?";
+    private static final String UPDATE_TENANT_BY_APARTMENT_ID = "UPDATE apartment SET idTenant=? WHERE idApartment=?";
 
     private ApartmentDaoImpl(){}
 
@@ -240,7 +245,6 @@ public class ApartmentDaoImpl implements ApartmentDao {
                     tenant.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
                     apartment.setTenant(tenant);
                 }
-
                 apartmentList.add(apartment);
             }
         } catch (SQLException | IncorrectStatusException | IncorrectRoleException e){
@@ -255,7 +259,72 @@ public class ApartmentDaoImpl implements ApartmentDao {
 
     @Override
     public List<Apartment> findApartmentsByTenant(long id) throws DaoException {
-        return null;
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        List<Apartment> apartmentList = new ArrayList<>();
+        try{
+            statement = connection.prepareStatement(SELECT_APARTMENT_BY_TENANT_ID);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Apartment apartment = new Apartment();
+                apartment.setId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
+                apartment.setRegion(resultSet.getString(ApartmentTable.REGION));
+                apartment.setCity(resultSet.getString(ApartmentTable.CITY));
+                apartment.setAddress(resultSet.getString(ApartmentTable.ADDRESS));
+                apartment.setRooms(resultSet.getInt(ApartmentTable.ROOMS));
+                apartment.setFloor(resultSet.getInt(ApartmentTable.FLOOR));
+                apartment.setSquare(resultSet.getDouble(ApartmentTable.SQUARE));
+                apartment.setYear(resultSet.getString(ApartmentTable.AGE));
+                apartment.setFurniture(resultSet.getBoolean(ApartmentTable.FURNITURE));
+                apartment.setDescription(resultSet.getString(ApartmentTable.DESCRIPTION));
+                long apartmentStatus = resultSet.getLong(ApartmentTable.ID_STATUS);
+                apartment.setStatus(ApartmentStatus.getByValue(apartmentStatus));
+                long registrationMillis = resultSet.getLong(ApartmentTable.REGISTRATION_DATE);
+                LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                apartment.setRegistrationDate(registrationDate);
+                apartment.setVisibility(resultSet.getBoolean(ApartmentTable.VISIBILITY));
+
+                long ownerId = resultSet.getLong(UserTable.ID_USER);
+                if(ownerId != 0){
+                    User owner = new User();
+                    owner.setId(ownerId);
+                    owner.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
+                    owner.setLoginName(resultSet.getString(UserTable.LOGIN));
+                    owner.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
+                    owner.setLastName(resultSet.getString(UserTable.LAST_NAME));
+                    long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
+                    if(birthdayMillis != 0){
+                        LocalDate birthday =
+                                Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                        owner.setBirthday(birthday);
+                    }
+                    String gender = resultSet.getString(UserTable.GENDER);
+                    if(gender != null){
+                        owner.setGender(Gender.valueOf(gender));
+                    }
+                    owner.setPhone(resultSet.getString(UserTable.PHONE));
+                    long tenantRegisterMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
+                    LocalDateTime tenantRegistrationDate = Instant.ofEpochMilli(tenantRegisterMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                    owner.setRegistrationDate(tenantRegistrationDate);
+                    owner.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
+                    owner.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
+                    apartment.setTenant(owner);
+                }
+                apartmentList.add(apartment);
+            }
+        } catch (SQLException | IncorrectStatusException | IncorrectRoleException e){
+            e.printStackTrace();
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return apartmentList;
     }
 
     @Override
@@ -350,6 +419,32 @@ public class ApartmentDaoImpl implements ApartmentDao {
         try {
             statement = connection.prepareStatement(UPDATE_STATUS_BY_APARTMENT_ID);
             statement.setInt(1, status.getValue());
+            statement.setLong(2, id);
+            int rows = statement.executeUpdate();
+            if(rows == 1){
+                flag = true;
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return flag;
+    }
+
+    @Override
+    public boolean updateTenantByApartmentId(long id, long tenantId) throws DaoException {
+        boolean flag = false;
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(UPDATE_TENANT_BY_APARTMENT_ID);
+            statement.setLong(1, tenantId);
             statement.setLong(2, id);
             int rows = statement.executeUpdate();
             if(rows == 1){

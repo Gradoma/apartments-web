@@ -16,4 +16,5 @@ public interface ApartmentDao extends BaseDao {
     void update(Apartment apartment) throws DaoException;
     ApartmentStatus findStatusByApartmentId(long id) throws DaoException;
     boolean updateStatusByApartmentId(long id, ApartmentStatus status) throws DaoException;
+    boolean updateTenantByApartmentId(long id, long tenantId) throws DaoException;
 }

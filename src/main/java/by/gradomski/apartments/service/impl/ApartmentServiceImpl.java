@@ -82,6 +82,22 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
+    public List<Apartment> getApartmentsByTenant(long id) throws ServiceException {
+        List<Apartment> apartmentList;
+        User tenant;
+        try {
+            apartmentList = ApartmentDaoImpl.getInstance().findApartmentsByTenant(id);
+            tenant = UserServiceImpl.getInstance().getUserById(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        for(Apartment apartment : apartmentList){
+            apartment.setTenant(tenant);
+        }
+        return apartmentList;
+    }
+
+    @Override
     public Apartment getApartmentByIdWithOwner(long id) throws ServiceException {
         Optional<Apartment> optionalApartment;
         try {
@@ -135,6 +151,17 @@ public class ApartmentServiceImpl implements ApartmentService {
         boolean result;
         try{
             result = ApartmentDaoImpl.getInstance().updateStatusByApartmentId(id, status);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean updateTenant(long apartmentId, long tenantId) throws ServiceException {
+        boolean result;
+        try{
+            result = ApartmentDaoImpl.getInstance().updateTenantByApartmentId(apartmentId, tenantId);
         } catch (DaoException e){
             throw new ServiceException(e);
         }
