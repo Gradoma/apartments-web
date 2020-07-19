@@ -26,11 +26,13 @@ public enum CommandType {
     TRANSITION_TO_REQUEST_LIST(new TransitionToRequestsCommand()),
     APPROVE_REQUEST(new ApproveRequestCommand()),
     REFUSE_REQUEST(new RefuseRequestCommand()),
-    TRANSITION_TO_MY_REQUESTS(new TransitionToMyRequestsCommand()),
+    TRANSITION_TO_MY_RENT(new TransitionToMyRentCommand()),
     CANCEL_REQUEST(new CancelRequestCommand()),
     DECLINE_INVITATION(new DeclineInvitationCommand()),
     ACCEPT_INVITATION(new AcceptInvitationCommand()),
-    FINISH_RENT(new FinishRentCommand());
+    FINISH_RENT(new FinishRentCommand()),
+    TRANSITION_TO_ADVERTISEMENT_EDIT(new TransitionToAdvertisementEditCommand()),
+    EDIT_ADVERTISEMENT(new EditAdvertisementCommand());
 
     private Command command;
 

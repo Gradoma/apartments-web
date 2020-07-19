@@ -20,52 +20,82 @@
 </head>
 <body>
 <c:import url="header.jsp"/>
-    <h2>${noAppartmentsMessage}</h2>
-<table>
-    <c:forEach var="elem" items="${apartmentList}" varStatus="status">
-        <tr>
-            <td><c:out value="${ status.count }" /></td>
-            <td><img src="fileController" width="50" height="50"></td>
-            <td><c:out value="${ elem.getRegion() }" /></td>
-            <td><c:out value="${ elem.getCity() }" /></td>
-            <td><c:out value="${ elem.getAddress() }" /></td>
-            <td>
-                <c:choose>
-                    <c:when test="${elem.getStatus() == registered}">
-                        <form action="control" method="get">
-                            <input type="hidden" name="command" value="transition_to_estate_edit"/>
-                            <input type="hidden" name="apartmentId" value="${elem.getId()}">
-                            <input type="hidden" name="region" value="${elem.getRegion()}">
-                            <input type="hidden" name="city" value="${elem.getCity()}">
-                            <input type="hidden" name="address" value="${elem.getAddress()}">
-                            <input type="hidden" name="city" value="${elem.getCity()}">
-                            <input type="hidden" name="rooms" value="${elem.getRooms()}">
-                            <input type="hidden" name="floor" value="${elem.getFloor()}">
-                            <input type="hidden" name="square" value="${elem.getSquare()}">
-                            <input type="hidden" name="year" value="${elem.getYear()}">
-                            <input type="hidden" name="furniture" value="${elem.hasFurniture()}">
-                            <input type="hidden" name="description" value="${elem.getDescription()}">
-                            <input type="submit" name="button" value="<fmt:message key="estate.editButton"/>">
-                        </form>
-                        <form action="control" method="get">
-                            <input type="hidden" name="command" value="transition_to_new_ad"/>
-                            <input type="hidden" name="apartmentId" value="${elem.getId()}">
-                            <input type="submit" name="button" value="<fmt:message key="estate.newAdButton"/>">
-                        </form>
-                    </c:when>
-                    <c:when test="${elem.getStatus() == demand}">
-                        <h5><fmt:message key="estate.demandMessage"/></h5>
-                        <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_request_list&apartmentId=${elem.getId()}><fmt:message key="estate.requests"/> </a>
-                    </c:when>
-                    <c:when test="${elem.getStatus() == rent}">
-                        <h5><fmt:message key="estate.rentedMessage"/></h5>
-                    </c:when>
-                </c:choose>
-            </td>
-            <td><h4>${errorDeleteMessage}</h4></td>
-        </tr>
-    </c:forEach>
-</table>
+<c:choose>
+    <c:when test="${noAppartmentsMessage eq true}">
+        <h2><fmt:message key="estate.noAppartmentsMessage"/> </h2>
+    </c:when>
+    <c:otherwise>
+        <table>
+            <c:forEach var="elem" items="${apartmentList}" varStatus="status">
+                <c:set var="apartmentId" value="${elem.getId()}"/>
+                <tr>
+                    <td><c:out value="${ status.count }" /></td>
+                    <td><img src="fileController" width="50" height="50"></td>
+                    <td><c:out value="${ elem.getRegion() }" /></td>
+                    <td><c:out value="${ elem.getCity() }" /></td>
+                    <td><c:out value="${ elem.getAddress() }" /></td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${elem.getStatus() == registered}">
+                                <form action="control" method="get">
+                                    <input type="hidden" name="command" value="transition_to_estate_edit"/>
+                                    <input type="hidden" name="apartmentId" value="${elem.getId()}">
+                                    <input type="hidden" name="region" value="${elem.getRegion()}">
+                                    <input type="hidden" name="city" value="${elem.getCity()}">
+                                    <input type="hidden" name="address" value="${elem.getAddress()}">
+                                    <input type="hidden" name="city" value="${elem.getCity()}">
+                                    <input type="hidden" name="rooms" value="${elem.getRooms()}">
+                                    <input type="hidden" name="floor" value="${elem.getFloor()}">
+                                    <input type="hidden" name="square" value="${elem.getSquare()}">
+                                    <input type="hidden" name="year" value="${elem.getYear()}">
+                                    <input type="hidden" name="furniture" value="${elem.hasFurniture()}">
+                                    <input type="hidden" name="description" value="${elem.getDescription()}">
+                                    <input type="submit" name="button" value="<fmt:message key="estate.editButton"/>">
+                                </form>
+                                <form action="control" method="get">
+                                    <input type="hidden" name="command" value="transition_to_new_ad"/>
+                                    <input type="hidden" name="apartmentId" value="${elem.getId()}">
+                                    <input type="submit" name="button" value="<fmt:message key="estate.newAdButton"/>">
+                                </form>
+                            </c:when>
+                            <c:when test="${elem.getStatus() == demand}">
+                                <c:set var="contains" value="${requestMap[apartmentId]}"/>
+                                <h5><fmt:message key="estate.demandMessage"/></h5>
+                                <c:choose>
+                                    <c:when test="${contains eq true}">
+                                        <fmt:message key="estate.cantChangeMessage"/>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <form action="control" method="get">
+                                            <input type="hidden" name="command" value="transition_to_advertisement_edit"/>
+                                            <input type="hidden" name="apartmentId" value="${elem.getId()}">
+                                            <input type="hidden" name="region" value="${elem.getRegion()}">
+                                            <input type="hidden" name="city" value="${elem.getCity()}">
+                                            <input type="hidden" name="address" value="${elem.getAddress()}">
+                                            <input type="hidden" name="city" value="${elem.getCity()}">
+                                            <input type="hidden" name="rooms" value="${elem.getRooms()}">
+                                            <input type="hidden" name="floor" value="${elem.getFloor()}">
+                                            <input type="hidden" name="square" value="${elem.getSquare()}">
+                                            <input type="hidden" name="year" value="${elem.getYear()}">
+                                            <input type="hidden" name="furniture" value="${elem.hasFurniture()}">
+                                            <input type="hidden" name="description" value="${elem.getDescription()}">
+                                            <input type="submit" name="button" value="<fmt:message key="estate.editAdvertisementButton"/>">
+                                        </form>
+                                    </c:otherwise>
+                                </c:choose>
+                                <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_request_list&apartmentId=${elem.getId()}><fmt:message key="estate.requests"/> </a>
+                            </c:when>
+                            <c:when test="${elem.getStatus() == rent}">
+                                <h5><fmt:message key="estate.rentedMessage"/></h5>
+                            </c:when>
+                        </c:choose>
+                    </td>
+                    <td><h4>${errorDeleteMessage}</h4></td>
+                </tr>
+            </c:forEach>
+        </table>
+    </c:otherwise>
+</c:choose>
 <form action="control" method="get">
     <input type="hidden" name="command" value="transition_to_new_estate"/>
     <input type="submit" name="button" value="<fmt:message key="estate.newApartmentButton"/>">

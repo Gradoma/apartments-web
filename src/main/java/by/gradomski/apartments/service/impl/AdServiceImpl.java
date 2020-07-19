@@ -99,8 +99,22 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public boolean updateAd(long id) throws ServiceException {
-        return false;
+    public boolean updateAd(Ad advertisement, String title, String price) throws ServiceException {
+        boolean flag;
+        if(title == null || title.isBlank() || price == null || price.isBlank()){
+            log.debug("title or price null or blank");
+            return false;
+        }       // TODO check price <=0
+                // TODO check title.length
+        BigDecimal decimalPrice = new BigDecimal(price);
+        advertisement.setTitle(title);
+        advertisement.setPrice(decimalPrice);
+        try{
+            flag = AdDaoImpl.getInstance().update(advertisement);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return flag;
     }
 
     @Override

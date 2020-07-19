@@ -12,7 +12,7 @@ public interface AdService {
     Ad getAdByApartmentId(long id) throws ServiceException;
     Ad getAdById(long id) throws ServiceException;
     List<Ad> getAllVisible() throws ServiceException;
-    boolean updateAd(long id) throws ServiceException;
+    boolean updateAd(Ad advertisement, String title, String price) throws ServiceException;
     boolean changeVisibility(long id) throws ServiceException;
     boolean deleteAd(long id) throws ServiceException;
 }

@@ -17,7 +17,7 @@
 <fmt:setBundle basename="prop.pagecontent" />
 <html>
 <head>
-    <title>My Requests</title>
+    <title>My Rent</title>
 </head>
 <body>
 <c:import url="header.jsp"/>

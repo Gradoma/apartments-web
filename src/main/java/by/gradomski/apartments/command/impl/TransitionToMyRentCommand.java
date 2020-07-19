@@ -22,7 +22,7 @@ import java.util.Map;
 import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
 import static by.gradomski.apartments.command.PagePath.MY_REQUESTS;
 
-public class TransitionToMyRequestsCommand implements Command {
+public class TransitionToMyRentCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String USER = "user";
     private static final String REQUEST_LIST = "requestList";

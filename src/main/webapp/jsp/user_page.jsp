@@ -28,7 +28,7 @@
     <input type="submit" name="button" value="<fmt:message key="main.estateButton"/>">
 </form>
 <form action="control" method="get">
-    <input type="hidden" name="command" value="transition_to_my_requests"/>
+    <input type="hidden" name="command" value="transition_to_my_rent"/>
     <input type="submit" name="button" value="<fmt:message key="main.myRequestsButton"/>">
 </form>
 <form action="control" method="get">
