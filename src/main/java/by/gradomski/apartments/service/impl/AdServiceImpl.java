@@ -110,10 +110,6 @@ public class AdServiceImpl implements AdService {
             Ad ad = getAdById(id);
             boolean currentVisibility = ad.isVisible();
             log.debug("current visibility" + currentVisibility);
-            if(!currentVisibility){
-                ad.setCreationDate(LocalDateTime.now());
-                log.debug("date updated: " + ad.getCreationDate());
-            }
             ad.setVisibility(!currentVisibility);
             log.debug("new visibility: " + ad.isVisible());
             flag = AdDaoImpl.getInstance().update(ad);

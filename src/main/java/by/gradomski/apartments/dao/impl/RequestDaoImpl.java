@@ -28,7 +28,7 @@ public class RequestDaoImpl implements RequestDao {
             " request.description, idStatusReq, idUser, idRole, login, firstName, lastName, birthday, gender, phone," +
             "user.registrationDate, mailAddress, idAppartment, region, city, address, rooms, square, floor FROM request JOIN user ON idApplicant=idUser JOIN appartment ON idApartment=idAppartment";
     private static final String SELECT_REQUEST_BY_APPLICANT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
-            " request.description, idStatusReq FROM request WHERE idApplicant=?";
+            " request.description, idStatusReq FROM request WHERE idApplicant=? AND idStatusReq!=5";
     private static final String SELECT_REQUEST_BY_APARTMENT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, " +
             "creationDate, request.description, idStatusReq, idUser, firstName, lastName, birthday, gender, phone, " +
             "registrationDate FROM request JOIN user ON idApplicant=idUser WHERE idApartment=? AND idStatusReq!=4;";
@@ -67,7 +67,7 @@ public class RequestDaoImpl implements RequestDao {
                 statement.setNull(4, Types.VARCHAR);
             }
             Instant creationInstant = request.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
-            long creationMillis = expectedInstant.toEpochMilli();
+            long creationMillis = creationInstant.toEpochMilli();
             statement.setLong(5, creationMillis);
             statement.setLong(6, request.getStatus().getValue());
             int rows = statement.executeUpdate();

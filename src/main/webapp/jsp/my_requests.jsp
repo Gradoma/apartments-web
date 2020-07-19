@@ -77,7 +77,8 @@ ${errorMessage}
                                         <fmt:message key="myRequests.apartmentRent"/>
                                         <form action="control" method="get">
                                             <input type="hidden" name="command" value="finish_rent"/>
-
+                                            <input type="hidden" name="apartmentId" value="${apartment.getId() }"/>
+                                            <input type="hidden" name="requestId" value="${ request.getId() }"/>
                                             <input type="submit" name="button" value="<fmt:message key="myRequests.finishRentButton"/>">
                                         </form>
                                     </c:when>

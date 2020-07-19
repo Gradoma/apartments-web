@@ -444,7 +444,11 @@ public class ApartmentDaoImpl implements ApartmentDao {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(UPDATE_TENANT_BY_APARTMENT_ID);
-            statement.setLong(1, tenantId);
+            if(tenantId > 0){
+                statement.setLong(1, tenantId);
+            } else {
+                statement.setNull(1, Types.BIGINT);
+            }
             statement.setLong(2, id);
             int rows = statement.executeUpdate();
             if(rows == 1){

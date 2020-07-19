@@ -9,7 +9,8 @@ public enum RequestStatus {
     CREATED(1),
     APPROVED(2),
     REFUSED(3),
-    CANCELED(4);
+    CANCELED(4),
+    ARCHIVED(5);
 
     private long value;
 

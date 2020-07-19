@@ -15,4 +15,5 @@ public interface RequestService {
     boolean approveRequestFromList(long approvingRequestId, List<Request> apartmentRequestList) throws ServiceException;
     boolean refuseRequest(long id) throws ServiceException;
     boolean cancelRequest(long id) throws ServiceException;
+    boolean archiveRequest(long id) throws ServiceException;
 }
