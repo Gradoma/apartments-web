@@ -38,11 +38,15 @@ public class TransitionToAdvertisementCommand implements Command {
                 request.setAttribute("apartment", apartment);
                 HttpSession session = request.getSession(false);
                 User currentUser = (User) session.getAttribute(USER);
-                List<Request> userRequestList = RequestServiceImpl.getInstance()
-                        .getRequestsByApplicantId(currentUser.getId());
-                for(Request userReq : userRequestList){
-                    if(ad.getApartmentId() == userReq.getApartmentId() && userReq.getStatus()== RequestStatus.CREATED){
-                        request.setAttribute(WAS_CREATED, true);
+                log.debug("ad.getAuthorId(): " + ad.getAuthorId());
+                log.debug("user: " + currentUser);
+                if(currentUser != null) {
+                    List<Request> userRequestList = RequestServiceImpl.getInstance()
+                            .getRequestsByApplicantId(currentUser.getId());
+                    for (Request userReq : userRequestList) {
+                        if (ad.getApartmentId() == userReq.getApartmentId() && userReq.getStatus() == RequestStatus.CREATED) {
+                            request.setAttribute(WAS_CREATED, true);
+                        }
                     }
                 }
                 page = ADVERTISEMENT;

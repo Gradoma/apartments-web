@@ -30,24 +30,32 @@
             <td>
                 <fmt:message key="advertisement.owner"/> <br/>
                 <c:set var="owner" value="${apartment.getOwner()}"/>
-                <fmt:message key="advertisement.name"/> ${owner.getFirstName()} ${owner.getLastName()}<br/>
-                <fmt:message key="setting.phone"/> : ${owner.getPhone()}<br/>
-                <fmt:message key="setting.birthday"/> : ${owner.getBirthday()}<br/>
                 <c:choose>
-                    <c:when test="${wasCreated == 'true'}">
-                        <b><fmt:message key="advertisement.wasCreatedMessage"/></b>
-                        <form action="control" method="get">
-                            <input type="hidden" name="command" value="transition_to_my_requests"/>
-                            <input type="submit" name="button" value="<fmt:message key="main.myRequestsButton"/>">
-                        </form>
+                    <c:when test="${user.getId() == owner.getId()}">
+                        <b><fmt:message key="advertisement.authorMessage"/></b><br/>
+                        <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_estate><fmt:message key="advertisement.linkToEstate"/> </a>
                     </c:when>
                     <c:otherwise>
-                        <form action="control" method="get">
-                            <input type="hidden" name="command" value="transition_to_new_request"/>
-                            <input type="hidden" name="advertisementId" value="${advertisement.getId()}">
-                            <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>
-                            <input type="submit" name="button" value="<fmt:message key="advertisement.wantToRentButton"/>">
-                        </form>
+                        <fmt:message key="advertisement.name"/> ${owner.getFirstName()} ${owner.getLastName()}<br/>
+                        <fmt:message key="setting.phone"/> : ${owner.getPhone()}<br/>
+                        <fmt:message key="setting.birthday"/> : ${owner.getBirthday()}<br/>
+                        <c:choose>
+                            <c:when test="${wasCreated == 'true'}">
+                                <b><fmt:message key="advertisement.wasCreatedMessage"/></b>
+                                <form action="control" method="get">
+                                    <input type="hidden" name="command" value="transition_to_my_requests"/>
+                                    <input type="submit" name="button" value="<fmt:message key="main.myRequestsButton"/>">
+                                </form>
+                            </c:when>
+                            <c:otherwise>
+                                <form action="control" method="get">
+                                    <input type="hidden" name="command" value="transition_to_new_request"/>
+                                    <input type="hidden" name="advertisementId" value="${advertisement.getId()}">
+                                    <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>
+                                    <input type="submit" name="button" value="<fmt:message key="advertisement.wantToRentButton"/>">
+                                </form>
+                            </c:otherwise>
+                        </c:choose>
                     </c:otherwise>
                 </c:choose>
             </td>

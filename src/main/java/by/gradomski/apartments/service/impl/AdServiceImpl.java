@@ -39,7 +39,7 @@ public class AdServiceImpl implements AdService {
             return -1;
         }
         BigDecimal decimalPrice = new BigDecimal(price);
-        Ad newAd = new Ad(title, author, decimalPrice, apartmentId);
+        Ad newAd = new Ad(title, author.getId(), decimalPrice, apartmentId);
         try{
             generatedId = AdDaoImpl.getInstance().add(newAd);
 //            if(advertisementId > 0){

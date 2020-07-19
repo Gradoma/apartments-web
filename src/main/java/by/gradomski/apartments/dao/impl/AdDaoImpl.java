@@ -53,7 +53,7 @@ public class AdDaoImpl implements AdDao {
             statement = connection.prepareStatement(INSERT_NEW_AD, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, ad.getTitle());
             statement.setBigDecimal(2, ad.getPrice());
-            statement.setLong(3, ad.getAuthor().getId());
+            statement.setLong(3, ad.getAuthorId());
             statement.setLong(4, ad.getApartmentId());
             Instant instant = ad.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
             long creationMillis = instant.toEpochMilli();
@@ -90,7 +90,7 @@ public class AdDaoImpl implements AdDao {
                 String title = resultSet.getString(AdTable.TITLE);
                 BigDecimal price = new BigDecimal(resultSet.getString(AdTable.PRICE));
                 long apartmentId = resultSet.getLong(AdTable.ID_APARTMENT);
-                ad = new Ad(title, null, price, apartmentId);
+                ad = new Ad(title, id, price, apartmentId);
                 ad.setId(id);
                 long creationMillis = resultSet.getLong(AdTable.ISSUE_DATE);
                 LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).
@@ -132,7 +132,7 @@ public class AdDaoImpl implements AdDao {
                 long authorId = resultSet.getLong(AdTable.ID_AUTHOR);
                 BigDecimal price = new BigDecimal(resultSet.getString(AdTable.PRICE));
                 long apartmentId = resultSet.getLong(AdTable.ID_APARTMENT);
-                Ad ad = new Ad(title,null, price, apartmentId); //TODO(author not null)
+                Ad ad = new Ad(title, authorId, price, apartmentId);
                 ad.setId(resultSet.getLong(AdTable.ID_AD));
                 long creationMillis = resultSet.getLong(AdTable.ISSUE_DATE);
                 LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).

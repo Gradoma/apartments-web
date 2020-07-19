@@ -9,14 +9,14 @@ public class Ad {
     private String title;
     private BigDecimal price;
     private long apartmentId;
-    private User author;
+    private long authorId;
     private LocalDateTime creationDate;
     private boolean visibility;
 
     public Ad(){};
-    public Ad(String title, User author, BigDecimal price, long apartmentId){       //TODO(author just id)
+    public Ad(String title, long authorId, BigDecimal price, long apartmentId){       //TODO(author just id)
         this.title = title;
-        this.author = author;
+        this.authorId = authorId;
         this.price = price;
         this.apartmentId = apartmentId;
         creationDate = LocalDateTime.now();
@@ -54,12 +54,12 @@ public class Ad {
         this.apartmentId = apartmentId;
     }
 
-    public User getAuthor() {
-        return author;
+    public long getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setAuthorId(long authorId) {
+        this.authorId = authorId;
     }
 
     public LocalDateTime getCreationDate() {
@@ -87,10 +87,10 @@ public class Ad {
 
         if (id != ad.id) return false;
         if (apartmentId != ad.apartmentId) return false;
+        if (authorId != ad.authorId) return false;
         if (visibility != ad.visibility) return false;
         if (title != null ? !title.equals(ad.title) : ad.title != null) return false;
         if (price != null ? !price.equals(ad.price) : ad.price != null) return false;
-        if (author != null ? !author.equals(ad.author) : ad.author != null) return false;
         return creationDate != null ? creationDate.equals(ad.creationDate) : ad.creationDate == null;
     }
 
@@ -100,7 +100,7 @@ public class Ad {
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (price != null ? price.hashCode() : 0);
         result = 31 * result + (int) (apartmentId ^ (apartmentId >>> 32));
-        result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (int) (authorId ^ (authorId >>> 32));
         result = 31 * result + (creationDate != null ? creationDate.hashCode() : 0);
         result = 31 * result + (visibility ? 1 : 0);
         return result;
@@ -119,8 +119,8 @@ public class Ad {
         builder.append(price);
         builder.append(", apartment id=");
         builder.append(apartmentId);
-        builder.append(", \nauthor=");
-        builder.append(author);
+        builder.append(", \nauthorId=");
+        builder.append(authorId);
         builder.append(", creationDate=");
         builder.append(creationDate);
         builder.append(", visibility=");
