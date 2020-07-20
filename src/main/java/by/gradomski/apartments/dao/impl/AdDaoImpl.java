@@ -90,7 +90,8 @@ public class AdDaoImpl implements AdDao {
                 String title = resultSet.getString(AdTable.TITLE);
                 BigDecimal price = new BigDecimal(resultSet.getString(AdTable.PRICE));
                 long apartmentId = resultSet.getLong(AdTable.ID_APARTMENT);
-                ad = new Ad(title, id, price, apartmentId);
+                long authorId = resultSet.getLong(AdTable.ID_AUTHOR);
+                ad = new Ad(title, authorId, price, apartmentId);
                 ad.setId(id);
                 long creationMillis = resultSet.getLong(AdTable.ISSUE_DATE);
                 LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).

@@ -44,7 +44,9 @@ public class TransitionToAdvertisementCommand implements Command {
                     List<Request> userRequestList = RequestServiceImpl.getInstance()
                             .getRequestsByApplicantId(currentUser.getId());
                     for (Request userReq : userRequestList) {
-                        if (ad.getApartmentId() == userReq.getApartmentId() && userReq.getStatus() == RequestStatus.CREATED) {
+                        if (ad.getApartmentId() == userReq.getApartmentId() & userReq.getStatus() == RequestStatus.CREATED) {
+                            log.debug("req id=" + userReq.getId());
+                            log.debug("req status=" + userReq.getStatus());
                             request.setAttribute(WAS_CREATED, true);
                         }
                     }

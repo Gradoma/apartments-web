@@ -3,9 +3,12 @@ package by.gradomski.apartments.command.impl;
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.ApartmentStatus;
+import by.gradomski.apartments.entity.Request;
+import by.gradomski.apartments.entity.RequestStatus;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
+import by.gradomski.apartments.service.impl.RequestServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,9 +31,19 @@ public class DeleteAdvertisementCommand implements Command {
         HttpSession session = request.getSession();
         Ad advertisement = (Ad) session.getAttribute(ADVERTISEMENT);
         try{
-            boolean advertisementStatusResult = AdServiceImpl.getInstance().changeVisibility(advertisement.getId());
+            long advertisementId = advertisement.getId();
+            boolean advertisementStatusResult = AdServiceImpl.getInstance().changeVisibility(advertisementId);
+            long apartmentId = advertisement.getApartmentId();
+            List<Request> apartmentRequestList = RequestServiceImpl.getInstance().getActiveRequestsByApartmentId(apartmentId);
+            for(Request apartmentReq : apartmentRequestList){
+                if(apartmentReq.getStatus() != RequestStatus.APPROVED){     //TODO(check is needed??)
+                    boolean updateStatusResult = RequestServiceImpl.getInstance().refuseRequest(apartmentReq.getId());
+                    if(!updateStatusResult){
+                        log.error("can't refuse apartment request: id=" + apartmentReq.getId());
+                    }
+                }
+            }
             if(advertisementStatusResult){
-                long apartmentId = advertisement.getApartmentId();
                 boolean apartmentStatusResult = ApartmentServiceImpl.getInstance()
                         .updateApartmentStatus(apartmentId, ApartmentStatus.REGISTERED);
                 if(apartmentStatusResult){
