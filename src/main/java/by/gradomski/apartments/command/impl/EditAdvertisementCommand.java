@@ -11,6 +11,8 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.List;
+
 import static by.gradomski.apartments.command.PagePath.*;
 
 public class EditAdvertisementCommand implements Command {
@@ -28,6 +30,7 @@ public class EditAdvertisementCommand implements Command {
     private static final String FURNITURE = "furniture";
     private static final String DESCRIPTION = "description";
     private static final String ADVERTISEMENT = "advertisement";
+    private static final String ADVERTISEMENT_LIST = "advertisementList";
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -42,6 +45,9 @@ public class EditAdvertisementCommand implements Command {
                 request.setAttribute("errorUpdateMessage", "Can't update check data");
                 page = EDIT_ADVERTISEMENT;
             } else {
+                request.getServletContext().removeAttribute(ADVERTISEMENT_LIST);
+                List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
+                request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
                 session.removeAttribute(ADVERTISEMENT);
                 session.removeAttribute(APARTMENT_ID);
                 session.removeAttribute(REGION);

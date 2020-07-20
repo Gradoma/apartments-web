@@ -6,7 +6,6 @@ import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
-import by.gradomski.apartments.service.ApartmentService;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import by.gradomski.apartments.service.impl.RequestServiceImpl;
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
-import static by.gradomski.apartments.command.PagePath.MY_REQUESTS;
+import static by.gradomski.apartments.command.PagePath.MY_RENT;
 
 public class TransitionToMyRentCommand implements Command {
     private static final Logger log = LogManager.getLogger();
@@ -49,7 +48,7 @@ public class TransitionToMyRentCommand implements Command {
             }
             request.setAttribute(ADVERTISEMENT_MAP, advertisementMap);
             request.setAttribute(APARTMENT_MAP, apartmentMap);
-            page = MY_REQUESTS;
+            page = MY_RENT;
         } catch (ServiceException e){
             log.error(e);
             page = ERROR_PAGE;

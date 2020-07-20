@@ -1,7 +1,6 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
-import by.gradomski.apartments.command.PagePath;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.User;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
-import static by.gradomski.apartments.command.PagePath.MY_REQUESTS;
+import static by.gradomski.apartments.command.PagePath.MY_RENT;
 
 public class CancelRequestCommand implements Command {
     private static final Logger log = LogManager.getLogger();
@@ -52,7 +51,7 @@ public class CancelRequestCommand implements Command {
                     advertisementMap.put(req.getId(), ad);
                 }
                 request.setAttribute(ADVERTISEMENT_MAP, advertisementMap);
-                page = MY_REQUESTS;
+                page = MY_RENT;
             } catch (ServiceException e){
                 log.error(e);
                 page = ERROR_PAGE;

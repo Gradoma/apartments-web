@@ -11,7 +11,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static by.gradomski.apartments.command.PagePath.*;
 
@@ -22,6 +25,7 @@ public class ApproveRequestCommand implements Command {
     private static final String APARTMENT_ID = "apartmentId";
     private static final String APARTMENT_LIST = "apartmentList";
     private static final String ADVERTISEMENT_LIST = "advertisementList";
+    private static final String REQUEST_MAP = "requestMap";
 
     @Override
     public String execute(HttpServletRequest request) {     //TODO(make through transaction)
@@ -45,6 +49,17 @@ public class ApproveRequestCommand implements Command {
                     long userId = user.getId();
                     List<Apartment> apartmentList = ApartmentServiceImpl.getInstance().getApartmentsByOwner(userId);
                     request.setAttribute(APARTMENT_LIST, apartmentList);
+                    // copy-paste from transitionToEstateCommand
+                    Map<Long, Boolean> requestMap = new HashMap<>();
+                    for(Apartment apartment : apartmentList){
+                        long id = apartment.getId();
+                        List<Request> apartmentRequestList = RequestServiceImpl.getInstance()
+                                .getActiveRequestsByApartmentId(id);
+                        if(containsApproved(apartmentRequestList)){
+                            requestMap.put(id, true);
+                        }
+                    }
+                    request.setAttribute(REQUEST_MAP, requestMap);
                     page = ESTATE;
                 } else {
                     log.debug("can't upd apartment status");
@@ -60,5 +75,13 @@ public class ApproveRequestCommand implements Command {
             page = ERROR_PAGE;
         }
         return page;
+    }
+
+    // copy-paste from transitionToEstateCommand
+    private boolean containsApproved(List<Request> requestList){
+        Optional<Request> optionalRequest = requestList.stream()
+                .filter(request -> request.getStatus()== RequestStatus.APPROVED)
+                .findAny();
+        return optionalRequest.isPresent();
     }
 }

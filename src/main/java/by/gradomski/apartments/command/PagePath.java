@@ -13,7 +13,7 @@ public class PagePath {
     public static final String ADVERTISEMENT = "/jsp/advertisement.jsp";
     public static final String NEW_REQUEST = "/jsp/new_request.jsp";
     public static final String REQUESTS = "/jsp/requests.jsp";
-    public static final String MY_REQUESTS = "/jsp/my_rent.jsp";
+    public static final String MY_RENT = "/jsp/my_rent.jsp";
     public static final String EDIT_ADVERTISEMENT = "/jsp/edit_advertisement.jsp";
 
     private PagePath(){}
