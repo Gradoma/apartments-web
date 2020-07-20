@@ -22,7 +22,11 @@
     <fmt:message key="newAd.price"/> : <input type="number" required name="price" ><br/>
     <input type="submit" name="button" value="<fmt:message key="advertisement.saveButton"/>"/>
 </form>
-<fmt:message key="advertisement.apartment"/>
+<form action="control" method="get">
+    <input type="hidden" name="command" value="delete_advertisement">
+    <input type="submit" name="button" value="<fmt:message key="advertisement.deleteButton"/>"/>
+</form>
+<b><fmt:message key="advertisement.apartment"/></b><br/>
 <fmt:message key="newEstate.region"/> : ${region}<br/>
 <fmt:message key="newEstate.city"/> : ${city}"<br/>
 <fmt:message key="newEstate.address"/> : ${address}<br/>

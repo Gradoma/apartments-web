@@ -32,7 +32,8 @@ public enum CommandType {
     ACCEPT_INVITATION(new AcceptInvitationCommand()),
     FINISH_RENT(new FinishRentCommand()),
     TRANSITION_TO_ADVERTISEMENT_EDIT(new TransitionToAdvertisementEditCommand()),
-    EDIT_ADVERTISEMENT(new EditAdvertisementCommand());
+    EDIT_ADVERTISEMENT(new EditAdvertisementCommand()),
+    DELETE_ADVERTISEMENT(new DeleteAdvertisementCommand());
 
     private Command command;
 
