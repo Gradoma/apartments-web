@@ -63,27 +63,6 @@
                                 </c:choose>
                             </c:otherwise>
                         </c:choose>
-
-<%--                        <c:choose>--%>
-<%--                            <c:when test="${advertisement.isVisible() eq false}">--%>
-<%--                                <b><fmt:message key="advertisement.archivedMessage"/></b>--%>
-<%--                            </c:when>--%>
-<%--                            <c:when test="${wasCreated == 'true'}">--%>
-<%--                                <b><fmt:message key="advertisement.wasCreatedMessage"/></b>--%>
-<%--                                <form action="control" method="get">--%>
-<%--                                    <input type="hidden" name="command" value="transition_to_my_requests"/>--%>
-<%--                                    <input type="submit" name="button" value="<fmt:message key="main.myRequestsButton"/>">--%>
-<%--                                </form>--%>
-<%--                            </c:when>--%>
-<%--                            <c:otherwise>--%>
-<%--                                <form action="control" method="get">--%>
-<%--                                    <input type="hidden" name="command" value="transition_to_new_request"/>--%>
-<%--                                    <input type="hidden" name="advertisementId" value="${advertisement.getId()}">--%>
-<%--                                    <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>--%>
-<%--                                    <input type="submit" name="button" value="<fmt:message key="advertisement.wantToRentButton"/>">--%>
-<%--                                </form>--%>
-<%--                            </c:otherwise>--%>
-<%--                        </c:choose>--%>
                     </c:otherwise>
                 </c:choose>
             </td>

@@ -3,6 +3,7 @@ package by.gradomski.apartments.service.impl;
 import by.gradomski.apartments.dao.impl.ApartmentDaoImpl;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.ApartmentStatus;
+import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
@@ -178,10 +179,16 @@ public class ApartmentServiceImpl implements ApartmentService {
                     flag = ApartmentDaoImpl.getInstance().updateStatusByApartmentId(id, ApartmentStatus.DELETED);
                     break;
                 case IN_DEMAND:
-                    //TODO(requestService - getAllRequests - iterate: request.changeStatus(DECLINE) + adService - deleteAd)
+                    List<Request> requestList = RequestServiceImpl.getInstance().getActiveRequestsByApartmentId(id);
+                    for(Request request : requestList){
+                        boolean refusingResult = RequestServiceImpl.getInstance().refuseRequest(request.getId());
+                        if(!refusingResult){
+                            log.error("can't refuse demand: id=" + request.getId());
+                        }
+                    }
+                    flag = true;
                     break;
                 case RENT:
-                    // TODO
                     log.warn("try to delete rent apartment");
                     break;
                 case DELETED:
