@@ -43,7 +43,7 @@ public class DeclineInvitationCommand implements Command {
                 boolean advertisementStatusResult = AdServiceImpl.getInstance().changeVisibility(advertisementId);
                 if(advertisementStatusResult){
                     List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
-                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);   //TODO(ASK: rewrite or should remove?)
+                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
 
                     HttpSession session = request.getSession(false);
                     User currentUser = (User) session.getAttribute(USER);

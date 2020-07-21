@@ -18,7 +18,7 @@ public class TransitionToNewAdCommand implements Command {
         String page;
         HttpSession session = request.getSession(false);
         if(session != null){
-            session.setAttribute(APARTMENT_ID, request.getParameter(APARTMENT_ID));//TODO(through session attribute) maybe?!
+            session.setAttribute(APARTMENT_ID, request.getParameter(APARTMENT_ID));
             page = NEW_AD;
         } else {
             page = SIGN_IN;

@@ -43,7 +43,7 @@ public class ApproveRequestCommand implements Command {
                 boolean advertisementVisibilityChanging = AdServiceImpl.getInstance().changeVisibility(advertisementId);
                 if(advertisementVisibilityChanging){
                     List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
-                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList); //TODO(ASK: rewrite or should remove?)
+                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
                     HttpSession session = request.getSession(false);
                     User user = (User) session.getAttribute(USER);
                     long userId = user.getId();

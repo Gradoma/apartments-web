@@ -82,7 +82,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> findAll() throws DaoException{             // TODO(add photo!!!)
+    public List<User> findAll() throws DaoException{
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -133,7 +133,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findById(long id) throws DaoException{          // TODO(add photo!!!)
+    public Optional<User> findById(long id) throws DaoException{
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -186,7 +186,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findByLogin(String login) throws DaoException {   // TODO(add photo!!!)
+    public Optional<User> findByLogin(String login) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -280,7 +280,7 @@ public class UserDaoImpl implements UserDao {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return flag;                        // TODO(what return?? new or old user)
+        return flag;
     }
 
     @Override

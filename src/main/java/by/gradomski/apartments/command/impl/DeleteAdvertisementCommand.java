@@ -51,7 +51,7 @@ public class DeleteAdvertisementCommand implements Command {
                     List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
                     request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
                     session.removeAttribute(ADVERTISEMENT);
-                    page = USER_PAGE;       // TODO(or on Estate page?)
+                    page = USER_PAGE;
                 } else {
                     log.error("apartment status wasn't update");
                     page = ERROR_PAGE;

@@ -14,7 +14,7 @@ public class Ad {
     private boolean visibility;
 
     public Ad(){};
-    public Ad(String title, long authorId, BigDecimal price, long apartmentId){       //TODO(author just id)
+    public Ad(String title, long authorId, BigDecimal price, long apartmentId){
         this.title = title;
         this.authorId = authorId;
         this.price = price;
