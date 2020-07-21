@@ -13,20 +13,58 @@
 <html>
 <head>
     <title>Sign Up</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" >
 </head>
 <body>
-<h2>Sign Up, please!</h2>
-</body>
 <c:import url="header.jsp"/>
-<form name="Simple" action="control" method="post">
+<form class="form-horizontal" action="control" method="post">
     <input type="hidden" name="command" value="sign_up">
-    <input required name="login" placeholder=<fmt:message key="label.login"/>/>
-        <br/> ${loginErrorMessage} <br/>
-    <input required name="password" placeholder=<fmt:message key="label.password"/>/>
-        <br/> ${passErrorMessage} <br/>
-    <input required name="email" placeholder=<fmt:message key="label.mail"/>/>
-        <br/> ${emailErrorMessage} <br/>
-    <input type="submit" name="button" value="<fmt:message key="label.registerButton"/>"/>
+    <fieldset>
+
+        <!-- Form Name -->
+        <legend><fmt:message key="legend.signUp"/> </legend>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput"><fmt:message key="label.login"/></label>
+            <div class="col-md-4">
+                <input name="login" type="text" class="form-control input-md" required="" width="100">
+            </div>
+            ${loginErrorMessage}
+        </div>
+
+        <!-- Password input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="passwordinput"><fmt:message key="label.password"/></label>
+            <div class="col-md-4">
+                <input id="passwordinput" name="password" type="password" class="form-control input-md" required="" width="100">
+            </div>
+            ${passErrorMessage}
+        </div>
+
+        <!-- Text input-->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="textinput"><fmt:message key="label.mail"/></label>
+            <div class="col-md-4">
+                <input id="textinput" name="email" type="text" class="form-control input-md" required="" width="100">
+
+            </div>
+            ${emailErrorMessage}
+        </div>
+
+        <!-- Button -->
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="singlebutton"></label>
+            <div class="col-md-4">
+                <button id="singlebutton" name="singlebutton" class="btn btn-success"><fmt:message key="label.registerButton"/></button>
+            </div>
+        </div>
+
+    </fieldset>
 </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Подключаем Bootstrap JS -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
 <c:import url="footer.jsp"/>
+</body>
 </html>
