@@ -18,9 +18,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class UserDaoImpl implements UserDao {
     private static final Logger log = LogManager.getLogger();
@@ -31,7 +29,7 @@ public class UserDaoImpl implements UserDao {
             " photo, registrationDate, mailAddress, visibility FROM user WHERE idUser=?";
     private static final String SELECT_USER_BY_LOGIN = "SELECT idUser, idRole, login, password, firstName, lastName, birthday, gender, phone," +
             " photo, registrationDate, mailAddress, visibility FROM user WHERE login=?";
-    private static final String UPDATE_USER_BY_LOGIN = "UPDATE user SET password=?, firstName=?, lastName=?, birthday=?, gender=?, phone=? WHERE login=?";
+    private static final String UPDATE_USER_BY_LOGIN = "UPDATE user SET firstName=?, lastName=?, birthday=?, gender=?, phone=? WHERE login=?";
     private static final String UPDATE_PHOTO_BY_LOGIN = "UPDATE user SET photo=? WHERE login=?";
     private static final String UPDATE_USER_VISIBILITY_BY_LOGIN = "UPDATE user SET visibility=? WHERE login=?";
     private static final String DEFAULT_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\def_user.jpg";
@@ -120,6 +118,9 @@ public class UserDaoImpl implements UserDao {
                 user.setRegistrationDate(registrationDate);
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
                 user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
+                byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
+                String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+                user.setPhotoBase64(photoBase64);
                 userList.add(user);
             }
         }catch (SQLException | IncorrectRoleException e){
@@ -170,6 +171,9 @@ public class UserDaoImpl implements UserDao {
                 user.setRegistrationDate(registrationDate);
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
                 user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
+                byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
+                String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+                user.setPhotoBase64(photoBase64);
             }
             if(user != null) optionalUser = Optional.of(user);
         } catch (SQLException | IncorrectRoleException e){
@@ -220,7 +224,11 @@ public class UserDaoImpl implements UserDao {
                 user.setRegistrationDate(registrationDate);
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
                 user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
-                user.setPhoto(resultSet.getBytes(UserTable.PHOTO));
+                byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
+                log.info("photoBytes:"  + Arrays.toString(photoBytes));
+                String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+                log.info("photo string: " + photoBase64);
+                user.setPhotoBase64(photoBase64);
             }
             if(user != null) optionalUser = Optional.of(user);
         } catch (SQLException | IncorrectRoleException e){
@@ -233,7 +241,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User update(User user) throws DaoException{
+    public boolean update(User user) throws DaoException{
+        boolean flag = false;
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -242,35 +251,36 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement statement = null;
         try{
             statement = connection.prepareStatement(UPDATE_USER_BY_LOGIN);
-            String encodedPass = PasswordEncoder.encode(user.getPassword());
-            statement.setString(1, encodedPass);
-            statement.setString(2, user.getFirstName());
-            statement.setString(3, user.getLastName());
+            statement.setString(1, user.getFirstName());
+            statement.setString(2, user.getLastName());
             if (user.getBirthday() != null){
                 Instant instant = user.getBirthday().atStartOfDay(ZoneId.systemDefault()).toInstant();
                 long birthdayMillis = instant.toEpochMilli();
                 log.debug("bDay in long: " + birthdayMillis);
-                statement.setLong(4, birthdayMillis);
+                statement.setLong(3, birthdayMillis);
             } else {
-                statement.setNull(4, Types.BIGINT);
+                statement.setNull(3, Types.BIGINT);
             }
             if (user.getGender() != null){
-                statement.setString(5, user.getGender().toString());
+                statement.setString(4, user.getGender().toString());
             }
             if (user.getPhone() != null){
-                statement.setString(6, user.getPhone());
+                statement.setString(5, user.getPhone());
             } else {
-                statement.setNull(6, Types.VARCHAR);
+                statement.setNull(5, Types.VARCHAR);
             }
-            statement.setString(7, user.getLoginName());
-            statement.executeUpdate();
+            statement.setString(6, user.getLoginName());
+            int rows = statement.executeUpdate();
+            if(rows != 0){
+                flag = true;
+            }
         } catch (SQLException e){
             throw new DaoException(e);
         } finally {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return user;                        // TODO(what return?? new or old user)
+        return flag;                        // TODO(what return?? new or old user)
     }
 
     @Override
@@ -284,13 +294,13 @@ public class UserDaoImpl implements UserDao {
         PreparedStatement statement = null;
         try{
             statement = connection.prepareStatement(UPDATE_PHOTO_BY_LOGIN);
-            statement.setBinaryStream(1, inputStream);
+            statement.setBinaryStream(1, inputStream, inputStream.available());
             statement.setString(2, login);
             int row = statement.executeUpdate();
             if(row > 0){
                 flag = true;
             }
-        } catch (SQLException e){
+        } catch (SQLException | IOException e){
             throw new DaoException(e);
         } finally {
             close(inputStream);

@@ -12,7 +12,7 @@ public interface UserDao extends BaseDao {
     List<User> findAll() throws DaoException;
     Optional<User> findById(long id) throws DaoException;
     Optional<User> findByLogin(String login) throws DaoException;
-    User update(User user) throws DaoException;
+    boolean update(User user) throws DaoException;
     boolean updatePhoto(InputStream inputStream, String login) throws DaoException;
     boolean deleteById(long id) throws DaoException;
     boolean changeVisibilityByLogin(String login) throws DaoException;

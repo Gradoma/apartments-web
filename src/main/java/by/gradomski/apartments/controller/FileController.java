@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static by.gradomski.apartments.command.PagePath.USER_SETTINGS;
 
@@ -29,30 +31,35 @@ import static by.gradomski.apartments.command.PagePath.USER_SETTINGS;
 @MultipartConfig(fileSizeThreshold = 1024*1024, maxFileSize = 1024*1024*5, maxRequestSize = 1024*1024*5*5)
 public class FileController extends HttpServlet {
     private static final Logger log = LogManager.getLogger(FileController.class);
-    //TODO(display image on page)
+    private static final String IMAGE_TYPE_PATTERN = "(?i)(png|gif|jpg|jpeg)(?-i)$";
+    private static final String INCORRECT_TYPE = "incorrectType";
+    private static final String EMPTY_FILE = "emptyFile";
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String login = request.getParameter("login");
         InputStream inputStream = null;
         Part filePart = request.getPart("image");
-        if(filePart != null){
-            inputStream = filePart.getInputStream();
+        log.info("contentType" + filePart.getContentType());
+        Pattern pattern = Pattern.compile(IMAGE_TYPE_PATTERN);
+        Matcher matcher = pattern.matcher(filePart.getContentType());
+        if(!matcher.find()){
+            request.setAttribute(INCORRECT_TYPE, true);
+        } else {
+            if(filePart != null){
+                inputStream = filePart.getInputStream();
+                try {
+                    User updatedUser = UserServiceImpl.getInstance().updateUserPhoto(inputStream, login);
+                    request.getSession().setAttribute("user", updatedUser);
+                } catch (ServiceException e) {
+                    log.error("file upload failed: " + e);
+                    throw new UnsupportedOperationException(e);
+                }
+            } else {
+                request.setAttribute(EMPTY_FILE, true);
+            }
         }
-        try {
-            User updatedUser = UserServiceImpl.getInstance().updateUserPhoto(inputStream, login);
-//            byte[] photoBytes = updatedUser.getPhoto();
-//            request.setAttribute("user", updatedUser);
-            request.getSession().setAttribute("user", updatedUser);
-//            response.setContentLength(photoBytes.length);
-//            OutputStream os = response.getOutputStream();
-//            os.write(photoBytes);
-//            os.flush();
-//            os.close();
-            RequestDispatcher dispatcher = request.getRequestDispatcher(USER_SETTINGS);
-            dispatcher.forward(request, response);
-        } catch (ServiceException e) {
-            log.error("file upload failed: " + e);
-            throw new UnsupportedOperationException(e);
-        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher(USER_SETTINGS);
+        dispatcher.forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {

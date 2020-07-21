@@ -20,8 +20,17 @@
 <body>
 <c:import url="header.jsp"/>
     <h2>${greeting}</h2>
+    <img src="data:image/jpg;base64,${user.getPhotoBase64()}" width="100" height="100">
+    <c:choose>
+        <c:when test="${incorrectType eq true}">
+            <h4><fmt:message key="photo.incorrectTypeMessage"/></h4>
+        </c:when>
+        <c:when test="${emptyFile eq true}">
+            <h4><fmt:message key="photo.empty"/></h4>
+        </c:when>
+    </c:choose>
+    <h5><fmt:message key="photo.formats"/> </h5>
     <form action="fileController" method="post" enctype="multipart/form-data">
-        <img src="fileController" width="100" height="100">
         <input type="file" name="image" height="150">
         <input type="hidden" name="login" value="${user.getLoginName()}"/>
         <input type="submit" name="button" value="<fmt:message key="setting.browseButton"/>">

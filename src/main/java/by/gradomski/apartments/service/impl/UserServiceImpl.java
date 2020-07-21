@@ -4,22 +4,16 @@ import by.gradomski.apartments.dao.impl.UserDaoImpl;
 import by.gradomski.apartments.entity.Gender;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
-import by.gradomski.apartments.exception.ImageValidationException;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.UserService;
-import by.gradomski.apartments.service.validator.ImageValidator;
 import by.gradomski.apartments.service.validator.Validator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -158,13 +152,19 @@ public class UserServiceImpl implements UserService {
                 throw new ServiceException(pEx);
             }
         }
-        User updatedUser;
+        Optional<User> optionalUser = Optional.empty();
         try {
-            updatedUser = UserDaoImpl.getInstance().update(user);
+            boolean updateResult = UserDaoImpl.getInstance().update(user);
+            if(updateResult){
+                optionalUser = UserDaoImpl.getInstance().findByLogin(login);
+            }
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
-        return updatedUser;
+        if(optionalUser.isEmpty()){
+            throw new ServiceException("user wasn't found, login: " + login);
+        }
+        return optionalUser.get();
     }
 
     @Override
@@ -174,13 +174,13 @@ public class UserServiceImpl implements UserService {
         }
         Optional<User> optionalUser;
         try {
-            if(!ImageValidator.isValid(inputStream)){
-                throw new ImageValidationException();
-            }
-            log.debug("image validation: success");
+//            if(!ImageValidator.isValid(inputStream)){
+//                throw new ImageValidationException();
+//            }
+//            log.debug("image validation: success");
             boolean updateResult = UserDaoImpl.getInstance().updatePhoto(inputStream, login);
             optionalUser = UserDaoImpl.getInstance().findByLogin(login);
-        } catch (DaoException | ImageValidationException e) {
+        } catch (DaoException e) {
             throw new ServiceException(e);
         }
         if(optionalUser.isEmpty()){

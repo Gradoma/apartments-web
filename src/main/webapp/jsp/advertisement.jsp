@@ -36,6 +36,7 @@
                         <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_estate><fmt:message key="advertisement.linkToEstate"/> </a>
                     </c:when>
                     <c:otherwise>
+                        <img src="data:image/jpg;base64,${owner.getPhotoBase64()}" width="50" height="50">
                         <fmt:message key="advertisement.name"/> ${owner.getFirstName()} ${owner.getLastName()}<br/>
                         <fmt:message key="setting.phone"/> : ${owner.getPhone()}<br/>
                         <fmt:message key="setting.birthday"/> : ${owner.getBirthday()}<br/>

@@ -47,6 +47,7 @@ public class UpdateUserCommand implements Command {
             String birthday = request.getParameter(BIRTHDAY);
             try {
                 User afterUpdating = userService.updateUser(login, password, gender, firstName, lastName, phone, birthday);
+                log.info("user photo after update: " + afterUpdating.getPhotoBase64());
                 session.setAttribute("user", afterUpdating);
                 page = USER_PAGE;
             } catch (ServiceException e) {

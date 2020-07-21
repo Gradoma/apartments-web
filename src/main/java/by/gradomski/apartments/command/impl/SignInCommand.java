@@ -31,6 +31,7 @@ public class SignInCommand implements Command {
         try {
             if (userService.signIn(login, password)) {
                 User user = userService.getUserByLogin(login);
+                log.info("photo String: " + user.getPhotoBase64());
                 log.debug("user ID after sign in: " + user.getId());
                 request.getSession().setAttribute("user", user);
                 if(user.getFirstName() != null & user.getLastName() != null){

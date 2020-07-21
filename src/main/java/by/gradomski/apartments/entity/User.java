@@ -1,12 +1,9 @@
 package by.gradomski.apartments.entity;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.Objects;
 
 public class User {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -21,7 +18,7 @@ public class User {
     private LocalDate birthday;
     private Gender gender;
     private String phone;
-    private byte[] photo;
+    private String photoBase64;
     private boolean visibility;
 
     public User(){}
@@ -124,12 +121,12 @@ public class User {
         this.phone = phone;
     }
 
-    public byte[] getPhoto() {
-        return photo;
+    public String getPhotoBase64() {
+        return photoBase64;
     }
 
-    public void setPhoto(byte[] photoBytes) {
-        this.photo = photoBytes;
+    public void setPhotoBase64(String photoBase64) {
+        this.photoBase64 = photoBase64;
     }
 
     public void setVisibility(boolean visibility) {
@@ -148,6 +145,7 @@ public class User {
         User user = (User) o;
 
         if (id != user.id) return false;
+        if (visibility != user.visibility) return false;
         if (loginName != null ? !loginName.equals(user.loginName) : user.loginName != null) return false;
         if (password != null ? !password.equals(user.password) : user.password != null) return false;
         if (role != user.role) return false;
@@ -159,8 +157,7 @@ public class User {
         if (birthday != null ? !birthday.equals(user.birthday) : user.birthday != null) return false;
         if (gender != user.gender) return false;
         if (phone != null ? !phone.equals(user.phone) : user.phone != null) return false;
-        if (visibility != user.visibility) return false;
-        return Arrays.equals(photo, user.photo);
+        return photoBase64 != null ? photoBase64.equals(user.photoBase64) : user.photoBase64 == null;
     }
 
     @Override
@@ -176,7 +173,7 @@ public class User {
         result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         result = 31 * result + (phone != null ? phone.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(photo);
+        result = 31 * result + (photoBase64 != null ? photoBase64.hashCode() : 0);
         result = 31 * result + (visibility ? 1 : 0);
         return result;
     }
@@ -208,8 +205,8 @@ public class User {
         builder.append(gender);
         builder.append(", phone=");
         builder.append(phone);
-        builder.append(", photo=");
-        builder.append(photo);
+        builder.append(", photoBase64=");
+        builder.append(photoBase64);
         builder.append(", visibility=");
         builder.append(visibility);
         return builder.toString();
