@@ -20,6 +20,7 @@ import static by.gradomski.apartments.command.PagePath.*;
 public class EditApartmentCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String USER = "user";
+    private static final String APARTMENT = "apartment";
     private static final String APARTMENT_LIST = "apartmentList";
     private static final String APARTMENT_ID = "apartmentId";
     private static final String REGION = "region";
@@ -41,8 +42,10 @@ public class EditApartmentCommand implements Command {
             log.info("session timed out");
             page = SIGN_IN;
         } else {
+            Apartment apartment = (Apartment) session.getAttribute(APARTMENT);
+            long id = apartment.getId();
             User currentUser = (User) session.getAttribute(USER);
-            long id = Long.parseLong(request.getParameter(APARTMENT_ID));
+//            long id = Long.parseLong(request.getParameter(APARTMENT_ID));
             String region = request.getParameter(REGION);
             String city = request.getParameter(CITY);
             String address = request.getParameter(ADDRESS);
@@ -53,20 +56,21 @@ public class EditApartmentCommand implements Command {
             String furniture = request.getParameter(FURNITURE);
             String description = request.getParameter(DESCRIPTION);
             try {
-                Map<String, String> updateResult = apartmentService.updateApartment(id, region, city, address,
-                        rooms, floor, square, year, furniture, description);
+                Map<String, String> updateResult = apartmentService.updateApartment(id, region, city, address, rooms,
+                        floor, square, year,furniture, description);
                 if (!updateResult.containsValue(FALSE)) {
                     List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(currentUser.getId());
                     session.setAttribute(APARTMENT_LIST, updatedApartmentList);
-                    session.removeAttribute(APARTMENT_ID);
-                    session.removeAttribute(REGION);
-                    session.removeAttribute(CITY);
-                    session.removeAttribute(ROOMS);
-                    session.removeAttribute(FLOOR);
-                    session.removeAttribute(SQUARE);
-                    session.removeAttribute(YEAR);
-                    session.removeAttribute(FURNITURE);
-                    session.removeAttribute(DESCRIPTION);
+                    session.removeAttribute(APARTMENT);
+//                    session.removeAttribute(APARTMENT_ID);
+//                    session.removeAttribute(REGION);
+//                    session.removeAttribute(CITY);
+//                    session.removeAttribute(ROOMS);
+//                    session.removeAttribute(FLOOR);
+//                    session.removeAttribute(SQUARE);
+//                    session.removeAttribute(YEAR);
+//                    session.removeAttribute(FURNITURE);
+//                    session.removeAttribute(DESCRIPTION);
                     page = ESTATE;
                 } else {
                     String failReason = defineFalseKey(updateResult);

@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,8 +54,8 @@ public class ApartmentDaoImpl implements ApartmentDao {
     }
 
     @Override
-    public boolean add(Apartment apartment) throws DaoException{
-        boolean flag = false;
+    public long add(Apartment apartment) throws DaoException{
+        long key = -1;
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -62,7 +63,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
         }
         PreparedStatement statement = null;
         try {
-            statement = connection.prepareStatement(INSERT_NEW_APARTMENT);
+            statement = connection.prepareStatement(INSERT_NEW_APARTMENT, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, apartment.getRegion());
             statement.setString(2, apartment.getCity());
             statement.setString(3, apartment.getAddress());
@@ -99,11 +100,10 @@ public class ApartmentDaoImpl implements ApartmentDao {
             statement.setLong(11, registrationMillis);
             log.debug("owner id: " + apartment.getOwner().getId());
             statement.setLong(12, apartment.getOwner().getId());
-            int rows = statement.executeUpdate();
-            if(rows == 0){
-                log.warn("table apartment wasn't updated, check database");
-            } else {
-                flag = true;
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet != null && resultSet.next()) {
+                key = resultSet.getLong(1);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -111,7 +111,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return flag;
+        return key;
     }
 
     @Override
@@ -171,6 +171,9 @@ public class ApartmentDaoImpl implements ApartmentDao {
                     owner.setRegistrationDate(tenantRegistrationDate);
                     owner.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
                     owner.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
+                    byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
+                    String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+                    owner.setPhotoBase64(photoBase64);
                     apartment.setOwner(owner);
                 }
             }
@@ -243,6 +246,9 @@ public class ApartmentDaoImpl implements ApartmentDao {
                     tenant.setRegistrationDate(tenantRegistrationDate);
                     tenant.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
                     tenant.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
+                    byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
+                    String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+                    tenant.setPhotoBase64(photoBase64);
                     apartment.setTenant(tenant);
                 }
                 apartmentList.add(apartment);
@@ -313,6 +319,9 @@ public class ApartmentDaoImpl implements ApartmentDao {
                     owner.setRegistrationDate(tenantRegistrationDate);
                     owner.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
                     owner.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
+                    byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
+                    String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+                    owner.setPhotoBase64(photoBase64);
                     apartment.setTenant(owner);
                 }
                 apartmentList.add(apartment);

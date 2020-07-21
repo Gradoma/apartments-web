@@ -33,7 +33,7 @@
                             <small>${ request.getCreationDate() }</small>
                         </td>
                         <td>
-                            <img src="data:image/jpg;base64,${applicant.getPhotoBase64()}" width="50" height="50">
+                            <img src="data:image/jpg;base64,${applicant.getPhotoBase64()}" width="100" height="100"><br/>
                             <b><fmt:message key="requests.name"/> ${applicant.getFirstName()} ${applicant.getLastName()}</b><br/>
                             <fmt:message key="setting.birthday"/> : ${applicant.getBirthday()}<br/>
                             <fmt:message key="setting.phone"/> : ${applicant.getPhone()}<br/>

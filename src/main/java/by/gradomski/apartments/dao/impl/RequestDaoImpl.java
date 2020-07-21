@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class RequestDaoImpl implements RequestDao {
@@ -26,11 +27,12 @@ public class RequestDaoImpl implements RequestDao {
             " creationDate, idStatusReq) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_REQUESTS = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
             " request.description, idStatusReq, idUser, idRole, login, firstName, lastName, birthday, gender, phone," +
-            "user.registrationDate, mailAddress, idAppartment, region, city, address, rooms, square, floor FROM request JOIN user ON idApplicant=idUser JOIN appartment ON idApartment=idAppartment";
+            "photo, user.registrationDate, mailAddress, idAppartment, region, city, address, rooms, square, floor " +
+            "FROM request JOIN user ON idApplicant=idUser JOIN appartment ON idApartment=idAppartment";
     private static final String SELECT_REQUEST_BY_APPLICANT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
             " request.description, idStatusReq FROM request WHERE idApplicant=? AND idStatusReq!=5";
     private static final String SELECT_REQUEST_BY_APARTMENT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, " +
-            "creationDate, request.description, idStatusReq, idUser, firstName, lastName, birthday, gender, phone, " +
+            "creationDate, request.description, idStatusReq, idUser, firstName, lastName, birthday, gender, phone, photo, " +
             "registrationDate FROM request JOIN user ON idApplicant=idUser WHERE idApartment=? AND idStatusReq!=4;";
     private static final String UPDATE_REQUEST = "UPDATE request SET expectedDate=?, description=?, idStatusReq=? WHERE idRequest=?";
     private static final String UPDATE_STATUS_BY_ID = "UPDATE request SET idStatusReq=? WHERE idRequest=?";
@@ -118,6 +120,9 @@ public class RequestDaoImpl implements RequestDao {
                 LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 user.setRegistrationDate(registrationDate);
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
+                byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
+                String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+                user.setPhotoBase64(photoBase64);
 
                 Request request = new Request();
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
@@ -232,6 +237,9 @@ public class RequestDaoImpl implements RequestDao {
                 long applicantRegisterMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
                 LocalDateTime tenantRegistrationDate = Instant.ofEpochMilli(applicantRegisterMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
                 applicant.setRegistrationDate(tenantRegistrationDate);
+                byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
+                String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
+                applicant.setPhotoBase64(photoBase64);
 
                 request.setApplicant(applicant);
                 requestList.add(request);

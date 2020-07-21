@@ -28,9 +28,10 @@
         <table>
             <c:forEach var="elem" items="${apartmentList}" varStatus="status">
                 <c:set var="apartmentId" value="${elem.getId()}"/>
+                <c:set var="photoList" value="${elem.getUnmodifiablePhotoList()}"/>
                 <tr>
                     <td><c:out value="${ status.count }" /></td>
-                    <td><img src="fileController" width="50" height="50"></td>
+                    <td><img src="data:image/jpg;base64,${photoList[0]}" width="250" height="150"></td>
                     <td><c:out value="${ elem.getRegion() }" /></td>
                     <td><c:out value="${ elem.getCity() }" /></td>
                     <td><c:out value="${ elem.getAddress() }" /></td>
@@ -40,16 +41,16 @@
                                 <form action="control" method="get">
                                     <input type="hidden" name="command" value="transition_to_estate_edit"/>
                                     <input type="hidden" name="apartmentId" value="${elem.getId()}">
-                                    <input type="hidden" name="region" value="${elem.getRegion()}">
-                                    <input type="hidden" name="city" value="${elem.getCity()}">
-                                    <input type="hidden" name="address" value="${elem.getAddress()}">
-                                    <input type="hidden" name="city" value="${elem.getCity()}">
-                                    <input type="hidden" name="rooms" value="${elem.getRooms()}">
-                                    <input type="hidden" name="floor" value="${elem.getFloor()}">
-                                    <input type="hidden" name="square" value="${elem.getSquare()}">
-                                    <input type="hidden" name="year" value="${elem.getYear()}">
-                                    <input type="hidden" name="furniture" value="${elem.hasFurniture()}">
-                                    <input type="hidden" name="description" value="${elem.getDescription()}">
+<%--                                    <input type="hidden" name="region" value="${elem.getRegion()}">--%>
+<%--                                    <input type="hidden" name="city" value="${elem.getCity()}">--%>
+<%--                                    <input type="hidden" name="address" value="${elem.getAddress()}">--%>
+<%--                                    <input type="hidden" name="city" value="${elem.getCity()}">--%>
+<%--                                    <input type="hidden" name="rooms" value="${elem.getRooms()}">--%>
+<%--                                    <input type="hidden" name="floor" value="${elem.getFloor()}">--%>
+<%--                                    <input type="hidden" name="square" value="${elem.getSquare()}">--%>
+<%--                                    <input type="hidden" name="year" value="${elem.getYear()}">--%>
+<%--                                    <input type="hidden" name="furniture" value="${elem.hasFurniture()}">--%>
+<%--                                    <input type="hidden" name="description" value="${elem.getDescription()}">--%>
                                     <input type="submit" name="button" value="<fmt:message key="estate.editButton"/>">
                                 </form>
                                 <form action="control" method="get">

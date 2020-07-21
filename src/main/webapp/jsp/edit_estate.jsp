@@ -19,30 +19,60 @@
 <c:import url="header.jsp"/>
 <form name="update_apartment" action="control" method="get">
     <input type="hidden" name="command" value="edit_apartment">
-    <input type="hidden" name="apartmentId" value="${apartmentId}">
-    <fmt:message key="newEstate.region"/> : <input required name="region" value="${region}">
+<%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
+    <fmt:message key="newEstate.region"/> : <input required name="region" value="${apartment.getRegion()}">
     ${regionErrorMessage}<br/>
-    <fmt:message key="newEstate.city"/> : <input required name="city" value="${city}">
+    <fmt:message key="newEstate.city"/> : <input required name="city" value="${apartment.getCity()}">
     ${cityErrorMessage}<br/>
-    <fmt:message key="newEstate.address"/> : <input required name="address" value="${address}">
+    <fmt:message key="newEstate.address"/> : <input required name="address" value="${apartment.getAddress()}">
     ${addressErrorMessage}<br/>
-    <fmt:message key="newEstate.rooms"/> : <input required type="number" name="rooms" value="${rooms}">
+    <fmt:message key="newEstate.rooms"/> : <input required type="number" name="rooms" value="${apartment.getRooms()}">
     ${roomsErrorMessage}<br/>
-    <fmt:message key="newEstate.floor"/> : <input type="number" name="floor" value="${floor!=0 ? floor : null}">
+    <fmt:message key="newEstate.floor"/> : <input type="number" name="floor" value="${apartment.getFloor() !=0 ? apartment.getFloor() : null}">
     ${floorErrorMessage}<br/>
     <fmt:message key="newEstate.square"/> : <input type="text" pattern="\d+(\.\d{1})?" name="square"
-                                                   value="${square!=0.0 ? square : null}"><br/>
-    <fmt:message key="newEstate.year"/> : <input type="text" pattern="\d{4}" name="year" value="${year}"><br/>
+                                                   value="${apartment.getSquare() !=0.0 ? apartment.getSquare() : null}"><br/>
+    <fmt:message key="newEstate.year"/> : <input type="text" pattern="\d{4}" name="year" value="${apartment.getYear()}"><br/>
     <fmt:message key="newEstate.furniture"/> :
-    <input type="checkbox" name="furniture" value="true" ${apartmentFurniture eq true ? 'checked' : ''}/><fmt:message key="newEstate.yes"/><br/>
-    <fmt:message key="newEstate.description"/> : <input name="description" value="${description}"><br/>
+    <input type="checkbox" name="furniture" value="true" ${apartment.hasFurniture() eq true ? 'checked' : ''}/><fmt:message key="newEstate.yes"/><br/>
+    <fmt:message key="newEstate.description"/> : <input name="description" value="${apartment.getDescription()}"><br/>
     <input type="submit" name="button" value="<fmt:message key="setting.saveButton"/>"/>
+</form>
+<c:choose>
+    <c:when test="${incorrectType eq true}">
+        <h4><fmt:message key="photo.incorrectTypeMessage"/></h4>
+    </c:when>
+    <c:when test="${emptyFile eq true}">
+        <h4><fmt:message key="photo.empty"/></h4>
+    </c:when>
+</c:choose>
+<h5><fmt:message key="photo.formats"/> </h5>
+<form action="fileController" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" height="150">
+    <input type="hidden" name="page" value="EDIT">
+    <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>
+    <input type="submit" name="button" value="<fmt:message key="setting.browseButton"/>">
 </form>
 <form name="delete_apartment" action="control" method="get">
     <input type="hidden" name="command" value="delete_apartment">
-    <input type="hidden" name="apartmentId" value="${apartmentId}">
+    <input type="hidden" name="apartmentId" value="${apartment.getId()}">
+<%--    todo check remove apartment from session after delete ???--%>
     <input type="submit" name="button" value="<fmt:message key="estate.deleteButton"/>"/>
 </form>
+<table>
+    <c:forEach var="photo" items="${apartment.getUnmodifiablePhotoList()}" varStatus="status">
+        <tr>
+            <td><c:out value="${ status.count }" /></td>
+            <td><img src="data:image/jpg;base64,${photo}" width="250" height="100"></td>
+            <td>
+                <form action="control" method="get">
+                    <input type="hidden" name="command" value="delete_photo"/>
+                    <input type="submit" name="button" value="<fmt:message key="photo.deleteButton"/>">
+                </form>
+            </td>
+        </tr>
+    </c:forEach>
+</table>
 <c:import url="footer.jsp"/>
 </body>
 </html>

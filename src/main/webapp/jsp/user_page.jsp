@@ -37,15 +37,17 @@
 </form>
 <table>
     <c:forEach var="ad" items="${advertisementList}" varStatus="status">
+        <c:set var="apartment" value="${apartmentMap[ad.getId()]}"/>
+        <c:set var="photoList" value="${apartment.getUnmodifiablePhotoList()}"/>
         <tr>
-            <td><img src="fileController" width="80" height="80"></td>
+            <td><img src="data:image/jpg;base64,${photoList[0]}" width="120" height="120"></td>
             <td><a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${ad.getId()}>${ad.getTitle()}</a></td>
                 <%--                <td><c:out value="${ad.getTitle() }" /></td>--%>
             <td><c:out value="${ad.getPrice() }" /></td>
         </tr>
         <tr>
                 <%--                <td><ctg:dateTime dateTimeValue="${ad.getCreationDate()}"/></td>    //TODO(format tag)--%>
-            <td><c:out value="${ad.getCreationDate() }" /></td>
+            <td><small><c:out value="${ad.getCreationDate() }" /></small></td>
         </tr>
     </c:forEach>
 </table>

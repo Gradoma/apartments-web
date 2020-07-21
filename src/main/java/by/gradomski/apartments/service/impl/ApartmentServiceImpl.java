@@ -8,6 +8,7 @@ import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.ApartmentService;
+import by.gradomski.apartments.service.PhotoApartmentService;
 import by.gradomski.apartments.service.validator.ApartmentValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,21 +50,20 @@ public class ApartmentServiceImpl implements ApartmentService {
         if(!year.isBlank()){
             apartment.setYear(year);
         }
-        if(!year.isBlank()){
+        if(!furniture.isBlank()){
             apartment.setFurniture(Boolean.parseBoolean(furniture));
         }
         if(!description.isBlank()){
             apartment.setDescription(description);
         }
         try{
-            boolean result = ApartmentDaoImpl.getInstance().add(apartment);
-            if(!result){
+            long newApartmentId = ApartmentDaoImpl.getInstance().add(apartment);
+            if(newApartmentId < 0){
                 log.warn("apartment wasn't added to DB");
             }
         } catch (DaoException e){
             throw new ServiceException(e);
-        }
-        return validationResult;
+        } return validationResult;
     }
 
     @Override
@@ -78,6 +78,15 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
         for(Apartment apartment : apartmentList){
             apartment.setOwner(owner);
+            long apartmentId = apartment.getId();
+            PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
+            List<String> photoList = photoService.getByApartmentId(apartmentId);
+            if(photoList.isEmpty()){
+                log.debug("no apartment photo, default photo will be set");
+                String defaultImage = photoService.getDefaultImage();
+                photoList.add(defaultImage);
+            }
+            apartment.setPhoto(photoList);
         }
         return apartmentList;
     }
@@ -94,6 +103,15 @@ public class ApartmentServiceImpl implements ApartmentService {
         }
         for(Apartment apartment : apartmentList){
             apartment.setTenant(tenant);
+            long apartmentId = apartment.getId();
+            PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
+            List<String> photoList = photoService.getByApartmentId(apartmentId);
+            if(photoList.isEmpty()){
+                log.debug("no apartment photo, default photo will be set");
+                String defaultImage = photoService.getDefaultImage();
+                photoList.add(defaultImage);
+            }
+            apartment.setPhoto(photoList);
         }
         return apartmentList;
     }
@@ -109,7 +127,17 @@ public class ApartmentServiceImpl implements ApartmentService {
         if(optionalApartment.isEmpty()){
             throw new ServiceException("apartment wasn't found, id: " + id);
         }
-        return optionalApartment.get();
+        Apartment apartment = optionalApartment.get();
+        long apartmentId = apartment.getId();
+        PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
+        List<String> photoList = photoService.getByApartmentId(apartmentId);
+        if(photoList.isEmpty()){
+            log.debug("no apartment photo, default photo will be set");
+            String defaultImage = photoService.getDefaultImage();
+            photoList.add(defaultImage);
+        }
+        apartment.setPhoto(photoList);
+        return apartment;
     }
 
     @Override
@@ -177,6 +205,13 @@ public class ApartmentServiceImpl implements ApartmentService {
             switch (currentStatus){
                 case REGISTERED:
                     flag = ApartmentDaoImpl.getInstance().updateStatusByApartmentId(id, ApartmentStatus.DELETED);
+                    if(flag){
+                        boolean deletePhotosResult = PhotoApartmentServiceImpl.getInstance()
+                                .deleteAllApartmentPhotos(id);
+                        if(!deletePhotosResult){
+                            log.warn("photos wasn't deleted: apartmentId=" + id);
+                        }
+                    }
                     break;
                 case IN_DEMAND:
                     List<Request> requestList = RequestServiceImpl.getInstance().getActiveRequestsByApartmentId(id);

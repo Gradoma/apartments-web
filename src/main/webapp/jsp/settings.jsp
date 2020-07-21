@@ -33,6 +33,7 @@
     <form action="fileController" method="post" enctype="multipart/form-data">
         <input type="file" name="image" height="150">
         <input type="hidden" name="login" value="${user.getLoginName()}"/>
+        <input type="hidden" name="page" value="SETTINGS">
         <input type="submit" name="button" value="<fmt:message key="setting.browseButton"/>">
     </form>
     <form name="Simple" action="control" method="post">

@@ -2,12 +2,13 @@ package by.gradomski.apartments.entity;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 public class Apartment {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private long id;
-    private String photo;
     private String region;
     private String city;
     private String address;
@@ -21,7 +22,8 @@ public class Apartment {
     private User tenant;
     private ApartmentStatus status;
     private LocalDateTime registrationDate;
-    boolean visibility;
+    private boolean visibility;
+    private List<String> photoList;
 
     public Apartment(){};
     public Apartment(User owner, String region, String city, String address){
@@ -44,12 +46,12 @@ public class Apartment {
         this.id = id;
     }
 
-    public String getPhoto() {
-        return photo;
+    public List<String> getUnmodifiablePhotoList() {
+        return Collections.unmodifiableList(photoList);
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhoto(List<String> photoList) {
+        this.photoList = photoList;
     }
 
     public String getRegion() {
@@ -176,7 +178,7 @@ public class Apartment {
         if (rooms != apartment.rooms) return false;
         if (Double.compare(apartment.square, square) != 0) return false;
         if (furniture != apartment.furniture) return false;
-        if (photo != null ? !photo.equals(apartment.photo) : apartment.photo != null) return false;
+        if (visibility != apartment.visibility) return false;
         if (region != null ? !region.equals(apartment.region) : apartment.region != null) return false;
         if (city != null ? !city.equals(apartment.city) : apartment.city != null) return false;
         if (address != null ? !address.equals(apartment.address) : apartment.address != null) return false;
@@ -186,8 +188,9 @@ public class Apartment {
         if (owner != null ? !owner.equals(apartment.owner) : apartment.owner != null) return false;
         if (tenant != null ? !tenant.equals(apartment.tenant) : apartment.tenant != null) return false;
         if (status != apartment.status) return false;
-        if (visibility != apartment.visibility) return false;
-        return registrationDate != null ? registrationDate.equals(apartment.registrationDate) : apartment.registrationDate == null;
+        if (registrationDate != null ? !registrationDate.equals(apartment.registrationDate) : apartment.registrationDate != null)
+            return false;
+        return photoList != null ? photoList.equals(apartment.photoList) : apartment.photoList == null;
     }
 
     @Override
@@ -195,7 +198,6 @@ public class Apartment {
         int result;
         long temp;
         result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (photo != null ? photo.hashCode() : 0);
         result = 31 * result + (region != null ? region.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (address != null ? address.hashCode() : 0);
@@ -211,6 +213,7 @@ public class Apartment {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (registrationDate != null ? registrationDate.hashCode() : 0);
         result = 31 * result + (visibility ? 1 : 0);
+        result = 31 * result + (photoList != null ? photoList.hashCode() : 0);
         return result;
     }
 
@@ -249,6 +252,8 @@ public class Apartment {
         builder.append(registrationDate);
         builder.append(", visibility=");
         builder.append(visibility);
+        builder.append(", photoList=");
+        builder.append(photoList);
         return builder.toString();
     }
 }
