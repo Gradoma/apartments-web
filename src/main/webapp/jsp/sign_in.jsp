@@ -23,9 +23,13 @@
     <br/> ${errorAccess} <br/>
 <form name="Simple" action="control" method="post">
     <input type="hidden" name="command" value="sign_in"/>
-    <input required name="login" placeholder=<fmt:message key="label.login"/>><br/>
-    <input required name="password" placeholder=<fmt:message key="label.password"/>>
-        <br/> ${errorSignInPass} <br/>
+    <input required name="login" pattern="^[\p{Digit}\p{Alpha}_-]{3,15}$" placeholder=<fmt:message key="label.login"/>><br/>
+    <input required name="password" pattern="^.{5,45}$" placeholder=<fmt:message key="label.password"/>>
+    <c:choose>
+        <c:when test="${errorSignInPass eq true}">
+            <fmt:message key="signIn.errorSignInMessage"/>
+        </c:when>
+    </c:choose>
     <input type="submit" name="button" value="<fmt:message key="label.submitButton"/>">
 </form>
 <form action="control" method="get">

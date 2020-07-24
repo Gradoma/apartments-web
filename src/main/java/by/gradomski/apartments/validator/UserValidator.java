@@ -15,7 +15,7 @@ public class UserValidator {
     private static final String LOGIN_PATTERN = "^[\\p{Digit}\\p{Alpha}_-]{3,15}$";
     private static final String PASS_PATTERN = "^.{5,45}$";
     private static final String EMAIL_PATTERN = "[^@ \\t\\r\\n]+@[^@ \\t\\r\\n]+\\.[^@ \\t\\r\\n]+";
-    private static final String NAME_PATTERN = "^[\\p{Alpha}-]{1,45}$";
+    private static final String NAME_PATTERN = "^[а-яА-я-]{1,45}$";
     private static final String PHONE_PATTERN = "^[+]?[(]?[0-9]{5}[)]?[-\\s]?[0-9]{3}[-\\s]?[0-9]{2}[-\\s]?[0-9]{2}$";
     private static final int EMAIL_LENGTH = 40;
     private static final int PHONE_LENGTH = 18;

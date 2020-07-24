@@ -136,6 +136,7 @@ public class UserServiceImpl implements UserService {
     public User updateUser(String login, String genderString, String firstName,
                            String lastName, String phone, String birthdayString) throws ServiceException {
         User user = new User();
+        user.setLoginName(login);
         Gender gender = Gender.valueOf(genderString);
         user.setGender(gender);
         user.setFirstName(firstName);

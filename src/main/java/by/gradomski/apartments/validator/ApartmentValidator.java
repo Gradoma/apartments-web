@@ -11,6 +11,10 @@ import java.util.regex.Pattern;
 
 public class ApartmentValidator {
     private static final Logger log = LogManager.getLogger();
+    private static final String REGION_CITY_PATTERN = "^[а-яА-я-.\\s]{1,45}$";
+    private static final String ROOMS_FLOOR_PATTERN = "\\p{Digit}";
+    private static final String SQUARE_PATTERN = "^(\\p{Digit}+([.,]\\d)?)$";
+    private static final String YEAR_PATTERN = "\\p{Digit}{4}";
     private static final String FALSE = "false";
     private static final String REGION = "region";
     private static final String CITY = "city";
@@ -19,13 +23,23 @@ public class ApartmentValidator {
     private static final String FLOOR = "floor";
     private static final String SQUARE = "square";
     private static final String YEAR = "year";
-    private static final String YEAR_PATTERN = "\\d{4}";
+    private static final String DESCRIPTION = "description";
+    private static final int ADDRESS_LENGTH = 45;
+    private static final int DESCRIPTION_LENGTH = 200;
+    private static Logger logger = LogManager.getLogger();
 
     public static Map<String, String> isValid(String region, String city, String address, String rooms, String floor,
-                                              String square, String year){
+                                              String square, String year, String description){
         Map<String, String> resultMap = new HashMap<>();
         if(region == null || region.isBlank() || region.strip().isBlank()){
             log.info("region blank or null");
+            resultMap.put(REGION, FALSE);
+            return resultMap;
+        }
+        Pattern regionCityPattern = Pattern.compile(REGION_CITY_PATTERN);
+        Matcher regionMatcher = regionCityPattern.matcher(region);
+        if( !regionMatcher.matches()){
+            logger.debug("region doesnt match pattern: " + region);
             resultMap.put(REGION, FALSE);
             return resultMap;
         }
@@ -34,8 +48,19 @@ public class ApartmentValidator {
             resultMap.put(CITY, FALSE);
             return resultMap;
         }
+        Matcher cityMatcher = regionCityPattern.matcher(city);
+        if( !cityMatcher.matches()){
+            logger.debug("city doesnt match pattern: " + city);
+            resultMap.put(CITY, FALSE);
+            return resultMap;
+        }
         if(address == null || address.isBlank() || address.strip().isBlank()){
             log.info("address blank or null");
+            resultMap.put(ADDRESS, FALSE);
+            return resultMap;
+        }
+        if(address.length() > ADDRESS_LENGTH){
+            log.info("address to long");
             resultMap.put(ADDRESS, FALSE);
             return resultMap;
         }
@@ -43,52 +68,37 @@ public class ApartmentValidator {
             log.info("rooms blank or null");
             resultMap.put(ROOMS, FALSE);
             return resultMap;
-        } else {
-            try{
-                int roomsInt = Integer.parseInt(rooms);
-                if(roomsInt <= 0) {
-                    log.info("rooms less 0: " + roomsInt);
-                    resultMap.put(ROOMS, FALSE);
-                    return resultMap;
-                }
-            } catch (NumberFormatException e){
-                log.info("invalid rooms number: " + rooms);
-                resultMap.put(ROOMS, FALSE);
-                return resultMap;
-            }
         }
-        if(!floor.isBlank()){
-            try{
-                int floorInt = Integer.parseInt(floor);
-                if(floorInt <= 0) {
-                    log.info("floor less 0: " + floorInt);
-                    resultMap.put(FLOOR, FALSE);
-                    return resultMap;
-                }
-            } catch (NumberFormatException e){
+        Pattern roomsFloorPattern = Pattern.compile(ROOMS_FLOOR_PATTERN);
+        Matcher roomsMatcher = roomsFloorPattern.matcher(rooms);
+        if(!roomsMatcher.matches()){
+            log.info("invalid rooms number: " + rooms);
+            resultMap.put(ROOMS, FALSE);
+            return resultMap;
+        }
+
+        if(floor != null && !floor.isBlank()){
+            Matcher floorMatcher = roomsFloorPattern.matcher(floor);
+            if(!floorMatcher.matches()){
                 log.info("invalid floor number: " + floor);
                 resultMap.put(FLOOR, FALSE);
                 return resultMap;
             }
         }
-        if(!square.isBlank()){
-            try{
-                double squareDouble = Double.parseDouble(square);
-                if(Double.compare(squareDouble, 0.0) <= 0) {
-                    log.info("square less 0: " + squareDouble);
-                    resultMap.put(SQUARE, FALSE);
-                    return resultMap;
-                }
-            } catch (NumberFormatException e){
+        if(square != null && !square.isBlank()){
+            Pattern squarePattern = Pattern.compile(SQUARE_PATTERN);
+            Matcher squareMatcher = squarePattern.matcher(square);
+            if(!squareMatcher.matches()){
                 log.info("invalid square number: " + square);
                 resultMap.put(SQUARE, FALSE);
                 return resultMap;
             }
         }
-        if(!year.isBlank()){
-            Pattern patternYear = Pattern.compile(YEAR_PATTERN);
-            Matcher matcher = patternYear.matcher(year);
-            if(!matcher.matches()){
+
+        if(year != null && !year.isBlank()){
+            Pattern yearPattern = Pattern.compile(YEAR_PATTERN);
+            Matcher yearMatcher = yearPattern.matcher(year);
+            if(!yearMatcher.matches()){
                 log.info("incorrect year format: " + year);
                 resultMap.put(YEAR, FALSE);
                 return resultMap;
@@ -97,6 +107,14 @@ public class ApartmentValidator {
             if(Integer.parseInt(year) > currentYear){
                 log.info("year after current year: " + year);
                 resultMap.put(YEAR, FALSE);
+                return resultMap;
+            }
+        }
+
+        if(description != null && !description.isBlank()){
+            if(description.length() > DESCRIPTION_LENGTH){
+                log.info("description too long");
+                resultMap.put(DESCRIPTION, FALSE);
                 return resultMap;
             }
         }

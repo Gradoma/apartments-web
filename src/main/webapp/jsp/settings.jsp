@@ -19,7 +19,11 @@
 </head>
 <body>
 <c:import url="header.jsp"/>
-    <h2>${greeting}</h2>
+    <c:choose>
+        <c:when test="${greeting eq true}">
+            <h2><fmt:message key="setting.greetingMessage"/></h2>
+        </c:when>
+    </c:choose>
     <img src="data:image/jpg;base64,${user.getPhotoBase64()}" width="100" height="100">
     <c:choose>
         <c:when test="${incorrectType eq true}">
@@ -39,13 +43,37 @@
     <form name="Simple" action="control" method="post">
         <input type="hidden" name="command" value="update_user"/>
         <input type="hidden" name="login" value="${user.getLoginName()}"/>
-        <fmt:message key="setting.firstName"/> : <input required name="firstName" value="${user.getFirstName()}"><br/>
-        <fmt:message key="setting.lastName"/> : <input required name="lastName" value="${user.getLastName()}"><br/>
+        <fmt:message key="setting.firstName"/> : <input required name="firstName" value="${user.getFirstName()}" pattern="^[а-яА-я-]{1,45}$"><br/>
+        <c:choose>
+            <c:when test="${firstNameError eq true}">
+                <fmt:message key="setting.firstNameErrorMessage"/>
+            </c:when>
+        </c:choose>
+        <fmt:message key="setting.lastName"/> : <input required name="lastName" value="${user.getLastName()}" pattern="^[а-яА-я-]{1,45}$"><br/>
+        <c:choose>
+            <c:when test="${lastNameError eq true}">
+                <fmt:message key="setting.lastNameErrorMessage"/>
+            </c:when>
+        </c:choose>
         <fmt:message key="setting.gender"/> : <input type="radio" name="gender" value="FEMALE" ${userGender eq female ? 'checked' : ''}/><fmt:message key="setting.female"/>
         <input type="radio" name="gender" value="MALE" ${userGender eq male ? 'checked' : ''}/><fmt:message key="setting.male"/><br/>
-        <fmt:message key="setting.phone"/> : <input name="phone" value="${user.getPhone()}"><br/>
+        <c:choose>
+            <c:when test="${genderErrorMessage eq true}">
+                <fmt:message key="setting.genderErrorMessage"/>
+            </c:when>
+        </c:choose>
+        <fmt:message key="setting.phone"/> : <input name="phone" value="${user.getPhone()}" pattern="^[+]?[(]?[0-9]{5}[)]?[-\s]?[0-9]{3}[-\s]?[0-9]{2}[-\s]?[0-9]{2}$"><br/>
+        <c:choose>
+            <c:when test="${phoneErrorMessage eq true}">
+                <fmt:message key="setting.phoneErrorMessage"/>
+            </c:when>
+        </c:choose>
         <fmt:message key="setting.birthday"/> : <input type="date" name="birthday" value="${user.getBirthday()}">
-        <br/> ${errorBirthday} <br/>
+        <c:choose>
+            <c:when test="${birthdayErrorMessage eq true}">
+                <fmt:message key="setting.birthdayErrorMessage"/>
+            </c:when>
+        </c:choose>
         <input type="submit" name="button" value=<fmt:message key="setting.saveButton"/>>
     </form>
 <c:import url="footer.jsp"/>

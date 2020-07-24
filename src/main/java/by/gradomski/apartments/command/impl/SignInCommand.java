@@ -52,11 +52,11 @@ public class SignInCommand implements Command {
                         page = ERROR_PAGE;
                     }
                 } else {
-                    request.setAttribute("greeting", "Welcome! Please finish your registration to use our app easily and conveniently");
+                    request.setAttribute("greeting", true);
                     page = USER_SETTINGS;
                 }
             } else {
-                request.setAttribute("errorSignInPass", "Incorrect login or password");
+                request.setAttribute("errorSignInPass", true);
                 log.info("incorrect login or password");
                 page = SIGN_IN;
             }

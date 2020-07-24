@@ -65,31 +65,34 @@ public class AddNewApartmentCommand implements Command {
                     switch (failReason){
                         case REGION:
                             log.debug("incorrect region: " + region);
-                            request.setAttribute("regionErrorMessage","Required filed");
+                            request.setAttribute("regionError",true);
                             break;
                         case CITY:
                             log.debug("incorrect city: " + city);
-                            request.setAttribute("cityErrorMessage","Required filed");
+                            request.setAttribute("cityError",true);
                             break;
                         case ADDRESS:
                             log.debug("incorrect address: " + address);
-                            request.setAttribute("addressErrorMessage","Required filed");
+                            request.setAttribute("addressError",true);
                             break;
                         case ROOMS:
                             log.debug("incorrect rooms: " + rooms);
-                            request.setAttribute("roomsErrorMessage","Required filed, more 0");
+                            request.setAttribute("roomsError",true);
                             break;
                         case FLOOR:
                             log.debug("incorrect floor: " + floor);
-                            request.setAttribute("floorErrorMessage","Should be more 0");
+                            request.setAttribute("floorError",true);
                             break;
                         case SQUARE:
                             log.debug("incorrect square: " + square);
-                            request.setAttribute("squareErrorMessage","Incorrect format or less 0");
+                            request.setAttribute("squareError",true);
                             break;
                         case YEAR:
                             log.debug("incorrect year: " + year);
-                            request.setAttribute("yearErrorMessage","Invalid year build");
+                            request.setAttribute("yearError",true);
+                            break;
+                        case DESCRIPTION:
+                            request.setAttribute("descriptionError",true);
                             break;
                     }
                     page = NEW_ESTATE;

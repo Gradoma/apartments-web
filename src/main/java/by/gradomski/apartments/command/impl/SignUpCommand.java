@@ -46,19 +46,19 @@ public class SignUpCommand implements Command {
                 switch (key){
                     case LOGIN:
                         log.debug("incorrect login: " + login);
-                        request.setAttribute("loginErrorMessage","Invalid login (3-15 characters required)");
+                        request.setAttribute("loginError",true);
                         break;
                     case PASSWORD:
                         log.debug("incorrect password: " + password);
-                        request.setAttribute("passErrorMessage","Too short: should be more than 5 symbols");
+                        request.setAttribute("passError",true);
                         break;
                     case EMAIL:
                         log.debug("incorrect email: " + email);
-                        request.setAttribute("emailErrorMessage","Incorrect email, check again");
+                        request.setAttribute("emailError",true);
                         break;
                     case UNIQ_LOGIN:
                         log.debug(login + " - user already exist");
-                        request.setAttribute("loginErrorMessage","User with this login already exist");
+                        request.setAttribute("uniqLoginError",true);
                         break;
                 }
                 page = SIGN_UP;

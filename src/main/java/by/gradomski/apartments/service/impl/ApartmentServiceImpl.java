@@ -20,6 +20,8 @@ import java.util.Optional;
 public class ApartmentServiceImpl implements ApartmentService {
     private static final Logger log = LogManager.getLogger();
     private static final String FALSE = "false";
+    private static final char COMMA = ',';
+    private static final char DOT = '.';
     private static ApartmentServiceImpl instance;
 
     private ApartmentServiceImpl(){}
@@ -35,7 +37,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     public Map<String, String> addApartment(User owner, String region, String city, String address, String rooms, String floor,
                                             String square, String year, String furniture, String description) throws ServiceException {
         log.debug("owner " + owner);
-        Map<String, String> validationResult = ApartmentValidator.isValid(region, city, address, rooms, floor, square, year);
+        Map<String, String> validationResult = ApartmentValidator.isValid(region, city, address, rooms, floor, square,
+                year, description);
         if(validationResult.containsValue(FALSE)){
             return validationResult;
         }
@@ -45,6 +48,7 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartment.setFloor(Integer.parseInt(floor));
         }
         if(!square.isBlank()){
+            square = square.replace(COMMA, DOT);
             apartment.setSquare(Double.parseDouble(square));
         }
         if(!year.isBlank()){
@@ -144,7 +148,8 @@ public class ApartmentServiceImpl implements ApartmentService {
     public Map<String, String> updateApartment(long id, String region, String city, String address, String rooms,
                                                String floor, String square, String year, String furniture,
                                                String description) throws ServiceException {
-        Map<String, String> validationResult = ApartmentValidator.isValid(region, city, address, rooms, floor, square, year);
+        Map<String, String> validationResult = ApartmentValidator.isValid(region, city, address, rooms, floor,
+                square, year, description);
         if(validationResult.containsValue(FALSE)){
             return validationResult;
         }
@@ -156,12 +161,13 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartment.setFloor(Integer.parseInt(floor));
         }
         if(!square.isBlank()){
+            square = square.replace(COMMA, DOT);
             apartment.setSquare(Double.parseDouble(square));
         }
         if(!year.isBlank()){
             apartment.setYear(year);
         }
-        if(!year.isBlank()){
+        if(!furniture.isBlank()){
             apartment.setFurniture(Boolean.parseBoolean(furniture));
         }
         if(!description.isBlank()){

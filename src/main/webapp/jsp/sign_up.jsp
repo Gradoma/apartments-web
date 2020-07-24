@@ -28,18 +28,29 @@
         <div class="form-group">
             <label class="col-md-4 control-label" for="textinput"><fmt:message key="label.login"/></label>
             <div class="col-md-4">
-                <input name="login" type="text" class="form-control input-md" required="" width="50" pattern="^[a-zA-Z0-9_-]{3,15}$">
+                <input name="login" type="text" class="form-control input-md" required="" width="50" pattern="^[\p{Digit}\p{Alpha}_-]{3,15}$">
             </div>
-            ${loginErrorMessage}
+            <c:choose>
+                <c:when test="${loginError eq true}">
+                    <fmt:message key="signUp.loginErrorMessage"/>
+                </c:when>
+                <c:when test="${uniqLoginError eq true}">
+                    <fmt:message key="signUp.uniqLoginErrorMessage"/>
+                </c:when>
+            </c:choose>
         </div>
 
         <!-- Password input-->
         <div class="form-group">
             <label class="col-md-4 control-label" for="passwordinput"><fmt:message key="label.password"/></label>
             <div class="col-md-4">
-                <input id="passwordinput" name="password" type="password" class="form-control input-md" required="" width="100" pattern="^.{5,}$">
+                <input id="passwordinput" name="password" type="password" class="form-control input-md" required="" width="100" pattern="^.{5,45}$">
             </div>
-            ${passErrorMessage}
+            <c:choose>
+                <c:when test="${passError eq true}">
+                    <fmt:message key="signUp.passErrorMessage"/>
+                </c:when>
+            </c:choose>
         </div>
 
         <!-- Text input-->
@@ -49,7 +60,11 @@
                 <input id="textinput" name="email" type="text" class="form-control input-md" required="" width="100" pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+">
 
             </div>
-            ${emailErrorMessage}
+            <c:choose>
+                <c:when test="${emailError eq true}">
+                    <fmt:message key="signUp.emailErrorMessage"/>
+                </c:when>
+            </c:choose>
         </div>
 
         <!-- Button -->
