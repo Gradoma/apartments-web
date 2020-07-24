@@ -1,6 +1,5 @@
-package by.gradomski.apartments.service.validator;
+package by.gradomski.apartments.validator;
 
-import by.gradomski.apartments.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

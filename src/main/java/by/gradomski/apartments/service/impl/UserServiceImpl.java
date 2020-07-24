@@ -6,7 +6,7 @@ import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.UserService;
-import by.gradomski.apartments.service.validator.Validator;
+import by.gradomski.apartments.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +21,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private static UserServiceImpl instance;
     private static final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    private static final String FALSE = "false";
     private static final Logger log = LogManager.getLogger();
 
     private UserServiceImpl(){}
@@ -34,15 +35,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, String> signUp(String login, String password, String email) throws ServiceException {
-        Map<String, String> resultMap = new HashMap<>();
-        String trueValue = "true";
-        String falseValue = "false";
-        resultMap.put("login", trueValue);
-        resultMap.put("loginUniq", trueValue);
-        resultMap.put("password", trueValue);
-        resultMap.put("email", trueValue);
-        resultMap = Validator.isValid(login, password, email, new HashMap<>());
-        if(resultMap.containsValue(falseValue)){
+        Map<String, String> resultMap;
+//        String trueValue = "true";          // TODO(fix!)
+//        String falseValue = "false";
+//        resultMap.put("login", trueValue);
+//        resultMap.put("loginUniq", trueValue);
+//        resultMap.put("password", trueValue);
+//        resultMap.put("email", trueValue);
+//        resultMap = UserValidator.isValid(login, password, email, new HashMap<>());
+        resultMap = UserValidator.isValid(login, password, email);
+        if(resultMap.containsValue(FALSE)){
             return resultMap;
         }
         Optional<User> optionalUser;
@@ -53,7 +55,7 @@ public class UserServiceImpl implements UserService {
         }
         if(optionalUser.isPresent()){
             log.debug("user with this login already exist");
-            resultMap.put("loginUniq", falseValue);
+            resultMap.put("loginUniq", FALSE);
             return resultMap;
         }
         User user = new User(login, password, email);
@@ -67,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean signIn(String login, String password) throws ServiceException {
-        if(!Validator.isValid(login, password)){
+        if(!UserValidator.isValid(login, password)){
             return false;
         }
         Optional<User> optionalUser;
@@ -131,26 +133,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(String login, String password, Gender gender, String firstName,
+    public User updateUser(String login, String genderString, String firstName,
                            String lastName, String phone, String birthdayString) throws ServiceException {
-        User user = new User(login, password, null);
+        User user = new User();
+        Gender gender = Gender.valueOf(genderString);
         user.setGender(gender);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setPhone(phone);           // TODO (validation phone)
-        log.debug("birthday String: " + birthdayString);
-        if(birthdayString != null && !birthdayString.isBlank()){
-            LocalDate today = LocalDate.now();
-            try {
-                LocalDate birthday = LocalDate.parse(birthdayString);
-                if (today.isBefore(birthday)) {
-                    log.debug("invalid birthDay: later than today");
-                    throw new DateTimeParseException("invalid birthday", birthdayString, 0);
-                }
-                user.setBirthday(birthday);
-            } catch (DateTimeParseException pEx){
-                throw new ServiceException(pEx);
-            }
+        user.setPhone(phone);
+        try {
+            LocalDate birthday = LocalDate.parse(birthdayString);
+            user.setBirthday(birthday);
+        } catch (DateTimeParseException pEx){
+            throw new ServiceException(pEx);
         }
         Optional<User> optionalUser = Optional.empty();
         try {

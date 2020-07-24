@@ -20,7 +20,14 @@
     <h3>${apartment.getRegion()}, ${apartment.getCity()}</h3>
     <h3>${apartment.getAddress()}</h3>
     <c:set var="photoList" value="${apartment.getUnmodifiablePhotoList()}"/>
-    <img src="data:image/jpg;base64,${photoList[0]}" width="800" height="500"><br/>
+    <c:choose>
+        <c:when test="${photoList.isEmpty()}">
+            No photo
+        </c:when>
+        <c:otherwise>
+            <img src="data:image/jpg;base64,${photoList[0]}" width="120" height="120"><br/>
+        </c:otherwise>
+    </c:choose>
     <table>
         <tr>
             <td>

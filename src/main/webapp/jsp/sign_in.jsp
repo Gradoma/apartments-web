@@ -37,7 +37,16 @@
             <c:set var="apartment" value="${apartmentMap[ad.getId()]}"/>
             <c:set var="photoList" value="${apartment.getUnmodifiablePhotoList()}"/>
             <tr>
-                <td><img src="data:image/jpg;base64,${photoList[0]}" width="120" height="120"></td>
+                <td>
+                    <c:choose>
+                        <c:when test="${photoList.isEmpty()}">
+                            No photo
+                        </c:when>
+                        <c:otherwise>
+                            <img src="data:image/jpg;base64,${photoList[0]}" width="120" height="120">
+                        </c:otherwise>
+                    </c:choose>
+                </td>
                 <td><a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${ad.getId()}>${ad.getTitle()}</a></td>
 <%--                <td><c:out value="${ad.getTitle() }" /></td>--%>
                 <td><c:out value="${ad.getPrice() }" /></td>

@@ -61,7 +61,6 @@ public class SignUpCommand implements Command {
                         request.setAttribute("loginErrorMessage","User with this login already exist");
                         break;
                 }
-                log.info("incorrect login or password");
                 page = SIGN_UP;
             }
         }catch (ServiceException e){

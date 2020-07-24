@@ -13,7 +13,7 @@ public interface UserService {
     void activateUser(String login) throws ServiceException;
     User getUserByLogin(String login) throws ServiceException;
     User getUserById(long id) throws ServiceException;
-    User updateUser(String login, String password, Gender gender, String firstName,
+    User updateUser(String login, String gender, String firstName,
                     String lastName, String phone, String birthday) throws ServiceException;
     User updateUserPhoto(InputStream inputStream, String login) throws ServiceException;
 }

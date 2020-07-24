@@ -9,7 +9,7 @@ import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.ApartmentService;
 import by.gradomski.apartments.service.PhotoApartmentService;
-import by.gradomski.apartments.service.validator.ApartmentValidator;
+import by.gradomski.apartments.validator.ApartmentValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -81,11 +81,11 @@ public class ApartmentServiceImpl implements ApartmentService {
             long apartmentId = apartment.getId();
             PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
             List<String> photoList = photoService.getByApartmentId(apartmentId);
-            if(photoList.isEmpty()){
-                log.debug("no apartment photo, default photo will be set");
-                String defaultImage = photoService.getDefaultImage();
-                photoList.add(defaultImage);
-            }
+//            if(photoList.isEmpty()){
+//                log.debug("no apartment photo, default photo will be set");
+//                String defaultImage = photoService.getDefaultImage();
+//                photoList.add(defaultImage);
+//            }
             apartment.setPhoto(photoList);
         }
         return apartmentList;
@@ -106,11 +106,11 @@ public class ApartmentServiceImpl implements ApartmentService {
             long apartmentId = apartment.getId();
             PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
             List<String> photoList = photoService.getByApartmentId(apartmentId);
-            if(photoList.isEmpty()){
-                log.debug("no apartment photo, default photo will be set");
-                String defaultImage = photoService.getDefaultImage();
-                photoList.add(defaultImage);
-            }
+//            if(photoList.isEmpty()){
+//                log.debug("no apartment photo, default photo will be set");
+//                String defaultImage = photoService.getDefaultImage();
+//                photoList.add(defaultImage);
+//            }
             apartment.setPhoto(photoList);
         }
         return apartmentList;
@@ -131,11 +131,11 @@ public class ApartmentServiceImpl implements ApartmentService {
         long apartmentId = apartment.getId();
         PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
         List<String> photoList = photoService.getByApartmentId(apartmentId);
-        if(photoList.isEmpty()){
-            log.debug("no apartment photo, default photo will be set");
-            String defaultImage = photoService.getDefaultImage();
-            photoList.add(defaultImage);
-        }
+//        if(photoList.isEmpty()){
+//            log.debug("no apartment photo, default photo will be set");
+//            String defaultImage = photoService.getDefaultImage();
+//            photoList.add(defaultImage);
+//        }
         apartment.setPhoto(photoList);
         return apartment;
     }
