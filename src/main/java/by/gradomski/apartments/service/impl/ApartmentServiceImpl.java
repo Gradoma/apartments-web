@@ -54,7 +54,7 @@ public class ApartmentServiceImpl implements ApartmentService {
         if(!year.isBlank()){
             apartment.setYear(year);
         }
-        if(!furniture.isBlank()){
+        if(furniture!=null && !furniture.isBlank()){
             apartment.setFurniture(Boolean.parseBoolean(furniture));
         }
         if(!description.isBlank()){

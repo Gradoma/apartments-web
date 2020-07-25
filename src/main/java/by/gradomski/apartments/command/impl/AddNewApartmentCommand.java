@@ -52,6 +52,7 @@ public class AddNewApartmentCommand implements Command {
             String square = request.getParameter(SQUARE);
             String year = request.getParameter(YEAR);
             String furniture = request.getParameter(FURNITURE);
+            log.debug("furniture=" + furniture);
             String description = request.getParameter(DESCRIPTION);
             try {
                 Map<String, String> addingResult = apartmentService.addApartment(currentUser, region, city, address,
