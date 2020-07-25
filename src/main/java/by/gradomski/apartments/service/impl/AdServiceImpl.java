@@ -103,8 +103,7 @@ public class AdServiceImpl implements AdService {
         if(title == null || title.isBlank() || price == null || price.isBlank()){
             log.debug("title or price null or blank");
             return false;
-        }       // TODO check price <=0
-                // TODO check title.length
+        }
         BigDecimal decimalPrice = new BigDecimal(price);
         advertisement.setTitle(title);
         advertisement.setPrice(decimalPrice);

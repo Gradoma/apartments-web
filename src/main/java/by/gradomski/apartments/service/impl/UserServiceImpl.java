@@ -36,13 +36,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, String> signUp(String login, String password, String email) throws ServiceException {
         Map<String, String> resultMap;
-//        String trueValue = "true";          // TODO(fix!)
-//        String falseValue = "false";
-//        resultMap.put("login", trueValue);
-//        resultMap.put("loginUniq", trueValue);
-//        resultMap.put("password", trueValue);
-//        resultMap.put("email", trueValue);
-//        resultMap = UserValidator.isValid(login, password, email, new HashMap<>());
         resultMap = UserValidator.isValid(login, password, email);
         if(resultMap.containsValue(FALSE)){
             return resultMap;

@@ -30,7 +30,6 @@ public class TransitionToNewRequestCommand implements Command {
                 session.setAttribute(ADVERTISEMENT_ID, advertisementId);
                 request.setAttribute("errorAccess", "Please sign in to make requests");
                 page = SIGN_IN;
-                //TODO(check current user; if null - save ad id - go to sign in - after sign in again to ad)
             } else {
                 log.error("request parameter " + ADVERTISEMENT_ID + "== null");
                 page = ERROR_PAGE;

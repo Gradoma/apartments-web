@@ -7,9 +7,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.Lock;
@@ -21,38 +19,29 @@ public class ConnectionPool {
     private static Lock lock = new ReentrantLock();
     private static final int DEFAULT_POOL_SIZE = 32;
     private static final String DRIVER = "db.driver";
-    private BlockingQueue<Connection> freeConnections;
-
+    private BlockingQueue<ProxyConnection> freeConnections;
+    private Queue<ProxyConnection> busyConnections;
+    private String url;
+    private Properties properties;
 
     private ConnectionPool(){
         PropertiesHandler propHandler = new PropertiesHandler();
-        String url = propHandler.getUrl();
-        Properties properties = propHandler.getProperties();
+        url = propHandler.getUrl();
+        properties = propHandler.getProperties();
         String driver = properties.getProperty(DRIVER);
-        System.out.println(driver);
         try {
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
-            throw new ExceptionInInitializerError("driver trouble");
+            throw new ExceptionInInitializerError(e);
         }
-        freeConnections = new LinkedBlockingQueue<Connection>(DEFAULT_POOL_SIZE);
-        for(int i = 0; i < DEFAULT_POOL_SIZE; i++){
-            try {
-                freeConnections.add(DriverManager.getConnection(url, properties));
-            } catch (SQLException throwables) {
-                log.error(throwables);
-            }
-        }
+        freeConnections = new LinkedBlockingQueue<ProxyConnection>(DEFAULT_POOL_SIZE);
+        busyConnections = new ArrayDeque<>();
+        createConnections(DEFAULT_POOL_SIZE);
         int size = freeConnections.size();
         log.debug("pool size=" + size);
-        if (size < DEFAULT_POOL_SIZE){
-            for (int i = 0; i < DEFAULT_POOL_SIZE - size; i++){
-                try {
-                    freeConnections.add(DriverManager.getConnection(url, properties));
-                } catch (SQLException throwables) {
-                    log.error(throwables);
-                }
-            }
+        if(!checkTotalAmount()){
+            log.info("pool doesn't have enough connections=" + size);
+            createConnections(DEFAULT_POOL_SIZE - size);
         }
         if(freeConnections.size() != DEFAULT_POOL_SIZE){
             log.debug("connections after adding =" + freeConnections.size());
@@ -75,8 +64,8 @@ public class ConnectionPool {
         return instance;
     }
 
-    public Connection getConnection() {
-        Connection connection = null;
+    public ProxyConnection getConnection() {
+        ProxyConnection connection = null;
         try {
             connection = freeConnections.take();
         } catch (InterruptedException e) {
@@ -84,17 +73,28 @@ public class ConnectionPool {
             Thread.currentThread().interrupt();
             log.error(Thread.currentThread().toString() + " was interrupted");
         }
+        busyConnections.add(connection);
         return connection;
     }
 
     public void releaseConnection(Connection connection){
-        freeConnections.offer(connection);
+        if(connection.getClass() != ProxyConnection.class){
+            log.warn("try to release not original ProxyConnection");
+        }
+        busyConnections.remove(connection);
+        freeConnections.offer((ProxyConnection) connection);
+        if(!checkTotalAmount()){
+            log.info("free connections=" + freeConnections.size());
+            log.info("busy connections=" + busyConnections.size());
+            int amountToCreate = DEFAULT_POOL_SIZE - freeConnections.size() - busyConnections.size();
+            createConnections(amountToCreate);
+        }
     }
 
     public void destroyPool(){
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++){
             try {
-                freeConnections.take().close();
+                freeConnections.take().closeReally();
             } catch (SQLException throwables) {
                 log.error("SQLException while closing connection: ", throwables);
             } catch (InterruptedException e) {
@@ -111,6 +111,21 @@ public class ConnectionPool {
                 DriverManager.deregisterDriver(iterator.next());
             } catch (SQLException throwables) {
                 log.error("can't deregister driver: ", throwables);
+            }
+        }
+    }
+
+    private boolean checkTotalAmount(){
+        return busyConnections.size() + freeConnections.size() == DEFAULT_POOL_SIZE;
+    }
+
+    private void createConnections(int amount){
+        for (int i = 0; i < amount; i++){
+            try {
+                ProxyConnection proxyConnection = new ProxyConnection(DriverManager.getConnection(url, properties));
+                freeConnections.add(proxyConnection);
+            } catch (SQLException throwables) {
+                log.error(throwables);
             }
         }
     }
