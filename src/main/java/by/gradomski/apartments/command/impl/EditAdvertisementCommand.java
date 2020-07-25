@@ -5,6 +5,7 @@ import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.AdService;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
+import by.gradomski.apartments.validator.AdvertisementValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static by.gradomski.apartments.command.PagePath.*;
 
@@ -31,6 +34,7 @@ public class EditAdvertisementCommand implements Command {
     private static final String DESCRIPTION = "description";
     private static final String ADVERTISEMENT = "advertisement";
     private static final String ADVERTISEMENT_LIST = "advertisementList";
+    private static final String FALSE = "false";
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -39,32 +43,58 @@ public class EditAdvertisementCommand implements Command {
         Ad advertisement = (Ad) session.getAttribute(ADVERTISEMENT);
         String title = request.getParameter(TITLE);
         String price = request.getParameter(PRICE);
+        Map<String, String> validationResult = AdvertisementValidator.isValid(title, price);
         try{
-            boolean result = AdServiceImpl.getInstance().updateAd(advertisement, title, price);
-            if(!result){
-                request.setAttribute("errorUpdateMessage", "Can't update check data");
-                page = EDIT_ADVERTISEMENT;
+            if(!validationResult.containsValue(FALSE)) {
+                boolean result = AdServiceImpl.getInstance().updateAd(advertisement, title, price);
+                if (!result) {
+                    request.setAttribute("errorUpdate", true);
+                    page = EDIT_ADVERTISEMENT;
+                } else {
+                    request.getServletContext().removeAttribute(ADVERTISEMENT_LIST);
+                    List<Ad> adList = AdServiceImpl.getInstance().getAllVisible();
+                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
+                    session.removeAttribute(ADVERTISEMENT);
+                    session.removeAttribute(APARTMENT_ID);
+                    session.removeAttribute(REGION);
+                    session.removeAttribute(CITY);
+                    session.removeAttribute(ADDRESS);
+                    session.removeAttribute(ROOMS);
+                    session.removeAttribute(FLOOR);
+                    session.removeAttribute(SQUARE);
+                    session.removeAttribute(YEAR);
+                    session.removeAttribute(FURNITURE);
+                    session.removeAttribute(DESCRIPTION);
+                    page = USER_PAGE;
+                }
             } else {
-                request.getServletContext().removeAttribute(ADVERTISEMENT_LIST);
-                List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
-                request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
-                session.removeAttribute(ADVERTISEMENT);
-                session.removeAttribute(APARTMENT_ID);
-                session.removeAttribute(REGION);
-                session.removeAttribute(CITY);
-                session.removeAttribute(ADDRESS);
-                session.removeAttribute(ROOMS);
-                session.removeAttribute(FLOOR);
-                session.removeAttribute(SQUARE);
-                session.removeAttribute(YEAR);
-                session.removeAttribute(FURNITURE);
-                session.removeAttribute(DESCRIPTION);
-                page = USER_PAGE;
+                String failReason = defineFalseKey(validationResult);
+                switch (failReason) {
+                    case TITLE:
+                        log.debug("incorrect title: " + title);
+                        request.setAttribute("titleError", true);
+                        break;
+                    case PRICE:
+                        log.debug("incorrect price: " + price);
+                        request.setAttribute("priceError", true);
+                        break;
+                }
+                page = EDIT_ADVERTISEMENT;
             }
         } catch (ServiceException e){
             log.error(e);
             page = ERROR_PAGE;
         }
         return page;
+    }
+
+    private String defineFalseKey(Map<String, String> map){
+        Optional<String> optionalResult = map.entrySet()
+                .stream()
+                .filter(entry -> FALSE.equals(entry.getValue()))
+                .map(Map.Entry::getKey)
+                .findFirst();
+
+        return optionalResult.get();
     }
 }

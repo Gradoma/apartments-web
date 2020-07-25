@@ -21,49 +21,49 @@
     <input type="hidden" name="command" value="edit_apartment">
 <%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
     <fmt:message key="newEstate.region"/> : <input required name="region" value="${apartment.getRegion()}"
-                                                   pattern="^[а-яА-я-.\s]{1,45}$">
+                                                   pattern="^[а-яА-я-.\s]{1,45}$"><br/>
     <c:choose>
         <c:when test="${regionError eq true}">
             <fmt:message key="estate.regionErrorMessage"/><br/>
         </c:when>
     </c:choose>
     <fmt:message key="newEstate.city"/> : <input required name="city" value="${apartment.getCity()}"
-                                                 pattern="^[а-яА-я-.\s]{1,45}$">
+                                                 pattern="^[а-яА-я-.\s]{1,45}$"><br/>
     <c:choose>
         <c:when test="${cityError eq true}">
             <fmt:message key="estate.cityErrorMessage"/><br/>
         </c:when>
     </c:choose>
     <fmt:message key="newEstate.address"/> : <input required name="address" value="${apartment.getAddress()}"
-                                                    pattern="^.{1,45}$">
+                                                    pattern="^.{1,45}$"><br/>
     <c:choose>
         <c:when test="${addressError eq true}">
             <fmt:message key="estate.addressErrorMessage"/><br/>
         </c:when>
     </c:choose>
     <fmt:message key="newEstate.rooms"/> : <input required type="number" name="rooms" value="${apartment.getRooms()}"
-                                                  pattern="\p{Digit}{1,2}">
+                                                  pattern="\p{Digit}{1,2}"><br/>
     <c:choose>
         <c:when test="${roomsError eq true}">
             <fmt:message key="estate.roomsErrorMessage"/><br/>
         </c:when>
     </c:choose>
     <fmt:message key="newEstate.floor"/> : <input type="number" name="floor" pattern="\p{Digit}{1,2}"
-                                                  value="${apartment.getFloor() !=0 ? apartment.getFloor() : null}" >
+                                                  value="${apartment.getFloor() !=0 ? apartment.getFloor() : null}" ><br/>
     <c:choose>
         <c:when test="${floorError eq true}">
             <fmt:message key="estate.floorErrorMessage"/><br/>
         </c:when>
     </c:choose>
     <fmt:message key="newEstate.square"/> : <input type="text" name="square" pattern="^(\p{Digit}+([.,]\d)?)$"
-                                                   value="${apartment.getSquare() !=0.0 ? apartment.getSquare() : null}" >
+                                                   value="${apartment.getSquare() !=0.0 ? apartment.getSquare() : null}" ><br/>
     <c:choose>
         <c:when test="${squareError eq true}">
             <fmt:message key="estate.squareErrorMessage"/><br/>
         </c:when>
     </c:choose>
     <fmt:message key="newEstate.year"/> : <input type="text" pattern="\p{Digit}{4}" name="year"
-                                                 value="${apartment.getYear()}">
+                                                 value="${apartment.getYear()}"><br/>
     <c:choose>
         <c:when test="${yearError eq true}">
             <fmt:message key="estate.yearErrorMessage"/><br/>
@@ -72,7 +72,7 @@
     <fmt:message key="newEstate.furniture"/> :
     <input type="checkbox" name="furniture" value="true" ${apartment.hasFurniture() eq true ? 'checked' : ''}/><fmt:message key="newEstate.yes"/><br/>
     <fmt:message key="newEstate.description"/> : <input name="description" value="${apartment.getDescription()}"
-                                                        pattern="^.{0,200}$">
+                                                        pattern="^.{0,200}$"><br/>
     <c:choose>
         <c:when test="${descriptionError eq true}">
             <fmt:message key="estate.descriptionErrorMessage"/><br/>

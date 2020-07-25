@@ -26,7 +26,6 @@ public class ApartmentValidator {
     private static final String DESCRIPTION = "description";
     private static final int ADDRESS_LENGTH = 45;
     private static final int DESCRIPTION_LENGTH = 200;
-    private static Logger logger = LogManager.getLogger();
 
     public static Map<String, String> isValid(String region, String city, String address, String rooms, String floor,
                                               String square, String year, String description){
@@ -39,7 +38,7 @@ public class ApartmentValidator {
         Pattern regionCityPattern = Pattern.compile(REGION_CITY_PATTERN);
         Matcher regionMatcher = regionCityPattern.matcher(region);
         if( !regionMatcher.matches()){
-            logger.debug("region doesnt match pattern: " + region);
+            log.debug("region doesnt match pattern: " + region);
             resultMap.put(REGION, FALSE);
             return resultMap;
         }
@@ -50,7 +49,7 @@ public class ApartmentValidator {
         }
         Matcher cityMatcher = regionCityPattern.matcher(city);
         if( !cityMatcher.matches()){
-            logger.debug("city doesnt match pattern: " + city);
+            log.debug("city doesnt match pattern: " + city);
             resultMap.put(CITY, FALSE);
             return resultMap;
         }

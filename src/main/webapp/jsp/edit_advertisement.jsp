@@ -18,8 +18,21 @@
 <c:import url="header.jsp"/>
 <form action="control" method="get">
     <input type="hidden" name="command" value="edit_advertisement">
-    <fmt:message key="newAd.title"/> : <input required name="title" ><br/>
-    <fmt:message key="newAd.price"/> : <input type="number" required name="price" ><br/>
+    <fmt:message key="newAd.title"/> : <input required name="title" pattern="^.{1,70}$"><br/>
+    <c:choose>
+        <c:when test="${titleError eq true}">
+            <fmt:message key="newAd.titleErrorMesage"/><br/>
+        </c:when>
+    </c:choose>
+    <fmt:message key="newAd.price"/> : <input type="text" required name="price" pattern="^((\p{Digit}){1,5}([.,]\d{1,2})?)$"><br/>
+    <c:choose>
+        <c:when test="${priceError eq true}">
+            <fmt:message key="newAd.priceErrorMesage"/><br/>
+        </c:when>
+        <c:when test="${errorUpdate eq true}">
+            <fmt:message key="advertisement.errorUpdateMessage"/>
+        </c:when>
+    </c:choose>
     <input type="submit" name="button" value="<fmt:message key="advertisement.saveButton"/>"/>
 </form>
 <form action="control" method="get">

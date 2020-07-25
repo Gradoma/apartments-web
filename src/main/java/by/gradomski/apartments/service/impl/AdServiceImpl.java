@@ -21,6 +21,8 @@ import java.util.Optional;
 public class AdServiceImpl implements AdService {
     private static final Logger log = LogManager.getLogger();
     private static AdServiceImpl instance;
+    private static final char COMMA = ',';
+    private static final char DOT = '.';
 
     private AdServiceImpl(){}
 
@@ -34,10 +36,7 @@ public class AdServiceImpl implements AdService {
     @Override
     public long addAdvertisement(String title, User author, String price, long apartmentId) throws ServiceException {
         long generatedId;
-        if(title == null || title.isBlank() || price == null || price.isBlank()){
-            log.debug("title or price null or blank");
-            return -1;
-        }
+        price = price.replace(COMMA, DOT);
         BigDecimal decimalPrice = new BigDecimal(price);
         Ad newAd = new Ad(title, author.getId(), decimalPrice, apartmentId);
         try{
