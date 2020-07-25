@@ -20,10 +20,25 @@
     <input type="hidden" name="command" value="new_request">
     <input type="hidden" name="apartmentId" value="${apartmentId}">
     <h3><fmt:message key="newRequest.head"/><br/></h3>
-    <fmt:message key="newRequest.date"/> : <input type="date" required name="expectedDate"> ${errorDate} <br/>
-    <fmt:message key="newRequest.description"/> : <input name="description" ><br/>
+    <fmt:message key="newRequest.date"/> : <input type="date" required name="expectedDate"><br/>
+    <c:choose>
+        <c:when test="${dateError eq true}">
+            <fmt:message key="newRequest.dateErrorMessage"/><br/>
+        </c:when>
+    </c:choose>
+    <fmt:message key="newRequest.description"/> : <input name="description" pattern="^.{1,150}$"><br/>
+    <c:choose>
+        <c:when test="${descriptionError eq true}">
+            <fmt:message key="newRequest.descriptionErrorMessage"/><br/>
+        </c:when>
+    </c:choose>
     <i><fmt:message key="newRequest.note"/> </i>
     <input type="submit" name="button" value="<fmt:message key="newRequest.applyButton"/>"/>
+    <c:choose>
+        <c:when test="${error eq true}">
+            <fmt:message key="newRequest.errorMessage"/><br/>
+        </c:when>
+    </c:choose>
 </form>
 <c:import url="footer.jsp"/>
 </body>
