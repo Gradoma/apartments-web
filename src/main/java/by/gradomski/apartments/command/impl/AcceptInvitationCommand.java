@@ -1,6 +1,8 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.command.PagePath;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.*;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.ApartmentService;
@@ -27,8 +29,9 @@ public class AcceptInvitationCommand implements Command {
     private static final String ADVERTISEMENT_LIST = "advertisementList";
 
     @Override
-    public String execute(HttpServletRequest request) {     //TODO(make through transaction)
-        String page;
+    public Router execute(HttpServletRequest request) {     //TODO(make through transaction)
+        Router router = new Router();
+        router.setRedirect();
         long acceptingRequestId = Long.parseLong(request.getParameter(REQUEST_ID));
         HttpSession session = request.getSession(false);
         User currentUser = (User) session.getAttribute(USER);
@@ -85,11 +88,14 @@ public class AcceptInvitationCommand implements Command {
             if(!apartmentStatusUpd){
                 log.error("can't upd apartment status: id=" + apartmentId);
             }
-            page = USER_PAGE;
+            router.setPage(USER_PAGE);
+//            page = USER_PAGE;
         } catch (ServiceException e){
             log.error(e);
-            page = ERROR_PAGE;
+            router.setPage(ERROR_PAGE);
+//            page = ERROR_PAGE;
         }
-        return page;
+        return router;
+//        return page;
     }
 }

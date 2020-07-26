@@ -1,7 +1,9 @@
 package by.gradomski.apartments.command;
 
+import by.gradomski.apartments.controller.Router;
+
 import javax.servlet.http.HttpServletRequest;
 
 public interface Command {
-    String execute(HttpServletRequest request);
+    Router execute(HttpServletRequest request);
 }

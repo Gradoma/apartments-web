@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
@@ -35,7 +36,9 @@ public class EditApartmentCommand implements Command {
     private static final String FALSE = "false";
     private ApartmentServiceImpl apartmentService = ApartmentServiceImpl.getInstance();
 
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         String page;
         HttpSession session = request.getSession(false);
         if(session == null) {
@@ -45,7 +48,6 @@ public class EditApartmentCommand implements Command {
             Apartment apartment = (Apartment) session.getAttribute(APARTMENT);
             long id = apartment.getId();
             User currentUser = (User) session.getAttribute(USER);
-//            long id = Long.parseLong(request.getParameter(APARTMENT_ID));
             String region = request.getParameter(REGION);
             String city = request.getParameter(CITY);
             String address = request.getParameter(ADDRESS);
@@ -73,6 +75,7 @@ public class EditApartmentCommand implements Command {
 //                    session.removeAttribute(DESCRIPTION);
                     page = ESTATE;
                 } else {
+                    router.setForward();
                     String failReason = defineFalseKey(updateResult);
                     switch (failReason) {
                         case REGION:
@@ -115,7 +118,9 @@ public class EditApartmentCommand implements Command {
             }
         }
         log.debug("return page: " + page);
-        return page;
+        router.setPage(page);
+        return  router;
+//        return page;
     }
 
     private String defineFalseKey(Map<String, String> map){

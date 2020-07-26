@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.AdService;
@@ -37,7 +38,9 @@ public class EditAdvertisementCommand implements Command {
     private static final String FALSE = "false";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         String page;
         HttpSession session = request.getSession();
         Ad advertisement = (Ad) session.getAttribute(ADVERTISEMENT);
@@ -48,10 +51,10 @@ public class EditAdvertisementCommand implements Command {
             if(!validationResult.containsValue(FALSE)) {
                 boolean result = AdServiceImpl.getInstance().updateAd(advertisement, title, price);
                 if (!result) {
+                    router.setForward();
                     request.setAttribute("errorUpdate", true);
                     page = EDIT_ADVERTISEMENT;
                 } else {
-                    request.getServletContext().removeAttribute(ADVERTISEMENT_LIST);
                     List<Ad> adList = AdServiceImpl.getInstance().getAllVisible();
                     request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
                     session.removeAttribute(ADVERTISEMENT);
@@ -68,6 +71,7 @@ public class EditAdvertisementCommand implements Command {
                     page = USER_PAGE;
                 }
             } else {
+                router.setForward();
                 String failReason = defineFalseKey(validationResult);
                 switch (failReason) {
                     case TITLE:
@@ -85,7 +89,9 @@ public class EditAdvertisementCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return router;
+//        return page;
     }
 
     private String defineFalseKey(Map<String, String> map){

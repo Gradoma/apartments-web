@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.ApartmentStatus;
 import by.gradomski.apartments.entity.Request;
@@ -26,7 +27,9 @@ public class DeleteAdvertisementCommand implements Command {
     private static final String ADVERTISEMENT_LIST = "advertisementList";
 
     @Override
-    public String execute(HttpServletRequest request) {        // TODO(through transaction)
+    public Router execute(HttpServletRequest request) {        // TODO(through transaction)
+        Router router = new Router();
+        router.setRedirect();
         String page;
         HttpSession session = request.getSession();
         Ad advertisement = (Ad) session.getAttribute(ADVERTISEMENT);
@@ -64,6 +67,8 @@ public class DeleteAdvertisementCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return router;
+//        return page;
     }
 }

@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +15,8 @@ public class TransitionToNewAdCommand implements Command {
     private static final String APARTMENT_ID = "apartmentId";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page;
         HttpSession session = request.getSession(false);
         if(session != null){
@@ -23,6 +25,7 @@ public class TransitionToNewAdCommand implements Command {
         } else {
             page = SIGN_IN;
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 }

@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.User;
@@ -28,29 +29,31 @@ public class CancelRequestCommand implements Command {
     private static final String ADVERTISEMENT_MAP = "advertisementMap";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         String page;
         String requestIdString = request.getParameter(REQUEST_ID);
         if(requestIdString != null){
             long requestId = Long.parseLong(requestIdString);
             try{
+                HttpSession session = request.getSession(false);
                 boolean cancelingResult = RequestServiceImpl.getInstance().cancelRequest(requestId);
                 if(!cancelingResult){
                     log.error("can't change status in Dao");
-                    request.setAttribute("errorMessage", "Can't cancel request, try again");
+                    session.setAttribute("errorMessage", "Can't cancel request, try again");
                 }
-                HttpSession session = request.getSession(false);
                 User currentUser = (User) session.getAttribute(USER);
                 long userId = currentUser.getId();
                 List<Request> requestList = RequestServiceImpl.getInstance().getRequestsByApplicantId(userId);
-                request.setAttribute(REQUEST_LIST, requestList);
+                session.setAttribute(REQUEST_LIST, requestList);        //TODO(as tmp atr)
                 Map<Long, Ad> advertisementMap = new HashMap<>();
                 for(Request req : requestList){
                     long apartmentId = req.getApartmentId();
                     Ad ad = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
                     advertisementMap.put(req.getId(), ad);
                 }
-                request.setAttribute(ADVERTISEMENT_MAP, advertisementMap);
+                session.setAttribute(ADVERTISEMENT_MAP, advertisementMap);      //TODO(as tmp atr)
                 page = MY_RENT;
             } catch (ServiceException e){
                 log.error(e);
@@ -60,6 +63,8 @@ public class CancelRequestCommand implements Command {
             log.error("request parameter requestId==null");
             page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return router;
+//        return page;
     }
 }

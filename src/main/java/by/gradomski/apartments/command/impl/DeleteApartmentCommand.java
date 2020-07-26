@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
@@ -19,10 +20,13 @@ public class DeleteApartmentCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String USER = "user";
     private static final String APARTMENT_ID = "apartmentId";
+    private static final String APARTMENT_LIST = "apartmentList";
     private ApartmentServiceImpl apartmentService = ApartmentServiceImpl.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         String page;
         HttpSession session = request.getSession(false);
         if(session == null) {
@@ -35,9 +39,11 @@ public class DeleteApartmentCommand implements Command {
                 boolean result = ApartmentServiceImpl.getInstance().deleteApartment(id);
                 if(result){
                     List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(currentUser.getId());
-                    session.setAttribute("apartmentList", updatedApartmentList);
+                    session.setAttribute(APARTMENT_LIST, updatedApartmentList);     //todo as tmp atr
                 } else {
-                    request.setAttribute("errorDeleteMessage", "You can't delete this apartment");
+                    //todo change page, now go to estate
+                    router.setForward();
+                    request.setAttribute("errorDeleteMessage", "You can't delete this apartment");//todo translate
                 }
                 page = ESTATE;
             } catch (ServiceException e){
@@ -45,6 +51,8 @@ public class DeleteApartmentCommand implements Command {
                 page = ERROR_PAGE;
             }
         }
-        return page;
+        router.setPage(page);
+        return router;
+//        return page;
     }
 }

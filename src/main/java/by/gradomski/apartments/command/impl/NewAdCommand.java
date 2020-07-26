@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.ApartmentStatus;
@@ -31,8 +32,9 @@ public class NewAdCommand implements Command {
     private static final String FALSE = "false";
 
     @Override
-    public String execute(HttpServletRequest request) {         //TODO(through transaction)
-        log.debug("start execute method");
+    public Router execute(HttpServletRequest request) {         //TODO(through transaction)
+        Router router = new Router();
+        router.setRedirect();
         String page;
         HttpSession session = request.getSession(false);
         if(session == null) {
@@ -64,6 +66,7 @@ public class NewAdCommand implements Command {
                             request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
                             page = ESTATE;
                         } else {
+                            router.setForward();
                             log.info("Advertisement was added; can't change apartment status");
                             boolean deleteResult = adService.deleteAd(newAdvertisementId);
                             if (!deleteResult) {
@@ -73,10 +76,12 @@ public class NewAdCommand implements Command {
                             page = NEW_AD;
                         }
                     } else {
+                        router.setForward();
                         request.setAttribute("newAdErrorMessage", "Title and price are required fields. Try again");
                         page = NEW_AD;
                     }
                 } else {
+                    router.setForward();
                     String failReason = defineFalseKey(validationResult);
                     switch (failReason) {
                         case TITLE:
@@ -95,7 +100,9 @@ public class NewAdCommand implements Command {
                 page = ERROR_PAGE;
             }
         }
-        return page;
+        router.setPage(page);
+        return router;
+//        return page;
     }
 
     private String defineFalseKey(Map<String, String> map){

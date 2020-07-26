@@ -12,7 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Optional;
 
 @WebServlet(urlPatterns = "/control")
@@ -41,10 +43,25 @@ public class Controller extends HttpServlet {
         if(optionalCommand.isPresent()){
             Command command = optionalCommand.get();
             log.debug("command: " + command);
-            page = command.execute(request);
-            log.debug("page: " + page);
-            RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-            dispatcher.forward(request, response);
+            Router router = command.execute(request);
+            page = router.getPage();
+            log.debug("transition type: " + router.getTransitionType());
+                HttpSession session = request.getSession(false);
+                Iterator<String> atrIterator = session.getAttributeNames().asIterator();
+                while (atrIterator.hasNext()){
+                    log.info("session has atr: " + atrIterator.next());
+                }
+                log.info("=======================");
+            if(Router.TransitionType.FORWARD == router.getTransitionType()){
+                RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+                dispatcher.forward(request, response);
+            } else {
+                response.sendRedirect(request.getContextPath() + page);
+            }
+//            page = command.execute(request);
+//            log.debug("page: " + page);
+//            RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+//            dispatcher.forward(request, response);
         } else {
             log.error("incorrect command: " + request.getParameter("command"));
             throw new UnsupportedOperationException();

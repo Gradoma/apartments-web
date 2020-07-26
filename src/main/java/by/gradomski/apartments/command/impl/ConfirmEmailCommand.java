@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -16,7 +17,9 @@ public class ConfirmEmailCommand implements Command {
     private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         String page;
         String login = request.getParameter(LOGIN);
         try {
@@ -27,6 +30,8 @@ public class ConfirmEmailCommand implements Command {
             page = ERROR_PAGE;
         }
         log.debug("return page: " + page);
-        return page;
+        router.setPage(page);
+        return  router;
+//        return page;
     }
 }

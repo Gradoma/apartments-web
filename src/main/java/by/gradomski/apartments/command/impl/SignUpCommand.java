@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.mail.MailSender;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
@@ -28,8 +29,9 @@ public class SignUpCommand implements Command {
     private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request) {
-        log.debug("start execute method");
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         String page;
         String login = request.getParameter(LOGIN);
         String password = request.getParameter(PASSWORD);
@@ -42,6 +44,7 @@ public class SignUpCommand implements Command {
                 MailSender sender = new MailSender(email, EMAIL_SUBJECT, emailBody);
                 sender.send();
             } else {
+                router.setForward();
                 String key = defineFalseKey(registrationResult);
                 switch (key){
                     case LOGIN:
@@ -68,7 +71,9 @@ public class SignUpCommand implements Command {
             page = ERROR_PAGE;
         }
         log.debug("return page: " + page);
-        return page;
+        router.setPage(page);
+        return router;
+//        return page;
     }
 
     private String defineFalseKey(Map<String, String> map){

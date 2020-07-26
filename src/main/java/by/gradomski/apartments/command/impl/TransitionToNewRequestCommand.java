@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,18 +18,19 @@ public class TransitionToNewRequestCommand implements Command {
     private static final String ADVERTISEMENT_ID = "advertisementId";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page;
         HttpSession session = request.getSession();
         session.setAttribute(APARTMENT_ID, request.getParameter(APARTMENT_ID));
         User currentUser = (User) session.getAttribute(USER);
         if(currentUser == null){
-            log.debug("attribute user == null");
             String idString = request.getParameter(ADVERTISEMENT_ID);
             if(idString != null) {
+                log.info("user wasn't sign in");
                 long advertisementId = Long.parseLong(idString);
                 session.setAttribute(ADVERTISEMENT_ID, advertisementId);
-                request.setAttribute("errorAccess", "Please sign in to make requests");
+                request.setAttribute("errorAccess", "Please sign in to make requests");     //todo(translate)
                 page = SIGN_IN;
             } else {
                 log.error("request parameter " + ADVERTISEMENT_ID + "== null");
@@ -37,6 +39,7 @@ public class TransitionToNewRequestCommand implements Command {
         } else {
             page = NEW_REQUEST;
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 }

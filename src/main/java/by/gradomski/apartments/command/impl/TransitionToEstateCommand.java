@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.RequestStatus;
@@ -26,9 +27,11 @@ public class TransitionToEstateCommand implements Command {
     private static final String USER = "user";
     private static final String APARTMENT_LIST = "apartmentList";
     private static final String REQUEST_MAP = "requestMap";
+    private static final String DEMAND_COUNTS = "demandCounts";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page;
         HttpSession session = request.getSession(false);
         if(session == null){
@@ -47,6 +50,7 @@ public class TransitionToEstateCommand implements Command {
                         long apartmentId = apartment.getId();
                         List<Request> apartmentRequestList = RequestServiceImpl.getInstance()
                                 .getActiveRequestsByApartmentId(apartmentId);
+                        request.setAttribute(DEMAND_COUNTS, apartmentRequestList.size());
                         if(containsApproved(apartmentRequestList)){
                             requestMap.put(apartmentId, true);
                         }
@@ -60,7 +64,8 @@ public class TransitionToEstateCommand implements Command {
                 page = ERROR_PAGE;
             }
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 
     private boolean containsApproved(List<Request> requestList){

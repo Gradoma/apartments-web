@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
@@ -17,13 +18,15 @@ public class TransitionToSettingsCommand implements Command {
     private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page;
         if(request.getSession(false) != null){
             page = USER_SETTINGS;
         } else {
             page = SIGN_IN;
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 }

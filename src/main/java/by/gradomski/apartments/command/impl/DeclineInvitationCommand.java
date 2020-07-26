@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.Request;
@@ -33,7 +34,9 @@ public class DeclineInvitationCommand implements Command {
     private static final String APARTMENT_MAP = "apartmentMap";
 
     @Override
-    public String execute(HttpServletRequest request) {     //TODO(make through transaction)
+    public Router execute(HttpServletRequest request) {     //TODO(make through transaction)
+        Router router = new Router();
+        router.setRedirect();
         String page;
         long requestId = Long.parseLong(request.getParameter(REQUEST_ID));
         long advertisementId = Long.parseLong(request.getParameter(ADVERTISEMENT_ID));
@@ -49,7 +52,7 @@ public class DeclineInvitationCommand implements Command {
                     User currentUser = (User) session.getAttribute(USER);
                     long userId = currentUser.getId();
                     List<Request> requestList = RequestServiceImpl.getInstance().getRequestsByApplicantId(userId);  //TODO(has same command - maybe filter?)
-                    request.setAttribute(REQUEST_LIST, requestList);
+                    session.setAttribute(REQUEST_LIST, requestList);        //TODO(as tmp atr)
                     Map<Long, Ad> advertisementMap = new HashMap<>();
                     Map<Long, Apartment> apartmentMap = new HashMap<>();
                     for(Request req : requestList){
@@ -60,8 +63,8 @@ public class DeclineInvitationCommand implements Command {
                         Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
                         apartmentMap.put(req.getId(), apartment);
                     }
-                    request.setAttribute(APARTMENT_MAP, apartmentMap);
-                    request.setAttribute(ADVERTISEMENT_MAP, advertisementMap);
+                    session.setAttribute(APARTMENT_MAP, apartmentMap);      //TODO(as tmp atr)
+                    session.setAttribute(ADVERTISEMENT_MAP, advertisementMap);      //TODO(as tmp atr)
                     page = MY_RENT;
                 } else {
                     log.error("can't change ad status");
@@ -75,6 +78,8 @@ public class DeclineInvitationCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return  router;
+//        return page;
     }
 }

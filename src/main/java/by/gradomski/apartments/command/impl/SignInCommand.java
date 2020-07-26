@@ -1,6 +1,8 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.command.PagePath;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.User;
@@ -20,10 +22,15 @@ public class SignInCommand implements Command {
     private static final String LOGIN = "login";
     private static final String PASSWORD = "password";
     private static final String ADVERTISEMENT_ID = "advertisementId";
+    private static final String USER = "user";
+    private static final String ADVERTISEMENT = "advertisement";
+    private static final String APARTMENT = "apartment";
     private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         log.debug("start execute method");
         String page;
         String login = request.getParameter(LOGIN);
@@ -33,18 +40,19 @@ public class SignInCommand implements Command {
                 User user = userService.getUserByLogin(login);
                 log.info("photo String: " + user.getPhotoBase64());
                 log.debug("user ID after sign in: " + user.getId());
-                request.getSession().setAttribute("user", user);
+                request.getSession().setAttribute(USER, user);
+                HttpSession session = request.getSession(false);
                 if(user.getFirstName() != null & user.getLastName() != null){
-                    HttpSession session = request.getSession(false);
                     if(session != null){
                         Long advertisementId = (Long) session.getAttribute(ADVERTISEMENT_ID);
                         if(advertisementId != null){
                             Ad ad = AdServiceImpl.getInstance().getAdById(advertisementId);
-                            request.setAttribute("advertisement", ad);
+//                            request.setAttribute("advertisement", ad);
+                            session.setAttribute(ADVERTISEMENT, ad);      //todo as tmp atr
                             long apartmentId = ad.getApartmentId();
                             Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
-                            request.setAttribute("apartment", apartment);
-                            page = ADVERTISEMENT;
+                            session.setAttribute(APARTMENT, apartment);      //todo as tmp atr
+                            page = PagePath.ADVERTISEMENT;
                         } else {
                             page = USER_PAGE;
                         }
@@ -52,10 +60,11 @@ public class SignInCommand implements Command {
                         page = ERROR_PAGE;
                     }
                 } else {
-                    request.setAttribute("greeting", true);
+//                    session.setAttribute("greeting", true);             //todo check on page -> delete if ok
                     page = USER_SETTINGS;
                 }
             } else {
+                router.setForward();
                 request.setAttribute("errorSignInPass", true);
                 log.info("incorrect login or password");
                 page = SIGN_IN;
@@ -65,6 +74,8 @@ public class SignInCommand implements Command {
             page = ERROR_PAGE;
         }
         log.debug("return page: " + page);
-        return page;
+        router.setPage(page);
+        return router;
+//        return page;
     }
 }

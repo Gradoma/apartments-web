@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
@@ -26,7 +27,9 @@ public class NewRequestCommand implements Command {
     private static final String FALSE = "false";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         String page;
         HttpSession session = request.getSession(false);
         User currentUser = (User) session.getAttribute(USER);
@@ -39,6 +42,7 @@ public class NewRequestCommand implements Command {
                 boolean result = RequestServiceImpl.getInstance().addRequest(currentUser, apartmentIdString,
                         expectedDateString, description);
                 if (!result) {
+                    router.setForward();
                     request.setAttribute("error", true);
                     page = NEW_REQUEST;
                 } else {
@@ -46,6 +50,7 @@ public class NewRequestCommand implements Command {
                     page = USER_PAGE;
                 }
             } else {
+                router.setForward();
                 String key = defineFalseKey(validationResult);
                 switch (key){
                     case EXPECTED_DATE:
@@ -59,16 +64,12 @@ public class NewRequestCommand implements Command {
                 page = NEW_REQUEST;
             }
         } catch (ServiceException e){
-            if (e.getCause().getClass().equals(DateTimeParseException.class)) {
-                log.debug("caused by: " + e.getCause());
-                request.setAttribute("errorDate", "Invalid expected date");
-                page = NEW_REQUEST;
-            } else {
-                log.error(e);
-                page = ERROR_PAGE;
-            }
+            log.error(e);
+            page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return router;
+//        return page;
     }
 
     private String defineFalseKey(Map<String, String> map){

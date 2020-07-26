@@ -20,7 +20,7 @@
 <body>
 <c:import url="header.jsp"/>
     <c:choose>
-        <c:when test="${greeting eq true}">
+        <c:when test="${user.getFirstName() == null}">
             <h2><fmt:message key="setting.greetingMessage"/></h2>
         </c:when>
     </c:choose>

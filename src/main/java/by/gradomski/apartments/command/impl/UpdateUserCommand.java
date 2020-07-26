@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
@@ -26,10 +27,13 @@ public class UpdateUserCommand implements Command {
     private static final String PHONE = "phone";
     private static final String BIRTHDAY = "birthday";
     private static final String FALSE = "false";
+    private static final String USER = "user";
     private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         String page;
         HttpSession session = request.getSession(false);
         if(session == null){
@@ -50,13 +54,14 @@ public class UpdateUserCommand implements Command {
                 try {
                     User afterUpdating = userService.updateUser(login, genderString, firstName, lastName, phone,
                             birthdayString);
-                    session.setAttribute("user", afterUpdating);
+                    session.setAttribute(USER, afterUpdating);
                     page = USER_PAGE;
                 } catch (ServiceException e) {
                     log.error(e);
                     page = ERROR_PAGE;
                 }
             } else {
+                router.setForward();
                 String key = defineFalseKey(checkResult);
                 switch (key){
                     case FIRST_NAME:
@@ -84,7 +89,8 @@ public class UpdateUserCommand implements Command {
             }
         }
         log.debug("return page: " + page);
-        return page;
+        router.setPage(page);
+        return router;
     }
 
     private String defineFalseKey(Map<String, String> map){

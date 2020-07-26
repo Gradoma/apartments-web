@@ -2,6 +2,7 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.command.CommandType;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
@@ -31,10 +32,13 @@ public class AddNewApartmentCommand implements Command {
     private static final String FURNITURE = "furniture";
     private static final String DESCRIPTION = "description";
     private static final String FALSE = "false";
+    private static final String APARTMENT_LIST = "apartmentList";
     private ApartmentServiceImpl apartmentService = ApartmentServiceImpl.getInstance();
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
+        router.setRedirect();
         log.debug("start execute method");
         String page;
         HttpSession session = request.getSession(false);
@@ -59,9 +63,10 @@ public class AddNewApartmentCommand implements Command {
                         rooms, floor, square, year, furniture, description);
                 if (!addingResult.containsValue(FALSE)) {
                     List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(currentUser.getId());
-                    session.setAttribute("apartmentList", updatedApartmentList);
+                    session.setAttribute(APARTMENT_LIST, updatedApartmentList);        //TODO(why session)
                     page = ESTATE;
                 } else {
+                    router.setForward();
                     String failReason = defineFalseKey(addingResult);
                     switch (failReason){
                         case REGION:
@@ -104,7 +109,9 @@ public class AddNewApartmentCommand implements Command {
             }
         }
         log.debug("return page: " + page);
-        return page;
+        router.setPage(page);
+        return router;
+//        return page;
     }
 
     private String defineFalseKey(Map<String, String> map){

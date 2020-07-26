@@ -1,6 +1,8 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.command.PagePath;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.*;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
@@ -22,9 +24,12 @@ public class TransitionToAdvertisementCommand implements Command {
     private static final String ID = "id";
     private static final String USER = "user";
     private static final String WAS_CREATED = "wasCreated";
+    private static final String ADVERTISEMENT = "advertisement";
+    private static final String APARTMENT = "apartment";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page = null;
         String idString = request.getParameter(ID);
         if(idString != null){
@@ -32,10 +37,10 @@ public class TransitionToAdvertisementCommand implements Command {
             log.debug("advertisement id: " + advertisementId);
             try{
                 Ad ad = AdServiceImpl.getInstance().getAdById(advertisementId);
-                request.setAttribute("advertisement", ad);
+                request.setAttribute(ADVERTISEMENT, ad);
                 long apartmentId = ad.getApartmentId();
                 Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
-                request.setAttribute("apartment", apartment);
+                request.setAttribute(APARTMENT, apartment);
                 HttpSession session = request.getSession(false);
                 User currentUser = (User) session.getAttribute(USER);
                 log.debug("ad.getAuthorId(): " + ad.getAuthorId());
@@ -51,7 +56,7 @@ public class TransitionToAdvertisementCommand implements Command {
                         }
                     }
                 }
-                page = ADVERTISEMENT;
+                page = PagePath.ADVERTISEMENT;
             } catch (ServiceException e){
                 log.error(e);
                 page = ERROR_PAGE;
@@ -59,6 +64,7 @@ public class TransitionToAdvertisementCommand implements Command {
         } else {
             log.debug("apartmentId string == null");
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 }

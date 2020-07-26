@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.exception.ServiceException;
@@ -24,7 +25,8 @@ public class TransitionFromIndexCommand implements Command {
     private static final String APARTMENT_MAP = "apartmentMap";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page;
         try{
             List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
@@ -41,6 +43,7 @@ public class TransitionFromIndexCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 }

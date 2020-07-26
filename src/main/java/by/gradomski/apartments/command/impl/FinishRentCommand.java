@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.ApartmentStatus;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
@@ -21,7 +22,9 @@ public class FinishRentCommand implements Command {
     private static final long TENANT_ERASING_ID = -1;
 
     @Override
-    public String execute(HttpServletRequest request) {     //TODO(through transaction)
+    public Router execute(HttpServletRequest request) {     //TODO(through transaction)
+        Router router = new Router();
+        router.setRedirect();
         String page;
         long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
         long requestId = Long.parseLong(request.getParameter(REQUEST_ID));
@@ -49,6 +52,7 @@ public class FinishRentCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 }

@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.Request;
@@ -29,7 +30,8 @@ public class TransitionToMyRentCommand implements Command {
     private static final String APARTMENT_MAP = "apartmentMap";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page;
         HttpSession session = request.getSession(false);
         User currentUser = (User) session.getAttribute(USER);
@@ -53,6 +55,7 @@ public class TransitionToMyRentCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 }

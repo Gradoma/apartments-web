@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.RequestStatus;
@@ -26,7 +27,8 @@ public class TransitionToRequestsCommand implements Command {
     private static final String CONTAINS_APPROVED = "containsApproved";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page;
         String apartmentIdString = request.getParameter(APARTMENT_ID);
         if(apartmentIdString != null) {
@@ -52,7 +54,8 @@ public class TransitionToRequestsCommand implements Command {
             log.error("apartmentIdString from request == null");
             page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 
     private boolean containsApproved(List<Request> requestList){

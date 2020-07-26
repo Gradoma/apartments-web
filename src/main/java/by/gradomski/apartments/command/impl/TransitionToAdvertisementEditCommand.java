@@ -1,6 +1,7 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
+import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.RequestStatus;
@@ -34,7 +35,8 @@ public class TransitionToAdvertisementEditCommand implements Command {
     private static final String ADVERTISEMENT = "advertisement";
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public Router execute(HttpServletRequest request) {
+        Router router = new Router();
         String page;
         long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
         try {
@@ -56,6 +58,7 @@ public class TransitionToAdvertisementEditCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
-        return page;
+        router.setPage(page);
+        return router;
     }
 }
