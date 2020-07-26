@@ -33,7 +33,8 @@ public enum CommandType {
     FINISH_RENT(new FinishRentCommand()),
     TRANSITION_TO_ADVERTISEMENT_EDIT(new TransitionToAdvertisementEditCommand()),
     EDIT_ADVERTISEMENT(new EditAdvertisementCommand()),
-    DELETE_ADVERTISEMENT(new DeleteAdvertisementCommand());
+    DELETE_ADVERTISEMENT(new DeleteAdvertisementCommand()),
+    DELETE_PHOTO(new DeletePhotoCommand());
 
     private Command command;
 

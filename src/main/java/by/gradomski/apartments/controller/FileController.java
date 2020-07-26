@@ -85,8 +85,9 @@ public class FileController extends HttpServlet {
                 request.setAttribute(EMPTY_FILE, true);
             }
         }
-        RequestDispatcher dispatcher = request.getRequestDispatcher(page);
-        dispatcher.forward(request, response);
+        response.sendRedirect(request.getContextPath() + page);
+//        RequestDispatcher dispatcher = request.getRequestDispatcher(page);      //TODO redirect
+//        dispatcher.forward(request, response);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {

@@ -84,13 +84,13 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartment.setOwner(owner);
             long apartmentId = apartment.getId();
             PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
-            List<String> photoList = photoService.getByApartmentId(apartmentId);
-//            if(photoList.isEmpty()){
+            Map<Long, String> photoMap = photoService.getByApartmentId(apartmentId);
+//            if(photoList.isEmpty()){          // todo(def photo here or load logo on page)
 //                log.debug("no apartment photo, default photo will be set");
 //                String defaultImage = photoService.getDefaultImage();
 //                photoList.add(defaultImage);
 //            }
-            apartment.setPhoto(photoList);
+            apartment.setPhotoMap(photoMap);
         }
         return apartmentList;
     }
@@ -109,13 +109,13 @@ public class ApartmentServiceImpl implements ApartmentService {
             apartment.setTenant(tenant);
             long apartmentId = apartment.getId();
             PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
-            List<String> photoList = photoService.getByApartmentId(apartmentId);
+            Map<Long, String> photoMap = photoService.getByApartmentId(apartmentId);
 //            if(photoList.isEmpty()){
 //                log.debug("no apartment photo, default photo will be set");
 //                String defaultImage = photoService.getDefaultImage();
 //                photoList.add(defaultImage);
 //            }
-            apartment.setPhoto(photoList);
+            apartment.setPhotoMap(photoMap);
         }
         return apartmentList;
     }
@@ -134,13 +134,13 @@ public class ApartmentServiceImpl implements ApartmentService {
         Apartment apartment = optionalApartment.get();
         long apartmentId = apartment.getId();
         PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
-        List<String> photoList = photoService.getByApartmentId(apartmentId);
+        Map<Long, String> photoMap = photoService.getByApartmentId(apartmentId);
 //        if(photoList.isEmpty()){
 //            log.debug("no apartment photo, default photo will be set");
 //            String defaultImage = photoService.getDefaultImage();
 //            photoList.add(defaultImage);
 //        }
-        apartment.setPhoto(photoList);
+        apartment.setPhotoMap(photoMap);
         return apartment;
     }
 

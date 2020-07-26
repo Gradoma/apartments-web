@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 
 public class PhotoApartmentServiceImpl implements PhotoApartmentService {
     private static final Logger log = LogManager.getLogger();
@@ -35,14 +36,14 @@ public class PhotoApartmentServiceImpl implements PhotoApartmentService {
     }
 
     @Override
-    public List<String> getByApartmentId(long apartmentId) throws ServiceException {
-        List<String> resultList;
+    public Map<Long, String> getByApartmentId(long apartmentId) throws ServiceException {
+        Map<Long, String> resultMap;
         try{
-            resultList = PhotoApartmentDaoImpl.getInstance().findByApartment(apartmentId);
+            resultMap = PhotoApartmentDaoImpl.getInstance().findByApartment(apartmentId);
         } catch (DaoException e){
             throw new ServiceException(e);
         }
-        return resultList;
+        return resultMap;
     }
 
     @Override
@@ -61,6 +62,17 @@ public class PhotoApartmentServiceImpl implements PhotoApartmentService {
         boolean result;
         try {
             result = PhotoApartmentDaoImpl.getInstance().deletePhotosByApartmentId(apartmentId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean deletePhotoById(long photoId) throws ServiceException {
+        boolean result;
+        try {
+            result = PhotoApartmentDaoImpl.getInstance().deletePhotoById(photoId);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

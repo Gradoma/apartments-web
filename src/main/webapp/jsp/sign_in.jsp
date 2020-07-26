@@ -39,15 +39,16 @@
     <table>
         <c:forEach var="ad" items="${advertisementList}" varStatus="status">
             <c:set var="apartment" value="${apartmentMap[ad.getId()]}"/>
-            <c:set var="photoList" value="${apartment.getUnmodifiablePhotoList()}"/>
+            <c:set var="photoMap" value="${apartment.getUnmodifiablePhotoMap()}"/>
             <tr>
                 <td>
                     <c:choose>
-                        <c:when test="${photoList.isEmpty()}">
+                        <c:when test="${photoMap.isEmpty()}">
                             No photo
                         </c:when>
                         <c:otherwise>
-                            <img src="data:image/jpg;base64,${photoList[0]}" width="120" height="120">
+                            <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>
+                            <img src="data:image/jpg;base64,${entry.value}" width="120" height="120">
                         </c:otherwise>
                     </c:choose>
                 </td>

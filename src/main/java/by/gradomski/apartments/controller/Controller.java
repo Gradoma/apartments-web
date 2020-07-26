@@ -47,11 +47,13 @@ public class Controller extends HttpServlet {
             page = router.getPage();
             log.debug("transition type: " + router.getTransitionType());
                 HttpSession session = request.getSession(false);
-                Iterator<String> atrIterator = session.getAttributeNames().asIterator();
-                while (atrIterator.hasNext()){
-                    log.info("session has atr: " + atrIterator.next());
+                if(session != null) {
+                    Iterator<String> atrIterator = session.getAttributeNames().asIterator();
+                    while (atrIterator.hasNext()) {
+                        log.info("session has atr: " + atrIterator.next());
+                    }
+                    log.info("=======================");
                 }
-                log.info("=======================");
             if(Router.TransitionType.FORWARD == router.getTransitionType()){
                 RequestDispatcher dispatcher = request.getRequestDispatcher(page);
                 dispatcher.forward(request, response);

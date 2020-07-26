@@ -102,13 +102,17 @@
     <input type="submit" name="button" value="<fmt:message key="estate.deleteButton"/>"/>
 </form>
 <table>
-    <c:forEach var="photo" items="${apartment.getUnmodifiablePhotoList()}" varStatus="status">
+    <c:forEach var="entryMap" items="${apartment.getUnmodifiablePhotoMap()}" varStatus="status">
+        <c:set var="photoId" value="${entryMap.key}"/>
+        <c:set var="photo" value="${entryMap.value}"/>
         <tr>
             <td><c:out value="${ status.count }" /></td>
-            <td><img src="data:image/jpg;base64,${photo}" width="250" height="100"></td>
+            <td><img src="data:image/jpg;base64,${photo}" width="250" height="150"></td>
             <td>
                 <form action="control" method="get">
                     <input type="hidden" name="command" value="delete_photo"/>
+                    <input type="hidden" name="apartmentId" value="${apartment.getId()}">
+                    <input type="hidden" name="photoId" value="${photoId}"/>
                     <input type="submit" name="button" value="<fmt:message key="photo.deleteButton"/>">
                 </form>
             </td>

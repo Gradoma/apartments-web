@@ -19,13 +19,14 @@
     <h2>${advertisement.getTitle()}</h2>
     <h3>${apartment.getRegion()}, ${apartment.getCity()}</h3>
     <h3>${apartment.getAddress()}</h3>
-    <c:set var="photoList" value="${apartment.getUnmodifiablePhotoList()}"/>
+    <c:set var="photoMap" value="${apartment.getUnmodifiablePhotoMap()}"/>
     <c:choose>
-        <c:when test="${photoList.isEmpty()}">
+        <c:when test="${photoMap.isEmpty()}">
             No photo
         </c:when>
         <c:otherwise>
-            <img src="data:image/jpg;base64,${photoList[0]}" width="120" height="120"><br/>
+            <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>
+            <img src="data:image/jpg;base64,${entry.value}" width="750" height="400"><br/>
         </c:otherwise>
     </c:choose>
     <table>
@@ -53,7 +54,7 @@
                             <c:when test="${wasCreated == 'true'}">
                                 <b><fmt:message key="advertisement.wasCreatedMessage"/></b>
                                 <form action="control" method="get">
-                                    <input type="hidden" name="command" value="transition_to_my_requests"/>
+                                    <input type="hidden" name="command" value="transition_to_my_rent"/>
                                     <input type="submit" name="button" value="<fmt:message key="main.myRequestsButton"/>">
                                 </form>
                             </c:when>

@@ -41,6 +41,7 @@ public class TransitionFromIndexCommand implements Command {
             page = SIGN_IN;
         } catch (ServiceException e){
             log.error(e);
+            e.printStackTrace();
             page = ERROR_PAGE;
         }
         router.setPage(page);

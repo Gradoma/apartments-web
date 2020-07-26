@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Apartment {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -23,7 +24,7 @@ public class Apartment {
     private ApartmentStatus status;
     private LocalDateTime registrationDate;
     private boolean visibility;
-    private List<String> photoList;
+    private Map<Long,String> photoMap;
 
     public Apartment(){};
     public Apartment(User owner, String region, String city, String address){
@@ -46,12 +47,12 @@ public class Apartment {
         this.id = id;
     }
 
-    public List<String> getUnmodifiablePhotoList() {
-        return Collections.unmodifiableList(photoList);
+    public Map<Long,String> getUnmodifiablePhotoMap() {
+        return Collections.unmodifiableMap(photoMap);
     }
 
-    public void setPhoto(List<String> photoList) {
-        this.photoList = photoList;
+    public void setPhotoMap(Map<Long, String> photoMap) {
+        this.photoMap = photoMap;
     }
 
     public String getRegion() {
@@ -190,7 +191,7 @@ public class Apartment {
         if (status != apartment.status) return false;
         if (registrationDate != null ? !registrationDate.equals(apartment.registrationDate) : apartment.registrationDate != null)
             return false;
-        return photoList != null ? photoList.equals(apartment.photoList) : apartment.photoList == null;
+        return photoMap != null ? photoMap.equals(apartment.photoMap) : apartment.photoMap == null; //todo check equals!!
     }
 
     @Override
@@ -213,7 +214,7 @@ public class Apartment {
         result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (registrationDate != null ? registrationDate.hashCode() : 0);
         result = 31 * result + (visibility ? 1 : 0);
-        result = 31 * result + (photoList != null ? photoList.hashCode() : 0);
+        result = 31 * result + (photoMap != null ? photoMap.hashCode() : 0);
         return result;
     }
 
@@ -252,8 +253,8 @@ public class Apartment {
         builder.append(registrationDate);
         builder.append(", visibility=");
         builder.append(visibility);
-        builder.append(", photoList=");
-        builder.append(photoList);
+        builder.append(", photoMap=");
+        builder.append(photoMap);
         return builder.toString();
     }
 }

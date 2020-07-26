@@ -28,10 +28,11 @@
         <table>
             <c:forEach var="elem" items="${apartmentList}" varStatus="status">
                 <c:set var="apartmentId" value="${elem.getId()}"/>
-                <c:set var="photoList" value="${elem.getUnmodifiablePhotoList()}"/>
+                <c:set var="photoMap" value="${elem.getUnmodifiablePhotoMap()}"/>
+                <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>
                 <tr>
                     <td><c:out value="${ status.count }" /></td>
-                    <td><img src="data:image/jpg;base64,${photoList[0]}" width="250" height="150"></td>
+                    <td><img src="data:image/jpg;base64,${entry.value}" width="250" height="150"></td>
                     <td><c:out value="${ elem.getRegion() }" /></td>
                     <td><c:out value="${ elem.getCity() }" /></td>
                     <td><c:out value="${ elem.getAddress() }" /></td>
