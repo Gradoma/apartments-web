@@ -34,7 +34,7 @@
                 ${demand.getCreationDate()}
             </td>
             <td>
-                <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_demand&id=${demand.getId()}>${demand.getDescription()}</a>
+                <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_demand_profile&id=${demand.getId()}>${demand.getDescription()}</a>
             </td>
             <td>
                 ${demand.getExpectedDate()}

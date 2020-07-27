@@ -1,6 +1,7 @@
 package by.gradomski.apartments.service.impl;
 
 import by.gradomski.apartments.dao.impl.RequestDaoImpl;
+import by.gradomski.apartments.dao.impl.UserDaoImpl;
 import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.RequestStatus;
 import by.gradomski.apartments.entity.User;
@@ -70,6 +71,21 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    public Request getRequestById(long id) throws ServiceException {
+        Optional<Request> optionalRequest;
+        try{
+            optionalRequest = RequestDaoImpl.getInstance().findById(id);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        if(optionalRequest.isEmpty()){
+            log.error("request wasn't found: id=" + id);
+            throw new ServiceException("request wasn't found: id=" + id);
+        }
+        return optionalRequest.get();
+    }
+
+    @Override
     public List<Request> getAll() throws ServiceException {
         List<Request> resultList;
         try{
@@ -81,10 +97,10 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<Request> getActiveRequestsByApartmentId(long id) throws ServiceException {
+    public List<Request> getActiveRequestsByApartmentId(long apartmentId) throws ServiceException {
         List<Request> resultList;
         try{
-            resultList = RequestDaoImpl.getInstance().findByApartment(id);
+            resultList = RequestDaoImpl.getInstance().findByApartment(apartmentId);
         } catch (DaoException e){
             throw new ServiceException(e);
         }
@@ -92,10 +108,10 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<Request> getRequestsByApplicantId(long id) throws ServiceException {
+    public List<Request> getRequestsByApplicantId(long applicantId) throws ServiceException {
         List<Request> resultList;
         try{
-            resultList = RequestDaoImpl.getInstance().findByApplicant(id);
+            resultList = RequestDaoImpl.getInstance().findByApplicant(applicantId);
         } catch (DaoException e){
             throw new ServiceException(e);
         }

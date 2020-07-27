@@ -9,6 +9,7 @@ import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.IncorrectRoleException;
 import by.gradomski.apartments.exception.IncorrectStatusException;
 import by.gradomski.apartments.pool.ConnectionPool;
+import by.gradomski.apartments.util.PasswordEncoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +21,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 public class RequestDaoImpl implements RequestDao {
     private static final Logger log = LogManager.getLogger();
@@ -27,6 +29,8 @@ public class RequestDaoImpl implements RequestDao {
             " creationDate, idStatusReq) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_ALL_REQUESTS = "SELECT idRequest, idApartment, expectedDate, creationDate," +
             " request.description, idStatusReq FROM request";
+    private static final String SELECT_REQUEST_BY_ID = "SELECT idApartment, idApplicant, expectedDate, creationDate," +
+            " request.description, idStatusReq FROM request WHERE idRequest=?";
     private static final String SELECT_REQUEST_BY_APPLICANT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
             " request.description, idStatusReq FROM request WHERE idApplicant=? AND idStatusReq!=5";
     private static final String SELECT_REQUEST_BY_APARTMENT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, " +
@@ -119,6 +123,49 @@ public class RequestDaoImpl implements RequestDao {
             pool.releaseConnection(connection);
         }
         return requestList;
+    }
+
+    @Override
+    public Optional<Request> findById(long id) throws DaoException {
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        PreparedStatement statement = null;
+        Optional<Request> optionalRequest = Optional.empty();
+        try{
+            statement = connection.prepareStatement(SELECT_REQUEST_BY_ID);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            Request request = null;
+            while (resultSet.next()) {
+                request = new Request();
+                request.setId(id);
+                request.setApartmentId(resultSet.getLong(RequestTable.ID_APARTMENT));
+                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
+                LocalDate expectedDate =
+                        Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
+                request.setExpectedDate(expectedDate);
+                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE);
+                LocalDateTime creationDate =
+                        Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                request.setCreationDate(creationDate);
+                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION));
+                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST);
+                request.setStatus(RequestStatus.getByValue(statusId));
+                User applicant = new User();
+                applicant.setId(resultSet.getLong(RequestTable.ID_APPLICANT));
+                request.setApplicant(applicant);
+            }
+            if(request != null) optionalRequest = Optional.of(request);
+        } catch (SQLException | IncorrectStatusException e){
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return optionalRequest;
     }
 
     @Override

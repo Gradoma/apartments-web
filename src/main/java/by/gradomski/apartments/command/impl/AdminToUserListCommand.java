@@ -31,7 +31,7 @@ public class AdminToUserListCommand implements Command {
             log.error(e);
             page = ERROR_PAGE;
         }
-        router.setPage(ADMIN_USERS);
+        router.setPage(page);
         return router;
     }
 }

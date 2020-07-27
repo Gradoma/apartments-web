@@ -34,7 +34,7 @@
                     ${advertisement.getCreationDate()}
             </td>
             <td>
-                <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_demand&id=${advertisement.getId()}>${advertisement.getTitle()}</a>
+                <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_advertisement_profile&id=${advertisement.getId()}>${advertisement.getTitle()}</a>
             </td>
             <td>
                     ${advertisement.getPrice()}

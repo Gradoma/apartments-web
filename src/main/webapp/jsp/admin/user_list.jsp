@@ -32,7 +32,7 @@
         <tr>
             <td><c:out value="${ status.count }" /></td>
             <td>
-                <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_user&login=${user.getLoginName()}>${user.getLoginName()}</a>
+                <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_user_profile&id=${user.getId()}>${user.getLoginName()}</a>
             </td>
             <td>
                 ${user.getFirstName()} ${user.getLastName()}

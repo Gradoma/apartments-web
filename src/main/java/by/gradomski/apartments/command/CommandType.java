@@ -38,7 +38,10 @@ public enum CommandType {
     ADMIN_TO_USER_LIST(new AdminToUserListCommand()),
     ADMIN_TO_APARTMENT_LIST(new AdminToApartmentListCommand()),
     ADMIN_TO_DEMAND_LIST(new AdminToDemandListCommand()),
-    ADMIN_TO_ADVERTISEMENT_LIST(new AdminToAdvertisementListCommand());
+    ADMIN_TO_ADVERTISEMENT_LIST(new AdminToAdvertisementListCommand()),
+    ADMIN_TO_USER_PROFILE(new AdminToUserProfileCommand()),
+    ADMIN_TO_DEMAND_PROFILE(new AdminToDemandProfileCommand()),
+    ADMIN_TO_ADVERTISEMENT_PROFILE(new AdminToAdvertisementProfileCommand());
 
     private Command command;
 
