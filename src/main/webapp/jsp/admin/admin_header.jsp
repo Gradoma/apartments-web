@@ -32,10 +32,11 @@
                 <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_advertisement_list>Advertisements</a>
             </td>
             <td>
-                <form action="${pageContext.request.contextPath}/control" method="get">
-                    <input type="hidden" name="command" value="create_new_admin"/>
-                    <input type="submit" name="button" value="Create new admin">
-                </form>
+                <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_new_admin_form>Create new admin</a>
+<%--                <form action="${pageContext.request.contextPath}/control" method="get">--%>
+<%--                    <input type="hidden" name="command" value="create_new_admin"/>--%>
+<%--                    <input type="submit" name="button" value="Create new admin">--%>
+<%--                </form>--%>
             </td>
             <td>
                 <form action="${pageContext.request.contextPath}/control" method="get">

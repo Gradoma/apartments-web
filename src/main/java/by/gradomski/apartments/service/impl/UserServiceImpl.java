@@ -2,6 +2,7 @@ package by.gradomski.apartments.service.impl;
 
 import by.gradomski.apartments.dao.impl.UserDaoImpl;
 import by.gradomski.apartments.entity.Gender;
+import by.gradomski.apartments.entity.Role;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
@@ -53,6 +54,34 @@ public class UserServiceImpl implements UserService {
             return resultMap;
         }
         User user = new User(login, password, email);
+        try {
+            UserDaoImpl.getInstance().add(user);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return resultMap;
+    }
+
+    @Override
+    public Map<String, String> createNewAdmin(String login, String password, String email) throws ServiceException {
+        Map<String, String> resultMap;
+        resultMap = UserValidator.isValid(login, password, email);
+        if(resultMap.containsValue(FALSE)){
+            return resultMap;
+        }
+        Optional<User> optionalUser;
+        try{
+            optionalUser = UserDaoImpl.getInstance().findByLogin(login);
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        if(optionalUser.isPresent()){
+            log.debug("user with this login already exist");
+            resultMap.put("loginUniq", FALSE);
+            return resultMap;
+        }
+        User user = new User(login, password, email);
+        user.setRole(Role.ADMIN);
         try {
             UserDaoImpl.getInstance().add(user);
         } catch (DaoException e) {

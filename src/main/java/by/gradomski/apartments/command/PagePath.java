@@ -25,6 +25,7 @@ public class PagePath {
     public static final String ADMIN_DEMAND_PROFILE = "/jsp/admin/demand_profile.jsp";
     public static final String ADMIN_ADVERTISEMENT_PROFILE = "/jsp/admin/advertisement_profile.jsp";
     public static final String ADMIN_APARTMENT_PROFILE = "/jsp/admin/apartment_profile.jsp";
+    public static final String ADMIN_NEW_ADMIN = "/jsp/admin/new_admin.jsp";
 
     private PagePath(){}
 }

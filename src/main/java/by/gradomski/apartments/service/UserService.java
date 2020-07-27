@@ -10,6 +10,7 @@ import java.util.Map;
 
 public interface UserService {
     Map<String, String> signUp(String login, String password, String email) throws ServiceException;
+    Map<String, String> createNewAdmin(String login, String password, String email) throws ServiceException;
     boolean signIn(String login, String password) throws ServiceException;
     void activateUser(String login) throws ServiceException;
     List<User> getAll() throws ServiceException;

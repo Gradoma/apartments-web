@@ -32,7 +32,8 @@ public class UserDaoImpl implements UserDao {
     private static final String UPDATE_USER_BY_LOGIN = "UPDATE user SET firstName=?, lastName=?, birthday=?, gender=?, phone=? WHERE login=?";
     private static final String UPDATE_PHOTO_BY_LOGIN = "UPDATE user SET photo=? WHERE login=?";
     private static final String UPDATE_USER_VISIBILITY_BY_LOGIN = "UPDATE user SET visibility=? WHERE login=?";
-    private static final String DEFAULT_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\def_user.jpg";
+    private static final String DEFAULT_USER_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\def_user.jpg";
+    private static final String DEFAULT_ADMIN_PHOTO_PATH = "F:\\My Projects\\epam java training\\Appartment project\\testPhotos\\admin.png";
     private static UserDaoImpl instance;
 
     private UserDaoImpl(){}
@@ -60,7 +61,12 @@ public class UserDaoImpl implements UserDao {
             statement.setString(2, user.getLoginName());
             String encodedPass = PasswordEncoder.encode(user.getPassword());
             statement.setString(3, encodedPass);
-            File file = new File(DEFAULT_PHOTO_PATH);
+            File file;
+            if(user.getRole() == Role.USER){
+                file = new File(DEFAULT_USER_PHOTO_PATH);
+            } else {
+                file = new File(DEFAULT_ADMIN_PHOTO_PATH);
+            }
             fileInputStream = new FileInputStream(file);
             statement.setBinaryStream(4, fileInputStream, (int) file.length());
             Instant instant = user.getRegistrationDate().atZone(ZoneId.systemDefault()).toInstant();
