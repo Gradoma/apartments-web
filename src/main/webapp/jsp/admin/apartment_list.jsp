@@ -35,7 +35,8 @@
                 <c:out value="${apartment.getRegistrationDate()}" />
             </td>
             <td>
-                <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_apartment&id=${apartment.getId()}>${apartment.getId()}</a>
+                <c:set var="tenant" value="${apartment.getTenant()}"/>
+                <a href=http://localhost:8080/apartments_web_war/control?command=admin_to_apartment_profile&id=${apartment.getId()}>${apartment.getId()}</a>
             </td>
             <td>
                 ${apartment.getRegion()}, ${apartment.getCity()}, ${apartment.getAddress()}

@@ -26,7 +26,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
     private static ApartmentDaoImpl instance;
     private static final String INSERT_NEW_APARTMENT = "INSERT INTO apartment (region, city, address, rooms, square, floor, " +
             "age, furniture, description, idStatus, registrationDate, idOwner) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL_APARTMENTS = "SELECT idApartment, region, city, address, rooms, square, floor," +
+    private static final String SELECT_ALL_APARTMENTS = "SELECT idApartment, idTenant, region, city, address, rooms, square, floor," +
             "age, furniture, description, idStatus, apartment.registrationDate, apartment.visibility " +
             "FROM apartment";
     private static final String SELECT_APARTMENT_BY_ID_JOIN_OWNER = "SELECT region, city, address, rooms, square, floor," +
