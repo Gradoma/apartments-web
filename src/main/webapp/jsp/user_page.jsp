@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="ctg" uri="/WEB-INF/custom/custom.tld" %>
 <fmt:setLocale value="${pageContext.session.getAttribute('locale')}"  />
 <fmt:setBundle basename="prop.pagecontent" />
 <html>
@@ -56,8 +57,8 @@
             <td><c:out value="${ad.getPrice() }" /></td>
         </tr>
         <tr>
-                <%--                <td><ctg:dateTime dateTimeValue="${ad.getCreationDate()}"/></td>    //TODO(format tag)--%>
-            <td><small><c:out value="${ad.getCreationDate() }" /></small></td>
+            <td><small><ctg:dateTime dateTimeValue="${ad.getCreationDate()}"/></small></td>
+<%--            <td><small><c:out value="${ad.getCreationDate() }" /></small></td>--%>
         </tr>
     </c:forEach>
 </table>
