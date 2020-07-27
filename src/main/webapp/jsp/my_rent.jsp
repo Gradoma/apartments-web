@@ -62,7 +62,7 @@ ${errorMessage}
                             <c:when test="${advertisement.isVisible() == 'true'}">
                                 <c:choose>
                                     <c:when test="${request.getStatus() == created}">
-                                        <form action="control" method="get">
+                                        <form action="${pageContext.request.contextPath}/control" method="get">
                                             <input type="hidden" name="command" value="cancel_request"/>
                                             <input type="hidden" name="requestId" value="${ request.getId() }"/>
                                             <input type="submit" name="button" value="<fmt:message key="myRequests.cancelButton"/>">
@@ -75,7 +75,7 @@ ${errorMessage}
                                 <c:choose>
                                     <c:when test="${apartment.getStatus() == apartmentRent}">
                                         <fmt:message key="myRequests.apartmentRent"/>
-                                        <form action="control" method="get">
+                                        <form action="${pageContext.request.contextPath}/control" method="get">
                                             <input type="hidden" name="command" value="finish_rent"/>
                                             <input type="hidden" name="apartmentId" value="${apartment.getId() }"/>
                                             <input type="hidden" name="requestId" value="${ request.getId() }"/>
@@ -85,13 +85,13 @@ ${errorMessage}
                                     <c:otherwise>
                                         <c:choose>
                                             <c:when test="${request.getStatus() == approved}">
-                                                <form action="control" method="get">
+                                                <form action="${pageContext.request.contextPath}/control" method="get">
                                                     <input type="hidden" name="command" value="accept_invitation"/>
                                                     <input type="hidden" name="requestId" value="${ request.getId() }"/>
                                                     <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>
                                                     <input type="submit" name="button" value="<fmt:message key="myRequests.acceptButton"/>">
                                                 </form>
-                                                <form action="control" method="get">
+                                                <form action="${pageContext.request.contextPath}/control" method="get">
                                                     <input type="hidden" name="command" value="decline_invitation"/>
                                                     <input type="hidden" name="requestId" value="${ request.getId() }"/>
                                                     <input type="hidden" name="advertisementId" value="${ advertisement.getId() }"/>

@@ -9,7 +9,7 @@
 </head>
 <body>
 <c:import url="header.jsp"/>
-<form name="Apartment" action="control" method="get">
+<form name="Apartment" action="${pageContext.request.contextPath}/control" method="get">
     <input type="hidden" name="command" value="add_new_apartment">
     <fmt:message key="newEstate.region"/> : <input required name="region" pattern="^[а-яА-я-.\s]{1,45}$"><br/>
     <c:choose>

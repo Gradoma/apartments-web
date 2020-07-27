@@ -59,13 +59,13 @@
                                             <h5><fmt:message key="requests.statusRefused"/></h5>
                                         </c:when>
                                         <c:otherwise>
-                                            <form action="control" method="get">
+                                            <form action="${pageContext.request.contextPath}/control" method="get">
                                                 <input type="hidden" name="command" value="approve_request"/>
                                                 <input type="hidden" name="requestId" value="${ request.getId() }"/>
                                                 <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>
                                                 <input type="submit" name="button" value="<fmt:message key="requests.approveButton"/>">
                                             </form>
-                                            <form action="control" method="get">
+                                            <form action="${pageContext.request.contextPath}/control" method="get">
                                                 <input type="hidden" name="command" value="refuse_request"/>
                                                 <input type="hidden" name="requestId" value="${ request.getId() }"/>
                                                 <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>

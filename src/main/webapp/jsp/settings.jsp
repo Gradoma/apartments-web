@@ -34,13 +34,13 @@
         </c:when>
     </c:choose>
     <h5><fmt:message key="photo.formats"/> </h5>
-    <form action="fileController" method="post" enctype="multipart/form-data">
+    <form action="${pageContext.request.contextPath}/fileController" method="post" enctype="multipart/form-data">
         <input type="file" name="image" height="150">
         <input type="hidden" name="login" value="${user.getLoginName()}"/>
         <input type="hidden" name="page" value="SETTINGS">
         <input type="submit" name="button" value="<fmt:message key="setting.browseButton"/>">
     </form>
-    <form name="Simple" action="control" method="post">
+    <form name="Simple" action="${pageContext.request.contextPath}/control" method="post">
         <input type="hidden" name="command" value="update_user"/>
         <input type="hidden" name="login" value="${user.getLoginName()}"/>
         <fmt:message key="setting.firstName"/> : <input required name="firstName" value="${user.getFirstName()}" pattern="^[а-яА-я-]{1,45}$"><br/>

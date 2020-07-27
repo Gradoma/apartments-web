@@ -17,7 +17,7 @@
 </head>
 <body>
 <c:import url="header.jsp"/>
-<form name="update_apartment" action="control" method="get">
+<form name="update_apartment" action="${pageContext.request.contextPath}/control" method="get">
     <input type="hidden" name="command" value="edit_apartment">
 <%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
     <fmt:message key="newEstate.region"/> : <input required name="region" value="${apartment.getRegion()}"
@@ -89,13 +89,13 @@
     </c:when>
 </c:choose>
 <h5><fmt:message key="photo.formats"/> </h5>
-<form action="fileController" method="post" enctype="multipart/form-data">
+<form action="${pageContext.request.contextPath}/fileController" method="post" enctype="multipart/form-data">
     <input type="file" name="image" height="150">
     <input type="hidden" name="page" value="EDIT">
     <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>
     <input type="submit" name="button" value="<fmt:message key="setting.browseButton"/>">
 </form>
-<form name="delete_apartment" action="control" method="get">
+<form name="${pageContext.request.contextPath}/delete_apartment" action="control" method="get">
     <input type="hidden" name="command" value="delete_apartment">
     <input type="hidden" name="apartmentId" value="${apartment.getId()}">
 <%--    todo check remove apartment from session after delete ???--%>
@@ -109,7 +109,7 @@
             <td><c:out value="${ status.count }" /></td>
             <td><img src="data:image/jpg;base64,${photo}" width="250" height="150"></td>
             <td>
-                <form action="control" method="get">
+                <form action="${pageContext.request.contextPath}/control" method="get">
                     <input type="hidden" name="command" value="delete_photo"/>
                     <input type="hidden" name="apartmentId" value="${apartment.getId()}">
                     <input type="hidden" name="photoId" value="${photoId}"/>

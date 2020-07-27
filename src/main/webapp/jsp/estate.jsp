@@ -29,17 +29,26 @@
             <c:forEach var="elem" items="${apartmentList}" varStatus="status">
                 <c:set var="apartmentId" value="${elem.getId()}"/>
                 <c:set var="photoMap" value="${elem.getUnmodifiablePhotoMap()}"/>
-                <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>
                 <tr>
                     <td><c:out value="${ status.count }" /></td>
-                    <td><img src="data:image/jpg;base64,${entry.value}" width="250" height="150"></td>
+                    <td>
+                        <c:choose>
+                            <c:when test="${photoMap.isEmpty()}">
+                                No photo
+                            </c:when>
+                            <c:otherwise>
+                                <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>
+                                <img src="data:image/jpg;base64,${entry.value}" width="250" height="150">
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                     <td><c:out value="${ elem.getRegion() }" /></td>
                     <td><c:out value="${ elem.getCity() }" /></td>
                     <td><c:out value="${ elem.getAddress() }" /></td>
                     <td>
                         <c:choose>
                             <c:when test="${elem.getStatus() == registered}">
-                                <form action="control" method="get">
+                                <form action="${pageContext.request.contextPath}/control" method="get">
                                     <input type="hidden" name="command" value="transition_to_estate_edit"/>
                                     <input type="hidden" name="apartmentId" value="${elem.getId()}">
 <%--                                    <input type="hidden" name="region" value="${elem.getRegion()}">--%>
@@ -54,7 +63,7 @@
 <%--                                    <input type="hidden" name="description" value="${elem.getDescription()}">--%>
                                     <input type="submit" name="button" value="<fmt:message key="estate.editButton"/>">
                                 </form>
-                                <form action="control" method="get">
+                                <form action="${pageContext.request.contextPath}/control" method="get">
                                     <input type="hidden" name="command" value="transition_to_new_ad"/>
                                     <input type="hidden" name="apartmentId" value="${elem.getId()}">
                                     <input type="submit" name="button" value="<fmt:message key="estate.newAdButton"/>">
@@ -68,7 +77,7 @@
                                         <fmt:message key="estate.cantChangeMessage"/>
                                     </c:when>
                                     <c:otherwise>
-                                        <form action="control" method="get">
+                                        <form action="${pageContext.request.contextPath}/control" method="get">
                                             <input type="hidden" name="command" value="transition_to_advertisement_edit"/>
                                             <input type="hidden" name="apartmentId" value="${elem.getId()}">
                                             <input type="hidden" name="region" value="${elem.getRegion()}">
@@ -98,7 +107,7 @@
         </table>
     </c:otherwise>
 </c:choose>
-<form action="control" method="get">
+<form action="${pageContext.request.contextPath}/control" method="get">
     <input type="hidden" name="command" value="transition_to_new_estate"/>
     <input type="submit" name="button" value="<fmt:message key="estate.newApartmentButton"/>">
 </form>

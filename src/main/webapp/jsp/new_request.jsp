@@ -16,7 +16,7 @@
 </head>
 <body>
 <c:import url="header.jsp"/>
-<form name="Request" action="control" method="get">
+<form name="Request" action="${pageContext.request.contextPath}/control" method="get">
     <input type="hidden" name="command" value="new_request">
     <input type="hidden" name="apartmentId" value="${apartmentId}">
     <h3><fmt:message key="newRequest.head"/><br/></h3>

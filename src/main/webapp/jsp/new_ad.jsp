@@ -17,7 +17,7 @@
 <body>
 <c:import url="header.jsp"/>
 ${newAdErrorMessage}
-<form name="Ad" action="control" method="get">
+<form name="Ad" action="${pageContext.request.contextPath}/control" method="get">
     <input type="hidden" name="command" value="new_ad">
     <input type="hidden" name="apartmentId" value="${apartmentId}">
     <fmt:message key="newAd.title"/> : <input required name="title" pattern="^.{1,70}$"><br/>

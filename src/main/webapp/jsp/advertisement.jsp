@@ -53,7 +53,7 @@
                         <c:choose>
                             <c:when test="${wasCreated == 'true'}">
                                 <b><fmt:message key="advertisement.wasCreatedMessage"/></b>
-                                <form action="control" method="get">
+                                <form action="${pageContext.request.contextPath}/control" method="get">
                                     <input type="hidden" name="command" value="transition_to_my_rent"/>
                                     <input type="submit" name="button" value="<fmt:message key="main.myRequestsButton"/>">
                                 </form>
@@ -61,7 +61,7 @@
                             <c:otherwise>
                                 <c:choose>
                                     <c:when test="${advertisement.isVisible() eq true}">
-                                        <form action="control" method="get">
+                                        <form action="${pageContext.request.contextPath}/control" method="get">
                                             <input type="hidden" name="command" value="transition_to_new_request"/>
                                             <input type="hidden" name="advertisementId" value="${advertisement.getId()}">
                                             <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>

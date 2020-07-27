@@ -16,7 +16,7 @@
 </head>
 <body>
 <c:import url="header.jsp"/>
-<form action="control" method="get">
+<form action="${pageContext.request.contextPath}/control" method="get">
     <input type="hidden" name="command" value="edit_advertisement">
     <fmt:message key="newAd.title"/> : <input required name="title" pattern="^.{1,70}$"><br/>
     <c:choose>
@@ -35,7 +35,7 @@
     </c:choose>
     <input type="submit" name="button" value="<fmt:message key="advertisement.saveButton"/>"/>
 </form>
-<form action="control" method="get">
+<form action="${pageContext.request.contextPath}/control" method="get">
     <input type="hidden" name="command" value="delete_advertisement">
     <input type="submit" name="button" value="<fmt:message key="advertisement.deleteButton"/>"/>
 </form>
