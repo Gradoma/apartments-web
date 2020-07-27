@@ -9,6 +9,7 @@ import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
+import by.gradomski.apartments.util.AdvertisementComparator;
 import by.gradomski.apartments.validator.AdvertisementValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +32,7 @@ public class NewAdCommand implements Command {
     private static final String PRICE = "price";
     private static final String ADVERTISEMENT_LIST = "advertisementList";
     private static final String FALSE = "false";
+    private static final String APARTMENT_MAP = "apartmentMap";
 
     @Override
     public Router execute(HttpServletRequest request) {         //TODO(through transaction)
@@ -58,12 +61,20 @@ public class NewAdCommand implements Command {
                             List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(adAuthor.getId());
                             session.removeAttribute(APARTMENT_ID);
                             session.setAttribute("apartmentList", updatedApartmentList); //TODO(change to request.attr?)
+
                             Ad newAd = AdServiceImpl.getInstance().getAdById(newAdvertisementId);
                             Object obj = request.getServletContext().getAttribute(ADVERTISEMENT_LIST);
                             log.debug("obj from servletContext ADVERTISEMENT_LIST: " + obj);    //FIXME(if this first ad -> obj == null?)
                             List<Ad> adList = (List<Ad>) obj;
                             adList.add(newAd);
+                            adList.sort(new AdvertisementComparator());
+
+                            Map<Long, Apartment> apartmentMap = (Map<Long, Apartment>) request.getServletContext().getAttribute(APARTMENT_MAP);
+                            Apartment apartment = apartmentService.getApartmentByIdWithOwner(apartmentId);
+                            apartmentMap.put(newAd.getId(), apartment);
+
                             request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
+                            request.getServletContext().setAttribute(APARTMENT_MAP, apartmentMap);
                             page = ESTATE;
                         } else {
                             router.setForward();
@@ -102,7 +113,6 @@ public class NewAdCommand implements Command {
         }
         router.setPage(page);
         return router;
-//        return page;
     }
 
     private String defineFalseKey(Map<String, String> map){

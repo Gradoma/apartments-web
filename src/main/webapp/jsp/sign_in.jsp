@@ -52,8 +52,11 @@
                         </c:otherwise>
                     </c:choose>
                 </td>
-                <td><a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${ad.getId()}>${ad.getTitle()}</a></td>
-<%--                <td><c:out value="${ad.getTitle() }" /></td>--%>
+                <td>
+                    <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${ad.getId()}>${ad.getTitle()}</a>
+                    <strong>${apartment.getAddress()}</strong>
+                    ${apartment.getRegion()}, ${apartment.getCity()}
+                </td>
                 <td><c:out value="${ad.getPrice() }" /></td>
             </tr>
             <tr>

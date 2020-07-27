@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-public class Ad {
+public class Ad implements Comparable<Ad>{
     private long id;
     private String title;
     private BigDecimal price;
@@ -126,5 +126,10 @@ public class Ad {
         builder.append(", visibility=");
         builder.append(visibility);
         return builder.toString();
+    }
+
+    @Override
+    public int compareTo(Ad o) {
+        return creationDate.compareTo(o.creationDate);
     }
 }

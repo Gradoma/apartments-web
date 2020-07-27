@@ -18,13 +18,14 @@
 <c:import url="header.jsp"/>
 <form action="${pageContext.request.contextPath}/control" method="get">
     <input type="hidden" name="command" value="edit_advertisement">
-    <fmt:message key="newAd.title"/> : <input required name="title" pattern="^.{1,70}$"><br/>
+    <fmt:message key="newAd.title"/> : <input required name="title" pattern="^.{1,70}$" value="${advertisement.getTitle()}"><br/>
     <c:choose>
         <c:when test="${titleError eq true}">
             <fmt:message key="newAd.titleErrorMesage"/><br/>
         </c:when>
     </c:choose>
-    <fmt:message key="newAd.price"/> : <input type="text" required name="price" pattern="^((\p{Digit}){1,5}([.,]\d{1,2})?)$"><br/>
+    <fmt:message key="newAd.price"/> : <input type="text" required name="price"
+                                              pattern="^((\p{Digit}){1,5}([.,]\d{1,2})?)$" value="${advertisement.getPrice()}"><br/>
     <c:choose>
         <c:when test="${priceError eq true}">
             <fmt:message key="newAd.priceErrorMesage"/><br/>

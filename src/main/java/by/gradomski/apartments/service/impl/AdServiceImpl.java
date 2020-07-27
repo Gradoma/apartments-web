@@ -9,12 +9,14 @@ import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.AdService;
+import by.gradomski.apartments.util.AdvertisementComparator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,6 +96,7 @@ public class AdServiceImpl implements AdService {
         } catch (DaoException e){
             throw new ServiceException(e);
         }
+        resultList.sort(new AdvertisementComparator());
         return resultList;
     }
 

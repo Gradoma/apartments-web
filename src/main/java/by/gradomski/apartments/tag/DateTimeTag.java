@@ -24,9 +24,7 @@ public class DateTimeTag extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
-        log.info("localDatetime=" + dateTimeValue);
         String dateTimeString = dateTimeValue.format(format);
-        log.info("formated Date time=" + dateTimeString);
         try {
             pageContext.getOut().write(dateTimeString);
         } catch (IOException e) {
