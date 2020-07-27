@@ -61,6 +61,17 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
+    public List<Ad> getAll() throws ServiceException {
+        List<Ad> resultList;
+        try{
+            resultList = AdDaoImpl.getInstance().findAll();
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return resultList;
+    }
+
+    @Override
     public Ad getAdByApartmentId(long id) throws ServiceException {
         Optional<Ad> optionalAd;
         try {

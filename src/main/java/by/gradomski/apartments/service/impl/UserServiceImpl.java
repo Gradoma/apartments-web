@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -94,6 +95,17 @@ public class UserServiceImpl implements UserService {
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public List<User> getAll() throws ServiceException {
+        List<User> allUsers;
+        try {
+            allUsers = UserDaoImpl.getInstance().findAll();
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return allUsers;
     }
 
     @Override

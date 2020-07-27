@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface AdService {
     long addAdvertisement(String title, User author, String price, long apartmentId) throws ServiceException;
+    List<Ad> getAll() throws ServiceException;
     Ad getAdByApartmentId(long id) throws ServiceException;
     Ad getAdById(long id) throws ServiceException;
     List<Ad> getAllVisible() throws ServiceException;

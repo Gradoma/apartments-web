@@ -70,6 +70,17 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    public List<Request> getAll() throws ServiceException {
+        List<Request> resultList;
+        try{
+            resultList = RequestDaoImpl.getInstance().findAll();
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return resultList;
+    }
+
+    @Override
     public List<Request> getActiveRequestsByApartmentId(long id) throws ServiceException {
         List<Request> resultList;
         try{

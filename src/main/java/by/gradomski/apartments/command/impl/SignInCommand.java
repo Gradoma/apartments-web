@@ -5,6 +5,7 @@ import by.gradomski.apartments.command.PagePath;
 import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Ad;
 import by.gradomski.apartments.entity.Apartment;
+import by.gradomski.apartments.entity.Role;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
@@ -38,16 +39,18 @@ public class SignInCommand implements Command {
         try {
             if (userService.signIn(login, password)) {
                 User user = userService.getUserByLogin(login);
-                log.info("photo String: " + user.getPhotoBase64());
-                log.debug("user ID after sign in: " + user.getId());
                 request.getSession().setAttribute(USER, user);
+                if(user.getRole() == Role.ADMIN){
+                    page = ADMIN_USERS;
+                    router.setPage(page);
+                    return router;
+                }
                 HttpSession session = request.getSession(false);
                 if(user.getFirstName() != null & user.getLastName() != null){
                     if(session != null){
                         Long advertisementId = (Long) session.getAttribute(ADVERTISEMENT_ID);
                         if(advertisementId != null){
                             Ad ad = AdServiceImpl.getInstance().getAdById(advertisementId);
-//                            request.setAttribute("advertisement", ad);
                             session.setAttribute(ADVERTISEMENT, ad);      //todo as tmp atr
                             long apartmentId = ad.getApartmentId();
                             Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
@@ -76,6 +79,5 @@ public class SignInCommand implements Command {
         log.debug("return page: " + page);
         router.setPage(page);
         return router;
-//        return page;
     }
 }

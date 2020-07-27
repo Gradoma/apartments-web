@@ -25,10 +25,8 @@ public class RequestDaoImpl implements RequestDao {
     private static final Logger log = LogManager.getLogger();
     private static final String INSERT_NEW_REQUEST = "INSERT INTO request (idApplicant, idApartment, expectedDate, description," +
             " creationDate, idStatusReq) VALUES (?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL_REQUESTS = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
-            " request.description, idStatusReq, idUser, idRole, login, firstName, lastName, birthday, gender, phone," +
-            "photo, user.registrationDate, mailAddress, idAppartment, region, city, address, rooms, square, floor " +
-            "FROM request JOIN user ON idApplicant=idUser JOIN appartment ON idApartment=idAppartment";
+    private static final String SELECT_ALL_REQUESTS = "SELECT idRequest, idApartment, expectedDate, creationDate," +
+            " request.description, idStatusReq FROM request";
     private static final String SELECT_REQUEST_BY_APPLICANT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, creationDate," +
             " request.description, idStatusReq FROM request WHERE idApplicant=? AND idStatusReq!=5";
     private static final String SELECT_REQUEST_BY_APARTMENT_ID = "SELECT idRequest, idApplicant, idApartment, expectedDate, " +
@@ -92,41 +90,14 @@ public class RequestDaoImpl implements RequestDao {
         if(connection == null){
             throw new DaoException("connection is null");
         }
-        PreparedStatement statement = null;
+        Statement statement = null;
         List<Request> requestList = new ArrayList<>();
         try {
-            statement = connection.prepareStatement(SELECT_ALL_REQUESTS);
-            ResultSet resultSet = statement.executeQuery();
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SELECT_ALL_REQUESTS);
             while (resultSet.next()){
-                User user = new User();
-                user.setId(resultSet.getLong(RequestTable.ID_APPLICANT));
-                user.setRole(Role.getRoleByValue(resultSet.getInt(UserTable.ID_ROLE)));
-                user.setLoginName(resultSet.getString(UserTable.LOGIN));
-                user.setPassword(resultSet.getString(UserTable.PASSWORD));
-                user.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
-                user.setLastName(resultSet.getString(UserTable.LAST_NAME));
-                long birthdayMillis = resultSet.getLong(UserTable.BIRTHDAY);
-                if(birthdayMillis != 0){
-                    LocalDate birthday =
-                            Instant.ofEpochMilli(birthdayMillis).atZone(ZoneId.systemDefault()).toLocalDate();
-                    user.setBirthday(birthday);
-                }
-                String gender = resultSet.getString(UserTable.GENDER);
-                if(gender != null){
-                    user.setGender(Gender.valueOf(gender));
-                }
-                user.setPhone(resultSet.getString(UserTable.PHONE));
-                long registrationMillis = resultSet.getLong(UserTable.REGISTRATION_DATE);
-                LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
-                user.setRegistrationDate(registrationDate);
-                user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
-                byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
-                String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
-                user.setPhotoBase64(photoBase64);
-
                 Request request = new Request();
                 request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
-                request.setApplicant(user);
                 request.setApartmentId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
                 long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
                 LocalDate expectedDate =
@@ -141,7 +112,7 @@ public class RequestDaoImpl implements RequestDao {
                 request.setStatus(RequestStatus.getByValue(statusId));
                 requestList.add(request);
             }
-        }catch (SQLException | IncorrectRoleException | IncorrectStatusException e){
+        }catch (SQLException | IncorrectStatusException e){
             throw new DaoException(e);
         } finally {
             closeStatement(statement);

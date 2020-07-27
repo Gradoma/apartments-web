@@ -22,6 +22,8 @@ public class AdDaoImpl implements AdDao {
     private static AdDaoImpl instance;
     private static final String INSERT_NEW_AD = "INSERT INTO ad (title, price, idAuthor, idAppartment, issueDate) " +
             "VALUES (?, ?, ?, ?, ?)";
+    private static final String SELECT_ALL = "SELECT idAd, title, price, idAuthor, idAppartment, issueDate, visibility" +
+            " FROM ad";
     private static final String SELECT_AD_BY_ID = "SELECT title, price, idAuthor, idAppartment, issueDate, visibility" +
             " FROM ad WHERE idAd=?";
     private static final String SELECT_AD_BY_APARTMENT_ID = "SELECT idAd, title, price, idAuthor, issueDate, visibility" +
@@ -112,8 +114,38 @@ public class AdDaoImpl implements AdDao {
     }
 
     @Override
-    public List<Ad> findAll() {
-        return null;
+    public List<Ad> findAll() throws DaoException{
+        List<Ad> listAd = new ArrayList<>();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        Statement statement = null;
+        try{
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SELECT_ALL);
+            while (resultSet.next()){
+                String title = resultSet.getString(AdTable.TITLE);
+                long authorId = resultSet.getLong(AdTable.ID_AUTHOR);
+                BigDecimal price = new BigDecimal(resultSet.getString(AdTable.PRICE));
+                long apartmentId = resultSet.getLong(AdTable.ID_APARTMENT);
+                Ad ad = new Ad(title, authorId, price, apartmentId);
+                ad.setId(resultSet.getLong(AdTable.ID_AD));
+                long creationMillis = resultSet.getLong(AdTable.ISSUE_DATE);
+                LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).
+                        toLocalDateTime();
+                ad.setCreationDate(creationDate);
+                ad.setVisibility(resultSet.getBoolean(AdTable.VISIBILITY));
+                listAd.add(ad);
+            }
+        } catch (SQLException e) {
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        return listAd;
     }
 
     @Override
@@ -124,7 +156,7 @@ public class AdDaoImpl implements AdDao {
         if(connection == null){
             throw new DaoException("connection is null");
         }
-        PreparedStatement statement = null; // TODO(usual statement)
+        PreparedStatement statement = null;
         try{
             statement = connection.prepareStatement(SELECT_ALL_VISIBLE_AD);
             ResultSet resultSet = statement.executeQuery();

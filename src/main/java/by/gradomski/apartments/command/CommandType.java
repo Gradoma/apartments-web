@@ -34,7 +34,11 @@ public enum CommandType {
     TRANSITION_TO_ADVERTISEMENT_EDIT(new TransitionToAdvertisementEditCommand()),
     EDIT_ADVERTISEMENT(new EditAdvertisementCommand()),
     DELETE_ADVERTISEMENT(new DeleteAdvertisementCommand()),
-    DELETE_PHOTO(new DeletePhotoCommand());
+    DELETE_PHOTO(new DeletePhotoCommand()),
+    ADMIN_TO_USER_LIST(new AdminToUserListCommand()),
+    ADMIN_TO_APARTMENT_LIST(new AdminToApartmentListCommand()),
+    ADMIN_TO_DEMAND_LIST(new AdminToDemandListCommand()),
+    ADMIN_TO_ADVERTISEMENT_LIST(new AdminToAdvertisementListCommand());
 
     private Command command;
 

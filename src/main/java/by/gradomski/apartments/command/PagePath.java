@@ -16,5 +16,11 @@ public class PagePath {
     public static final String MY_RENT = "/jsp/my_rent.jsp";
     public static final String EDIT_ADVERTISEMENT = "/jsp/edit_advertisement.jsp";
 
+    public static final String ADMIN_START = "/jsp/admin/admin_start.jsp";
+    public static final String ADMIN_USERS = "/jsp/admin/user_list.jsp";
+    public static final String ADMIN_APARTMENTS = "/jsp/admin/apartment_list.jsp";
+    public static final String ADMIN_DEMANDS = "/jsp/admin/demand_list.jsp";
+    public static final String ADMIN_ADVERTISEMENTS = "/jsp/admin/advertisement_list.jsp";
+
     private PagePath(){}
 }

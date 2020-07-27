@@ -26,6 +26,9 @@ public class ApartmentDaoImpl implements ApartmentDao {
     private static ApartmentDaoImpl instance;
     private static final String INSERT_NEW_APARTMENT = "INSERT INTO apartment (region, city, address, rooms, square, floor, " +
             "age, furniture, description, idStatus, registrationDate, idOwner) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_ALL_APARTMENTS = "SELECT idApartment, region, city, address, rooms, square, floor," +
+            "age, furniture, description, idStatus, apartment.registrationDate, apartment.visibility " +
+            "FROM apartment";
     private static final String SELECT_APARTMENT_BY_ID_JOIN_OWNER = "SELECT region, city, address, rooms, square, floor," +
             "age, furniture, description, idOwner, idStatus, apartment.registrationDate, apartment.visibility, " +
             "idUser, idRole, login, firstName, lastName, birthday, gender, phone, photo, user.registrationDate, mailAddress, " +
@@ -338,7 +341,45 @@ public class ApartmentDaoImpl implements ApartmentDao {
 
     @Override
     public List<Apartment> findAll() throws DaoException {
-        return null;
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.getConnection();
+        if(connection == null){
+            throw new DaoException("connection is null");
+        }
+        Statement statement = null;
+        List<Apartment> apartmentList = new ArrayList<>();
+        try{
+            statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(SELECT_ALL_APARTMENTS);
+            while (resultSet.next()){
+                Apartment apartment = new Apartment();
+                apartment.setId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
+                apartment.setRegion(resultSet.getString(ApartmentTable.REGION));
+                apartment.setCity(resultSet.getString(ApartmentTable.CITY));
+                apartment.setAddress(resultSet.getString(ApartmentTable.ADDRESS));
+                apartment.setRooms(resultSet.getInt(ApartmentTable.ROOMS));
+                apartment.setFloor(resultSet.getInt(ApartmentTable.FLOOR));
+                apartment.setSquare(resultSet.getDouble(ApartmentTable.SQUARE));
+                apartment.setYear(resultSet.getString(ApartmentTable.AGE));
+                apartment.setFurniture(resultSet.getBoolean(ApartmentTable.FURNITURE));
+                apartment.setDescription(resultSet.getString(ApartmentTable.DESCRIPTION));
+                long apartmentStatus = resultSet.getLong(ApartmentTable.ID_STATUS);
+                apartment.setStatus(ApartmentStatus.getByValue(apartmentStatus));
+                long registrationMillis = resultSet.getLong(ApartmentTable.REGISTRATION_DATE);
+                LocalDateTime registrationDate = Instant.ofEpochMilli(registrationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
+                apartment.setRegistrationDate(registrationDate);
+                apartment.setVisibility(resultSet.getBoolean(ApartmentTable.VISIBILITY));
+                apartmentList.add(apartment);
+            }
+        } catch (SQLException | IncorrectStatusException e){
+            e.printStackTrace();
+            throw new DaoException(e);
+        } finally {
+            closeStatement(statement);
+            pool.releaseConnection(connection);
+        }
+        log.debug("apartemtnList size=" + apartmentList.size());
+        return apartmentList;
     }
 
     @Override

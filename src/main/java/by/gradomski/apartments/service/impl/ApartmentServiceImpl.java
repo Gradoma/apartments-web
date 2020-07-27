@@ -145,6 +145,17 @@ public class ApartmentServiceImpl implements ApartmentService {
     }
 
     @Override
+    public List<Apartment> getAllApartments() throws ServiceException {
+        List<Apartment> apartmentList;
+        try{
+            apartmentList = ApartmentDaoImpl.getInstance().findAll();
+        } catch (DaoException e){
+            throw new ServiceException(e);
+        }
+        return apartmentList;
+    }
+
+    @Override
     public Map<String, String> updateApartment(long id, String region, String city, String address, String rooms,
                                                String floor, String square, String year, String furniture,
                                                String description) throws ServiceException {

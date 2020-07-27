@@ -13,6 +13,7 @@ public interface ApartmentService {
                                      String square, String year, String furniture, String description) throws ServiceException;
     List<Apartment> getApartmentsByOwner(long id) throws ServiceException;
     List<Apartment> getApartmentsByTenant(long id) throws ServiceException;
+    List<Apartment> getAllApartments() throws ServiceException;
     Apartment getApartmentByIdWithOwner(long id) throws ServiceException;
     Map<String, String> updateApartment(long id, String region, String city, String address, String rooms, String floor,
                                         String square, String year, String furniture, String description) throws ServiceException;
