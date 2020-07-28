@@ -27,7 +27,7 @@ public class NextAdvertisementPageCommand implements Command {
         if(page != 1) {
             int firstAdNumber = (int) ON_PAGE + 1;
             log.debug("first = " + firstAdNumber);
-            int lastAdNumber = (int) (page * ON_PAGE);
+            int lastAdNumber = (int)(page * ON_PAGE) - 1;
             log.debug("last=" + lastAdNumber);
             request.setAttribute(FIRST_ADVERTISEMENT, firstAdNumber);
             request.setAttribute(LAST_ADVERTISEMENT, lastAdNumber);

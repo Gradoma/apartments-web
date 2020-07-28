@@ -59,8 +59,8 @@
         </c:forEach>
     </div><br/>
     <table>
-        <c:forEach var="ad" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 1}"
-                   end="${ not empty lastAdvertisement ? lastAdvertisement : 5}">
+        <c:forEach var="ad" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"
+                   end="${ not empty lastAdvertisement ? lastAdvertisement : 4}">
             <c:set var="apartment" value="${apartmentMap[ad.getId()]}"/>
             <c:set var="photoMap" value="${apartment.getUnmodifiablePhotoMap()}"/>
             <tr>
