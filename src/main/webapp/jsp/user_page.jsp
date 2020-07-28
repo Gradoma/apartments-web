@@ -14,6 +14,23 @@
 <html>
 <head>
     <title>User Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+
+        .pagination a.active {
+            background-color: dodgerblue;
+            color: white;
+        }
+
+        .pagination a:hover:not(.active) {background-color: #ddd;}
+    </style>
 </head>
 <body>
 <c:import url="header.jsp"/>
@@ -36,8 +53,14 @@
     <input type="hidden" name="command" value="log_out"/>
     <input type="submit" name="button" value="<fmt:message key="main.logoutButton"/>">
 </form>
+<div class="pagination">
+    <c:forEach var="page" items="${pagesAmount}" varStatus="status">
+        <a class="${status.count == currentPage ? 'active' : ''}" href="http://localhost:8080/apartments_web_war/control?command=next_advertisement&page=${status.count}"><c:out value="${status.count}" /></a>
+    </c:forEach>
+</div><br/>
 <table>
-    <c:forEach var="ad" items="${advertisementList}" varStatus="status">
+    <c:forEach var="ad" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 1}"
+               end="${ not empty lastAdvertisement ? lastAdvertisement : 5}">
         <c:set var="apartment" value="${apartmentMap[ad.getId()]}"/>
         <c:set var="photoMap" value="${apartment.getUnmodifiablePhotoMap()}"/>
         <tr>
@@ -64,7 +87,12 @@
 <%--            <td><small><c:out value="${ad.getCreationDate() }" /></small></td>--%>
         </tr>
     </c:forEach>
-</table>
+</table><br/>
+<div class="pagination">
+    <c:forEach var="page" items="${pagesAmount}" varStatus="status">
+        <a class="${status.count == currentPage ? 'active' : ''}" href="http://localhost:8080/apartments_web_war/control?command=next_advertisement&page=${status.count}"><c:out value="${ status.count }" /></a>
+    </c:forEach>
+</div>
 <c:import url="footer.jsp"/>
 </body>
 <%--<!DOCTYPE html>--%>

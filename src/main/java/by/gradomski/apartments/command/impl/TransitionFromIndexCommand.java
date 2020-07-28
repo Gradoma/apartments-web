@@ -23,6 +23,8 @@ public class TransitionFromIndexCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String ADVERTISEMENT_LIST = "advertisementList";
     private static final String APARTMENT_MAP = "apartmentMap";
+    private static final String PAGES_AMOUNT = "pagesAmount";
+    private static final double ON_PAGE = 5.0;
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -30,6 +32,10 @@ public class TransitionFromIndexCommand implements Command {
         String page;
         try{
             List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
+            int size = adList.size();
+            int pages = (int) Math.ceil(size/ON_PAGE);
+            int[] arrayPages = new int[pages];
+            request.getServletContext().setAttribute(PAGES_AMOUNT, arrayPages);
             Map<Long, Apartment> apartmentMap = new HashMap<>();
             for(Ad advetisement : adList){
                 long apartmentId = advetisement.getApartmentId();

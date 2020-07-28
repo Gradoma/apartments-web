@@ -44,7 +44,8 @@ public enum CommandType {
     ADMIN_TO_ADVERTISEMENT_PROFILE(new AdminToAdvertisementProfileCommand()),
     ADMIN_TO_APARTMENT_PROFILE(new AdminToApartmentProfileCommand()),
     ADMIN_TO_NEW_ADMIN_FORM(new AdminToNewAdminForm()),
-    REGISTER_NEW_ADMIN(new RegisterNewAdminCommand());
+    REGISTER_NEW_ADMIN(new RegisterNewAdminCommand()),
+    NEXT_ADVERTISEMENT(new NextAdvertisementPageCommand());
 
     private Command command;
 
