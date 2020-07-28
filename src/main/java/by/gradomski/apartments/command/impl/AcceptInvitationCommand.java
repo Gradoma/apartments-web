@@ -29,7 +29,7 @@ public class AcceptInvitationCommand implements Command {
     private static final String ADVERTISEMENT_LIST = "advertisementList";
 
     @Override
-    public Router execute(HttpServletRequest request) {     //TODO(make through transaction)
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setRedirect();
         long acceptingRequestId = Long.parseLong(request.getParameter(REQUEST_ID));

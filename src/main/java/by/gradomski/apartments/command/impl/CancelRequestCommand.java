@@ -46,14 +46,14 @@ public class CancelRequestCommand implements Command {
                 User currentUser = (User) session.getAttribute(USER);
                 long userId = currentUser.getId();
                 List<Request> requestList = RequestServiceImpl.getInstance().getRequestsByApplicantId(userId);
-                session.setAttribute(REQUEST_LIST, requestList);        //TODO(as tmp atr)
+                session.setAttribute(REQUEST_LIST, requestList);
                 Map<Long, Ad> advertisementMap = new HashMap<>();
                 for(Request req : requestList){
                     long apartmentId = req.getApartmentId();
                     Ad ad = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
                     advertisementMap.put(req.getId(), ad);
                 }
-                session.setAttribute(ADVERTISEMENT_MAP, advertisementMap);      //TODO(as tmp atr)
+                session.setAttribute(ADVERTISEMENT_MAP, advertisementMap);
                 page = MY_RENT;
             } catch (ServiceException e){
                 log.error(e);

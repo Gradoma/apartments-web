@@ -44,29 +44,6 @@ public class RequestServiceImpl implements RequestService {
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
-
-//        if(apartmentIdString == null || apartmentIdString.isBlank()){         //todo clean
-//            throw new ServiceException("apartmentIdString == null or empty");
-//        }
-//        long apartmentId = Long.parseLong(apartmentIdString);
-//        if(expectedDateString == null || expectedDateString.isBlank()){
-//            throw new ServiceException("expectedDateString == null or empty");
-//        }
-//        LocalDate today = LocalDate.now();
-//        try {
-//            LocalDate expectedDate = LocalDate.parse(expectedDateString);
-//            if (today.isAfter(expectedDate)) {
-//                log.debug("invalid expected date: earlier than today");
-//                throw new DateTimeParseException("invalid expected date", expectedDateString, 0);
-//            }
-//            newRequest = new Request(author, apartmentId, expectedDate);
-//            if(description != null){
-//                newRequest.setDescription(description);
-//            }
-//            flag = RequestDaoImpl.getInstance().add(newRequest);
-//        } catch (DateTimeParseException | DaoException pEx){
-//            throw new ServiceException(pEx);
-//        }
         return flag;
     }
 
@@ -131,19 +108,6 @@ public class RequestServiceImpl implements RequestService {
                 if(!approvingResult){
                     return false;
                 }
-//                if(!apartmentRequestList.isEmpty()) {         todo clean
-//                    log.debug("request list not empty");
-//                    for (Request request : apartmentRequestList) {
-//                        if (request.getStatus() != RequestStatus.CANCELED) {
-//                            boolean refusingResult = RequestDaoImpl.getInstance()
-//                                    .updateStatusById(request.getId(), RequestStatus.REFUSED);
-//                            if (!refusingResult) {
-//                                log.warn("can't refuse : requestID=" + request.getId());
-//                                return false;
-//                            }
-//                        }
-//                    }
-//                }
                 log.debug("end method body");
                 flag = true;
             } catch (DaoException e){

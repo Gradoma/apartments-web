@@ -10,6 +10,7 @@ import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.util.PageCounter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,9 +33,10 @@ public class DeclineInvitationCommand implements Command {
     private static final String REQUEST_LIST = "requestList";
     private static final String ADVERTISEMENT_MAP = "advertisementMap";
     private static final String APARTMENT_MAP = "apartmentMap";
+    private static final String PAGES_AMOUNT = "pagesAmount";
 
     @Override
-    public Router execute(HttpServletRequest request) {     //TODO(make through transaction)
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setRedirect();
         String page;
@@ -63,6 +65,8 @@ public class DeclineInvitationCommand implements Command {
                         Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
                         apartmentMap.put(req.getId(), apartment);
                     }
+                    int pages = PageCounter.countPages(adList);
+                    request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
                     session.setAttribute(APARTMENT_MAP, apartmentMap);      //TODO(as tmp atr)
                     session.setAttribute(ADVERTISEMENT_MAP, advertisementMap);      //TODO(as tmp atr)
                     page = MY_RENT;

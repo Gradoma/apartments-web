@@ -54,7 +54,7 @@
     <input type="submit" name="button" value="<fmt:message key="main.logoutButton"/>">
 </form>
 <div class="pagination">
-    <c:forEach var="page" items="${pagesAmount}" varStatus="status">
+    <c:forEach var="page" varStatus="status" begin="1" end="${pagesAmount}">
         <a class="${status.count == currentPage ? 'active' : ''}" href="http://localhost:8080/apartments_web_war/control?command=next_advertisement&page=${status.count}"><c:out value="${status.count}" /></a>
     </c:forEach>
 </div><br/>

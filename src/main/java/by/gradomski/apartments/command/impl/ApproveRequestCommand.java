@@ -7,6 +7,7 @@ import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.util.PageCounter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,9 +28,10 @@ public class ApproveRequestCommand implements Command {
     private static final String APARTMENT_LIST = "apartmentList";
     private static final String ADVERTISEMENT_LIST = "advertisementList";
     private static final String REQUEST_MAP = "requestMap";
+    private static final String PAGES_AMOUNT = "pagesAmount";
 
     @Override
-    public Router execute(HttpServletRequest request) {     //TODO(make through transaction)
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setRedirect();
         String page;
@@ -49,8 +51,9 @@ public class ApproveRequestCommand implements Command {
                     User user = (User) session.getAttribute(USER);
                     long userId = user.getId();
                     List<Apartment> apartmentList = ApartmentServiceImpl.getInstance().getApartmentsByOwner(userId);
-                    session.setAttribute(APARTMENT_LIST, apartmentList);          //TODO(as tmp atr)
-                    // copy-paste from transitionToEstateCommand
+                    session.setAttribute(APARTMENT_LIST, apartmentList);
+                    int pages = PageCounter.countPages(adList);
+                    request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
                     Map<Long, Boolean> requestMap = new HashMap<>();
                     for(Apartment apartment : apartmentList){
                         long id = apartment.getId();

@@ -63,7 +63,7 @@ public class AddNewApartmentCommand implements Command {
                         rooms, floor, square, year, furniture, description);
                 if (!addingResult.containsValue(FALSE)) {
                     List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(currentUser.getId());
-                    session.setAttribute(APARTMENT_LIST, updatedApartmentList);        //TODO(why session)
+                    session.setAttribute(APARTMENT_LIST, updatedApartmentList);
                     page = ESTATE;
                 } else {
                     router.setForward();

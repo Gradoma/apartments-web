@@ -7,6 +7,7 @@ import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
+import by.gradomski.apartments.util.PageCounter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +25,6 @@ public class TransitionFromIndexCommand implements Command {
     private static final String ADVERTISEMENT_LIST = "advertisementList";
     private static final String APARTMENT_MAP = "apartmentMap";
     private static final String PAGES_AMOUNT = "pagesAmount";
-    private static final double ON_PAGE = 5.0;
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -32,10 +32,8 @@ public class TransitionFromIndexCommand implements Command {
         String page;
         try{
             List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
-            int size = adList.size();
-            int pages = (int) Math.ceil(size/ON_PAGE);
-            int[] arrayPages = new int[pages];
-            request.getServletContext().setAttribute(PAGES_AMOUNT, arrayPages);
+            int pages = PageCounter.countPages(adList);
+            request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
             Map<Long, Apartment> apartmentMap = new HashMap<>();
             for(Ad advetisement : adList){
                 long apartmentId = advetisement.getApartmentId();

@@ -2,10 +2,7 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Ad;
-import by.gradomski.apartments.entity.ApartmentStatus;
-import by.gradomski.apartments.entity.Request;
-import by.gradomski.apartments.entity.User;
+import by.gradomski.apartments.entity.*;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.mail.MailConstructor;
 import by.gradomski.apartments.mail.MailSender;
@@ -13,12 +10,15 @@ import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import by.gradomski.apartments.service.impl.RequestServiceImpl;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
+import by.gradomski.apartments.util.PageCounter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static by.gradomski.apartments.command.PagePath.ADMIN_APARTMENTS;
 import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
@@ -28,8 +28,8 @@ public class AdminBanAdvertisementCommand implements Command {
     private static final String EMAIL_SUBJECT = "You have a Ban!";
     private static final String ID = "id";
     private static final String ADVERTISEMENT = "advertisement";
-    private static final String AUTHOR = "author";
-    private static final String DEMAND_LIST = "demandList";
+    private static final String ADVERTISEMENT_LIST = "advertisementList";
+    private static final String PAGES_AMOUNT = "pagesAmount";
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -57,6 +57,15 @@ public class AdminBanAdvertisementCommand implements Command {
                 }
             }
             ApartmentServiceImpl.getInstance().updateApartmentStatus(apartmentId, ApartmentStatus.REGISTERED);
+            List<Ad> advertisementList = (List<Ad>) request.getServletContext().getAttribute(ADVERTISEMENT_LIST);
+            advertisementList.remove(advertisement);
+            request.getServletContext().setAttribute(ADVERTISEMENT_LIST, advertisementList);
+            int pages = PageCounter.countPages(advertisementList);
+            request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
+//            int size = advertisementList.size();
+//            int pages = (int) Math.ceil(size/ON_PAGE);
+//            int[] arrayPages = new int[pages];
+//            request.getServletContext().setAttribute(PAGES_AMOUNT, arrayPages);
             long authorId = advertisement.getAuthorId();
             log.debug("author id = " + authorId);
             User author = UserServiceImpl.getInstance().getUserById(authorId);

@@ -10,6 +10,7 @@ import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.util.PageCounter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,9 +26,10 @@ public class DeleteAdvertisementCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String ADVERTISEMENT = "advertisement";
     private static final String ADVERTISEMENT_LIST = "advertisementList";
+    private static final String PAGES_AMOUNT = "pagesAmount";
 
     @Override
-    public Router execute(HttpServletRequest request) {        // TODO(through transaction)
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setRedirect();
         String page;
@@ -52,6 +54,8 @@ public class DeleteAdvertisementCommand implements Command {
                 if(apartmentStatusResult){
                     request.getServletContext().removeAttribute(ADVERTISEMENT_LIST);
                     List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
+                    int pages = PageCounter.countPages(adList);
+                    request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
                     request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
                     session.removeAttribute(ADVERTISEMENT);
                     page = USER_PAGE;

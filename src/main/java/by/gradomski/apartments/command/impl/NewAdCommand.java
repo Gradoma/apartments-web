@@ -10,6 +10,7 @@ import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import by.gradomski.apartments.util.AdvertisementComparator;
+import by.gradomski.apartments.util.PageCounter;
 import by.gradomski.apartments.validator.AdvertisementValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -33,9 +34,10 @@ public class NewAdCommand implements Command {
     private static final String ADVERTISEMENT_LIST = "advertisementList";
     private static final String FALSE = "false";
     private static final String APARTMENT_MAP = "apartmentMap";
+    private static final String PAGES_AMOUNT = "pagesAmount";
 
     @Override
-    public Router execute(HttpServletRequest request) {         //TODO(through transaction)
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setRedirect();
         String page;
@@ -75,6 +77,8 @@ public class NewAdCommand implements Command {
 
                             request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
                             request.getServletContext().setAttribute(APARTMENT_MAP, apartmentMap);
+                            int pages = PageCounter.countPages(adList);
+                            request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
                             page = ESTATE;
                         } else {
                             router.setForward();

@@ -98,7 +98,6 @@
 <form name="${pageContext.request.contextPath}/delete_apartment" action="control" method="get">
     <input type="hidden" name="command" value="delete_apartment">
     <input type="hidden" name="apartmentId" value="${apartment.getId()}">
-<%--    todo check remove apartment from session after delete ???--%>
     <input type="submit" name="button" value="<fmt:message key="estate.deleteButton"/>"/>
 </form>
 <table>

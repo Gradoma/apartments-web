@@ -24,15 +24,13 @@ public class NextAdvertisementPageCommand implements Command {
         String pagePath;
         String pageString = request.getParameter(PAGE);
         int page = Integer.parseInt(pageString);
-        if(page != 1) {
-            int firstAdNumber = (int) ON_PAGE + 1;
-            log.debug("first = " + firstAdNumber);
-            int lastAdNumber = (int)(page * ON_PAGE) - 1;
-            log.debug("last=" + lastAdNumber);
-            request.setAttribute(FIRST_ADVERTISEMENT, firstAdNumber);
-            request.setAttribute(LAST_ADVERTISEMENT, lastAdNumber);
-            request.setAttribute(CURRENT_PAGE, page);
-        }
+        int firstAdNumber = (int) ON_PAGE * (page - 1);
+        log.debug("first = " + firstAdNumber);
+        int lastAdNumber = (int)(page * ON_PAGE) - 1;
+        log.debug("last=" + lastAdNumber);
+        request.setAttribute(FIRST_ADVERTISEMENT, firstAdNumber);
+        request.setAttribute(LAST_ADVERTISEMENT, lastAdNumber);
+        request.setAttribute(CURRENT_PAGE, page);
         HttpSession session = request.getSession(false);
         if(session.getAttribute(USER) == null){
             pagePath = PagePath.SIGN_IN;

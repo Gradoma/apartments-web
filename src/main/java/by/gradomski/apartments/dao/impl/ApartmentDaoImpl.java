@@ -428,7 +428,7 @@ public class ApartmentDaoImpl implements ApartmentDao {
         } finally {
             closeStatement(statement);
             pool.releaseConnection(connection);
-        }// TODO(what return??)
+        }
     }
 
     @Override

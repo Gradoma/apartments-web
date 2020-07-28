@@ -22,7 +22,7 @@ public class FinishRentCommand implements Command {
     private static final long TENANT_ERASING_ID = -1;
 
     @Override
-    public Router execute(HttpServletRequest request) {     //TODO(through transaction)
+    public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setRedirect();
         String page;
