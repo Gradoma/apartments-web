@@ -106,10 +106,10 @@
     <title>Offcanvas template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/bootstrap/css/offcanvas.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/bootstrap/css/offcanvas.css" rel="stylesheet">
 
     <style>
         .pagination a {
@@ -152,7 +152,8 @@
             <div class="media text-muted pt-3 border-bottom border-gray" style="">
                 <c:choose>
                     <c:when test="${photoMap.isEmpty()}">
-                        No photo
+                        <img class="mr-3" src="${pageContext.request.contextPath}/bootstrap/image/def_apartment.jpg" alt=""
+                             width="170" height="170">
                     </c:when>
                     <c:otherwise>
                         <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>
@@ -193,10 +194,10 @@
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="/bootstrap/js/vendor/popper.min.js"></script>
-<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/bootstrap/js/vendor/popper.min.js"></script>
+<script src="${pageContext.request.contextPath}/bootstrap/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/holderjs@2.9.4/holder.js"></script>
-<script src="/bootstrap/js/offcanvas.js"></script>
+<script src="${pageContext.request.contextPath}/bootstrap/js/offcanvas.js"></script>
 
 
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="none" style="display: none; visibility: hidden; position: absolute; top: -100%; left: -100%;"><defs><style type="text/css"></style></defs>

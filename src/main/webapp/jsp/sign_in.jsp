@@ -159,6 +159,9 @@
             <c:if test="${errorSignInPass eq true}">
                 <fmt:message key="signIn.errorSignInMessage"/>
             </c:if>
+            <c:if test="${errorAccess eq true}">
+                <fmt:message key="signIn.errorAccessMessage"/>
+            </c:if>
 
             <!-- Button -->
             <div class="form-group">
@@ -203,7 +206,8 @@
                 <div class="media text-muted pt-3 border-bottom border-gray" style="">
                     <c:choose>
                         <c:when test="${photoMap.isEmpty()}">
-                            No photo
+                            <img class="mr-3" src="${pageContext.request.contextPath}/bootstrap/image/def_apartment.jpg" alt=""
+                                 width="170" height="170">
                         </c:when>
                         <c:otherwise>
                             <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>

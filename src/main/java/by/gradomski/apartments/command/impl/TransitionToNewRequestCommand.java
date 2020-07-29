@@ -30,7 +30,7 @@ public class TransitionToNewRequestCommand implements Command {
                 log.info("user wasn't sign in");
                 long advertisementId = Long.parseLong(idString);
                 session.setAttribute(ADVERTISEMENT_ID, advertisementId);
-                request.setAttribute("errorAccess", "Please sign in to make requests");     //todo(translate)
+                request.setAttribute("errorAccess", true);
                 page = SIGN_IN;
             } else {
                 log.error("request parameter " + ADVERTISEMENT_ID + "== null");

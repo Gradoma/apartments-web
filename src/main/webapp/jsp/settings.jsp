@@ -24,7 +24,7 @@
             <h2><fmt:message key="setting.greetingMessage"/></h2>
         </c:when>
     </c:choose>
-    <img src="data:image/jpg;base64,${user.getPhotoBase64()}" width="100" height="100">
+    <img src="data:image/jpg;base64,${user.getPhotoBase64()}" width="100" height="100" class="user_img">
     <c:choose>
         <c:when test="${incorrectType eq true}">
             <h4><fmt:message key="photo.incorrectTypeMessage"/></h4>

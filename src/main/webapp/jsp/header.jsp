@@ -54,10 +54,10 @@
     <link rel="icon" href="../../../../favicon.ico">
 
     <!-- Bootstrap core CSS -->
-    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="bootstrap/css/offcanvas.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/bootstrap/css/offcanvas.css" rel="stylesheet">
 </head>
 
 <body class="bg-light" style="padding-top: 0px;">
