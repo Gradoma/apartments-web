@@ -130,20 +130,58 @@
 </head>
 
 <body class="bg-light">
-<%--<c:import url="header.jsp"/>--%>
-<%--<form name="Simple" action="control" method="post">--%>
-<%--        <input type="hidden" name="command" value="sign_in"/>--%>
-<%--        <input required name="login" pattern="^[\p{Digit}\p{Alpha}_-]{3,15}$" placeholder=<fmt:message key="label.login"/>><br/>--%>
-<%--        <input required name="password" pattern="^.{5,45}$" placeholder=<fmt:message key="label.password"/>>--%>
-<%--        <c:choose>--%>
-<%--            <c:when test="${errorSignInPass eq true}">--%>
-<%--                <fmt:message key="signIn.errorSignInMessage"/>--%>
-<%--            </c:when>--%>
-<%--        </c:choose>--%>
-<%--        <input type="submit" name="button" value="<fmt:message key="label.submitButton"/>">--%>
-<%--</form>--%>
+<c:import url="header.jsp"/>
 
 <main role="main" class="container">
+
+    <form class="form-horizontal" action="control" method="post">
+        <input type="hidden" name="command" value="sign_in"/>
+        <fieldset>
+            <!-- Text input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="textinput"><fmt:message key="label.login"/></label>
+                <div class="col-md-4">
+                    <input id="textinput" name="login" type="text" pattern="^[\p{Digit}\p{Alpha}_-]{3,15}$"
+                           placeholder="" class="form-control input-md" required="">
+                </div>
+            </div>
+
+            <!-- Password input-->
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="passwordinput"><fmt:message key="label.password"/></label>
+                <div class="col-md-4">
+                    <input id="passwordinput" name="password" type="password" pattern="^.{5,45}$"
+                           placeholder="" class="form-control input-md" required="">
+
+                </div>
+            </div>
+
+            <c:if test="${errorSignInPass eq true}">
+                <fmt:message key="signIn.errorSignInMessage"/>
+            </c:if>
+
+            <!-- Button -->
+            <div class="form-group">
+                <div class="col-md-4">
+                    <button id="signInButton" name="singlebutton"
+                            class="btn btn-success"><fmt:message key="label.submitButton"/></button>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+    <form class="form-horizontal" action="control" method="get">
+        <input type="hidden" name="command" value="transition_to_sign_up"/>
+
+        <!-- Button -->
+        <div class="form-group">
+            <div class="col-md-4">
+                <button id="signUpButton" name="singlebutton"
+                        class="btn btn-primary"><fmt:message key="label.transitionButton"/></button>
+            </div>
+        </div>
+
+    </form>
 
     <div class="my-3 p-3 bg-white rounded box-shadow" style="margin-top: 69px; padding-top: 63px;">
         <div class="media text-muted pt-3 border-bottom border-gray" style="">
