@@ -120,7 +120,7 @@
 <%--            <a class="nav-link" href="#">Link</a>--%>
 <%--            <a class="nav-link" href="#">Link</a>--%>
 
-            <a class="nav-link active" href="http://localhost:8080/apartments_web_war/control?command=transition_to_user_page">
+            <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_user_page">
                 <fmt:message key="header.home"/>
             </a>
             <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_estate">

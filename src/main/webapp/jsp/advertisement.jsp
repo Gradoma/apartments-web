@@ -246,6 +246,33 @@
             </p>
         </div>
 
+        <c:if test="${!photoMap.isEmpty()}">
+            <c:set var="iterator" value="${photoMap.entrySet().iterator()}"/>
+            <c:forEach begin="1" end="${photoMap.size()}">
+                <div class="media text-muted pt-3 border-bottom border-gray" style="margin-right: -3px;">
+                    <c:set var="entry" value="${iterator.next()}"/>
+                    <img class="mr-3" src="data:image/jpg;base64,${entry.value}" width="700" height="450"
+                         style="position: static; left: 50px;">
+                </div>
+            </c:forEach>
+        </c:if>
+
+<%--        <c:choose>--%>
+<%--            <c:when test="${!photoMap.isEmpty()}">--%>
+<%--                <img class="mr-3" src="${pageContext.request.contextPath}/bootstrap/image/def_apartment.jpg" alt=""--%>
+<%--                     width="170" height="170">--%>
+<%--            </c:when>--%>
+<%--            <c:otherwise>--%>
+<%--                <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>--%>
+<%--                <img class="mr-3" src="data:image/jpg;base64,${entry.value}" width="850" height="500"--%>
+<%--                     style="position: static; left: 50px;">--%>
+<%--            </c:otherwise>--%>
+<%--        </c:choose>--%>
+
+        <div class="media text-muted pt-3 border-bottom border-gray" style="margin-right: -3px;">
+
+        </div>
+
         <small class="d-block text-right mt-3">
 
         </small>

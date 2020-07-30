@@ -154,7 +154,7 @@
                             </c:otherwise>
                         </c:choose>
 
-                        <p class="media-body pb-3 mb-0 small lh-125" style="min-width: 353px; max-width: 360px; width: 289px;">
+                        <p class="media-body pb-3 mb-0 small lh-125" style="min-width: 450px; max-width: 460px; width: 390px;">
                             <strong class="d-block text-gray-dark">
                                     ${ elem.getRegion() }, ${ elem.getCity() }, ${ elem.getAddress() }
                             </strong>
@@ -164,14 +164,14 @@
                             <c:choose>
                             <c:when test="${elem.getStatus() == registered}">
                                 <a href="http://localhost:8080/apartments_web_war/control?command=transition_to_estate_edit&apartmentId=${elem.getId()}"
-                                   class="btn btn-warning"><fmt:message key="estate.editButton"/></a>
+                                   class="btn btn-info"><fmt:message key="estate.editButton"/></a>
 <%--                                <form action="${pageContext.request.contextPath}/control" method="get">--%>
 <%--                                    <input type="hidden" name="command" value="transition_to_estate_edit"/>--%>
 <%--                                    <input type="hidden" name="apartmentId" value="${elem.getId()}">--%>
 <%--                                    <input type="submit" name="button" value="">--%>
 <%--                                </form>--%>
                                 <a href="http://localhost:8080/apartments_web_war/control?command=transition_to_new_ad&apartmentId=${elem.getId()}"
-                                   class="btn btn-primary"><fmt:message key="estate.newAdButton"/></a>
+                                   class="btn btn-success"><fmt:message key="estate.newAdButton"/></a>
 <%--                                <form action="${pageContext.request.contextPath}/control" method="get">--%>
 <%--                                    <input type="hidden" name="command" value="transition_to_new_ad"/>--%>
 <%--                                    <input type="hidden" name="apartmentId" value="${elem.getId()}">--%>
@@ -186,8 +186,8 @@
                                         <fmt:message key="estate.cantChangeMessage"/><br/>
                                     </c:when>
                                     <c:otherwise>
-                                        <a href="http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement_edit"
-                                           class="btn btn-warning"><fmt:message key="estate.editButton"/></a>
+                                        <a href="http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement_edit&apartmentId=${elem.getId()}&region=${elem.getRegion()}&city=${elem.getCity()}&address=${elem.getAddress()}&rooms=${elem.getRooms()}&floor=${elem.getFloor()}&square=${elem.getSquare()}&year=${elem.getYear()}&furniture=${elem.hasFurniture()}&description=${elem.getDescription()}"
+                                           class="btn btn-warning"><fmt:message key="estate.editAdvertisementButton"/></a>
 <%--                                        <form action="${pageContext.request.contextPath}/control" method="get">--%>
 <%--                                            <input type="hidden" name="command" value="transition_to_advertisement_edit"/>--%>
 <%--                                            <input type="hidden" name="apartmentId" value="${elem.getId()}">--%>

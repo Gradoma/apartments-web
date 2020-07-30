@@ -14,9 +14,103 @@
 <html>
 <head>
     <title>Edit estate</title>
+    <style>
+        body {font-family: Arial, Helvetica, sans-serif;}
+
+        /* Set a style for all buttons */
+        button {
+            background-color: #f44336;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+
+        .container {
+            padding: 16px;
+        }
+
+        span.psw {
+            float: right;
+            padding-top: 16px;
+        }
+
+        /* The Modal (background) */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 50%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            padding-top: 60px;
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        .close:hover,
+        .close:focus {
+            color: red;
+            cursor: pointer;
+        }
+
+        /* Add Zoom Animation */
+        .animate {
+            -webkit-animation: animatezoom 0.6s;
+            animation: animatezoom 0.6s
+        }
+
+        @-webkit-keyframes animatezoom {
+            from {-webkit-transform: scale(0)}
+            to {-webkit-transform: scale(1)}
+        }
+
+        @keyframes animatezoom {
+            from {transform: scale(0)}
+            to {transform: scale(1)}
+        }
+
+    </style>
 </head>
 <body>
 <c:import url="header.jsp"/>
+
+<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
+    <fmt:message key="estate.deleteButton"/>
+</button>
+<div id="id01" class="modal">
+
+    <form class="modal-content animate" action="${pageContext.request.contextPath}/control" method="get">
+        <input type="hidden" name="command" value="delete_apartment">
+        <input type="hidden" name="apartmentId" value="${apartment.getId()}">
+        <div class="imgcontainer">
+            <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+        </div>
+
+        <div class="container">
+            <p><fmt:message key="estate.deleteConfirmText"/><p>
+            <button type="submit" style=""><fmt:message key="estate.deleteButton"/></button>
+        </div>
+    </form>
+</div>
+
 <form name="update_apartment" action="${pageContext.request.contextPath}/control" method="get">
     <input type="hidden" name="command" value="edit_apartment">
 <%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
@@ -95,11 +189,13 @@
     <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>
     <input type="submit" name="button" value="<fmt:message key="setting.browseButton"/>">
 </form>
-<form name="${pageContext.request.contextPath}/delete_apartment" action="control" method="get">
-    <input type="hidden" name="command" value="delete_apartment">
-    <input type="hidden" name="apartmentId" value="${apartment.getId()}">
-    <input type="submit" name="button" value="<fmt:message key="estate.deleteButton"/>"/>
-</form>
+<%--<form name="${pageContext.request.contextPath}/delete_apartment" action="control" method="get">--%>
+<%--    <input type="hidden" name="command" value="delete_apartment">--%>
+<%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
+<%--    <input type="submit" name="button" value="<fmt:message key="estate.deleteButton"/>"/>--%>
+<%--</form>--%>
+
+
 <table>
     <c:forEach var="entryMap" items="${apartment.getUnmodifiablePhotoMap()}" varStatus="status">
         <c:set var="photoId" value="${entryMap.key}"/>
@@ -119,5 +215,18 @@
     </c:forEach>
 </table>
 <c:import url="footer.jsp"/>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById('id01');
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+</script>
 </body>
 </html>
