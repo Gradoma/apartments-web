@@ -9,6 +9,8 @@ public class MailConstructor {
     private static final String BAN_TEXT_1 = "<b>Dear ";
     private static final String BAN_TEXT_2 = "<br><p>Your </p>";
     private static final String BAN_TEXT_3 = " was banned </p>";
+    private static final String NEW_USER_EMAIL_TEXT = "<b>Thanks for registration!</b><br><p>Please confirm your email address - click the link below</p>";
+    private static final String NEW_USER_EMAIL_LINK = "<a href=http://localhost:8080/apartments_web_war/control?command=confirm_email&login=";
 
     public static String newAdminMail(String loginParameter, String passwordParameter){
         StringBuilder builder = new StringBuilder();
@@ -39,6 +41,16 @@ public class MailConstructor {
         builder.append(description);
         builder.append(")");
         builder.append(BAN_TEXT_3);
+        return builder.toString();
+    }
+
+    public static String newUserMail(String loginParameter){
+        StringBuilder builder = new StringBuilder();
+        builder.append(NEW_USER_EMAIL_TEXT);
+        builder.append("<br>");
+        builder.append(NEW_USER_EMAIL_LINK);
+        builder.append(loginParameter);
+        builder.append(">Confirm your email</a>");
         return builder.toString();
     }
 }

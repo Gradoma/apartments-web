@@ -3,6 +3,7 @@ package by.gradomski.apartments.command.impl;
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.exception.ServiceException;
+import by.gradomski.apartments.mail.MailConstructor;
 import by.gradomski.apartments.mail.MailSender;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -40,7 +41,7 @@ public class SignUpCommand implements Command {
             Map<String, String> registrationResult = userService.signUp(login, password, email);
             if (!registrationResult.containsValue(FALSE)) {
                 page = SIGN_IN;
-                String emailBody = emailBodyCreator(login);
+                String emailBody = MailConstructor.newUserMail(login);
                 MailSender sender = new MailSender(email, EMAIL_SUBJECT, emailBody);
                 sender.send();
             } else {
@@ -83,15 +84,5 @@ public class SignUpCommand implements Command {
                 .findFirst();
 
         return optionalResult.get();
-    }
-
-    private String emailBodyCreator(String loginParameter){
-        StringBuilder builder = new StringBuilder();
-        builder.append(EMAIL_TEXT);
-        builder.append("<br>");
-        builder.append(EMAIL_LINK);
-        builder.append(loginParameter);
-        builder.append(">Confirm your email</a>");
-        return builder.toString();
     }
 }

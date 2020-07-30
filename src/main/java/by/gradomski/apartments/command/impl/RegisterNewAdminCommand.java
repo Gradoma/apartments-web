@@ -3,6 +3,7 @@ package by.gradomski.apartments.command.impl;
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.exception.ServiceException;
+import by.gradomski.apartments.mail.MailConstructor;
 import by.gradomski.apartments.mail.MailSender;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -22,9 +23,6 @@ public class RegisterNewAdminCommand implements Command {
     private static final String EMAIL = "email";
     private static final String FALSE = "false";
     private static final String EMAIL_SUBJECT = "Confirm your account!";
-    private static final String EMAIL_TEXT_1 = "<b>Welcome</b><br><p>Your account parameters: </p><br>";
-    private static final String EMAIL_TEXT_2 = "<p>To complete your registration - click the link below</p>";
-    private static final String EMAIL_LINK = "<a href=http://localhost:8080/apartments_web_war/control?command=confirm_email&login=";
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -39,7 +37,7 @@ public class RegisterNewAdminCommand implements Command {
                     .createNewAdmin(login, password, email);
             if (!registrationResult.containsValue(FALSE)) {
                 page = ADMIN_USERS;
-                String emailBody = emailBodyCreator(login, password, email);
+                String emailBody = MailConstructor.newAdminMail(login, password);
                 MailSender sender = new MailSender(email, EMAIL_SUBJECT, emailBody);
                 sender.send();
             } else {
@@ -81,24 +79,5 @@ public class RegisterNewAdminCommand implements Command {
                 .findFirst();
 
         return optionalResult.get();
-    }
-
-    private String emailBodyCreator(String loginParameter, String passwordParameter, String emailParameter){
-        StringBuilder builder = new StringBuilder();
-        builder.append(EMAIL_TEXT_1);
-        builder.append(LOGIN);
-        builder.append(": ");
-        builder.append(loginParameter);
-        builder.append("<br>");
-        builder.append(PASSWORD);
-        builder.append(": ");
-        builder.append(passwordParameter);
-        builder.append("<br>");
-        builder.append(EMAIL_TEXT_2);
-        builder.append("<br>");
-        builder.append(EMAIL_LINK);
-        builder.append(loginParameter);
-        builder.append(">Confirm your email</a>");
-        return builder.toString();
     }
 }
