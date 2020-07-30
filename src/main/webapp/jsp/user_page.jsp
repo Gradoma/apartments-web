@@ -95,6 +95,7 @@
 <%--</div>--%>
 <%--<c:import url="footer.jsp"/>--%>
 <%--</body>--%>
+<%--</html>--%>
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">

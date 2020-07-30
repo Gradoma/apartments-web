@@ -97,7 +97,7 @@
 </button>
 <div id="id01" class="modal">
 
-    <form class="modal-content animate" action="${pageContext.request.contextPath}/control" method="get">
+    <form class="modal-content animate" action="${pageContext.request.contextPath}/control" method="post">
         <input type="hidden" name="command" value="delete_apartment">
         <input type="hidden" name="apartmentId" value="${apartment.getId()}">
         <div class="imgcontainer">
@@ -105,7 +105,7 @@
         </div>
 
         <div class="container">
-            <p><fmt:message key="estate.deleteConfirmText"/><p>
+            <p><fmt:message key="estate.deleteConfirmText"/></p>
             <button type="submit" style=""><fmt:message key="estate.deleteButton"/></button>
         </div>
     </form>

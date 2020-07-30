@@ -71,7 +71,7 @@
                     <c:set var="owner" value="${apartment.getOwner()}"/>
                     <c:choose>
                         <c:when test="${user.getId() == owner.getId()}">
-                            <b><fmt:message key="advertisement.authorMessage"/></b><br/>
+                            <b style="color: #005cbf"><br/><fmt:message key="advertisement.authorMessage"/></b><br/>
                             <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_estate><fmt:message key="advertisement.linkToEstate"/> </a>
                         </c:when>
                         <c:otherwise>
@@ -81,7 +81,7 @@
                             <fmt:message key="setting.birthday"/> : ${owner.getBirthday()}<br/>
                             <c:choose>
                                 <c:when test="${wasCreated == 'true'}">
-                                    <b><fmt:message key="advertisement.wasCreatedMessage"/></b>
+                                    <b style="color: #3e8e41"><br/><fmt:message key="advertisement.wasCreatedMessage"/></b>
                                     <form action="${pageContext.request.contextPath}/control" method="get">
                                         <input type="hidden" name="command" value="transition_to_my_rent"/>
                                         <input type="submit" name="button" value="<fmt:message key="main.myRequestsButton"/>">
@@ -98,7 +98,7 @@
                                             </form>
                                         </c:when>
                                         <c:otherwise>
-                                            <b><fmt:message key="advertisement.archivedMessage"/></b><br/>
+                                            <b><br/><fmt:message key="advertisement.archivedMessage"/></b><br/>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:otherwise>
