@@ -2,11 +2,9 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Ad;
-import by.gradomski.apartments.entity.Apartment;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
-import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +22,7 @@ public class AdminToAdvertisementListCommand implements Command {
         Router router = new Router();
         String page;
         try{
-            List<Ad> allAdvertisements = AdServiceImpl.getInstance().getAll();
+            List<Advertisement> allAdvertisements = AdServiceImpl.getInstance().getAll();
             request.setAttribute(ADVERTISEMENT_LIST, allAdvertisements);
             page = ADMIN_ADVERTISEMENTS;
         } catch (ServiceException e){

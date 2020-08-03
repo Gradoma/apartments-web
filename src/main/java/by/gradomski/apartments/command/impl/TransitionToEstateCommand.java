@@ -3,12 +3,12 @@ package by.gradomski.apartments.command.impl;
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Apartment;
-import by.gradomski.apartments.entity.Request;
-import by.gradomski.apartments.entity.RequestStatus;
+import by.gradomski.apartments.entity.Demand;
+import by.gradomski.apartments.entity.DemandStatus;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.service.impl.DemandServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,7 +26,7 @@ public class TransitionToEstateCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String USER = "user";
     private static final String APARTMENT_LIST = "apartmentList";
-    private static final String REQUEST_MAP = "requestMap";
+    private static final String DEMAND_MAP = "demandMap";
     private static final String DEMAND_COUNTS = "demandCounts";
 
     @Override
@@ -48,14 +48,14 @@ public class TransitionToEstateCommand implements Command {
                     Map<Long, Boolean> requestMap = new HashMap<>();
                     for(Apartment apartment : apartmentList){
                         long apartmentId = apartment.getId();
-                        List<Request> apartmentRequestList = RequestServiceImpl.getInstance()
-                                .getActiveRequestsByApartmentId(apartmentId);
-                        request.setAttribute(DEMAND_COUNTS, apartmentRequestList.size());
-                        if(containsApproved(apartmentRequestList)){
+                        List<Demand> apartmentDemandList = DemandServiceImpl.getInstance()
+                                .getActiveDemandsByApartmentId(apartmentId);
+                        request.setAttribute(DEMAND_COUNTS, apartmentDemandList.size());
+                        if(containsApproved(apartmentDemandList)){
                             requestMap.put(apartmentId, true);
                         }
                     }
-                    request.setAttribute(REQUEST_MAP, requestMap);
+                    request.setAttribute(DEMAND_MAP, requestMap);
                 }
                 request.setAttribute(APARTMENT_LIST, apartmentList);
                 page = ESTATE;
@@ -68,9 +68,9 @@ public class TransitionToEstateCommand implements Command {
         return router;
     }
 
-    private boolean containsApproved(List<Request> requestList){
-        Optional<Request> optionalRequest = requestList.stream()
-                .filter(request -> request.getStatus()== RequestStatus.APPROVED)
+    private boolean containsApproved(List<Demand> demandList){
+        Optional<Demand> optionalRequest = demandList.stream()
+                .filter(request -> request.getStatus()== DemandStatus.APPROVED)
                 .findAny();
         return optionalRequest.isPresent();
     }

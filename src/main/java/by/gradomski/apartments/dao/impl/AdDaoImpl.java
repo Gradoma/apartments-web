@@ -2,7 +2,7 @@ package by.gradomski.apartments.dao.impl;
 
 import by.gradomski.apartments.dao.AdDao;
 import by.gradomski.apartments.dao.column.AdTable;
-import by.gradomski.apartments.entity.Ad;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.pool.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
@@ -43,7 +43,7 @@ public class AdDaoImpl implements AdDao {
     }
 
     @Override
-    public long add(Ad ad) throws DaoException{
+    public long add(Advertisement advertisement) throws DaoException{
         long key = -1;
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -53,11 +53,11 @@ public class AdDaoImpl implements AdDao {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(INSERT_NEW_AD, Statement.RETURN_GENERATED_KEYS);
-            statement.setString(1, ad.getTitle());
-            statement.setBigDecimal(2, ad.getPrice());
-            statement.setLong(3, ad.getAuthorId());
-            statement.setLong(4, ad.getApartmentId());
-            Instant instant = ad.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
+            statement.setString(1, advertisement.getTitle());
+            statement.setBigDecimal(2, advertisement.getPrice());
+            statement.setLong(3, advertisement.getAuthorId());
+            statement.setLong(4, advertisement.getApartmentId());
+            Instant instant = advertisement.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
             long creationMillis = instant.toEpochMilli();
             statement.setLong(5, creationMillis);
             statement.executeUpdate();
@@ -75,34 +75,34 @@ public class AdDaoImpl implements AdDao {
     }
 
     @Override
-    public Optional<Ad> findById(long id) throws DaoException {
+    public Optional<Advertisement> findById(long id) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
-        Optional<Ad> optionalAd = Optional.empty();
+        Optional<Advertisement> optionalAd = Optional.empty();
         try{
             statement = connection.prepareStatement(SELECT_AD_BY_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
-            Ad ad = null;
+            Advertisement advertisement = null;
             while (resultSet.next()){
                 String title = resultSet.getString(AdTable.TITLE);
                 BigDecimal price = new BigDecimal(resultSet.getString(AdTable.PRICE));
                 long apartmentId = resultSet.getLong(AdTable.ID_APARTMENT);
                 long authorId = resultSet.getLong(AdTable.ID_AUTHOR);
-                ad = new Ad(title, authorId, price, apartmentId);
-                ad.setId(id);
+                advertisement = new Advertisement(title, authorId, price, apartmentId);
+                advertisement.setId(id);
                 long creationMillis = resultSet.getLong(AdTable.ISSUE_DATE);
                 LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).
                         toLocalDateTime();
-                ad.setCreationDate(creationDate);
-                ad.setVisibility(resultSet.getBoolean(AdTable.VISIBILITY));
+                advertisement.setCreationDate(creationDate);
+                advertisement.setVisibility(resultSet.getBoolean(AdTable.VISIBILITY));
             }
-            if(ad != null){
-                optionalAd = Optional.of(ad);
+            if(advertisement != null){
+                optionalAd = Optional.of(advertisement);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -114,8 +114,8 @@ public class AdDaoImpl implements AdDao {
     }
 
     @Override
-    public List<Ad> findAll() throws DaoException{
-        List<Ad> listAd = new ArrayList<>();
+    public List<Advertisement> findAll() throws DaoException{
+        List<Advertisement> listAdvertisement = new ArrayList<>();
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -130,14 +130,14 @@ public class AdDaoImpl implements AdDao {
                 long authorId = resultSet.getLong(AdTable.ID_AUTHOR);
                 BigDecimal price = new BigDecimal(resultSet.getString(AdTable.PRICE));
                 long apartmentId = resultSet.getLong(AdTable.ID_APARTMENT);
-                Ad ad = new Ad(title, authorId, price, apartmentId);
-                ad.setId(resultSet.getLong(AdTable.ID_AD));
+                Advertisement advertisement = new Advertisement(title, authorId, price, apartmentId);
+                advertisement.setId(resultSet.getLong(AdTable.ID_AD));
                 long creationMillis = resultSet.getLong(AdTable.ISSUE_DATE);
                 LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).
                         toLocalDateTime();
-                ad.setCreationDate(creationDate);
-                ad.setVisibility(resultSet.getBoolean(AdTable.VISIBILITY));
-                listAd.add(ad);
+                advertisement.setCreationDate(creationDate);
+                advertisement.setVisibility(resultSet.getBoolean(AdTable.VISIBILITY));
+                listAdvertisement.add(advertisement);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -145,12 +145,12 @@ public class AdDaoImpl implements AdDao {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return listAd;
+        return listAdvertisement;
     }
 
     @Override
-    public List<Ad> findAllVisible() throws DaoException {
-        List<Ad> listAd = new ArrayList<>();
+    public List<Advertisement> findAllVisible() throws DaoException {
+        List<Advertisement> listAdvertisement = new ArrayList<>();
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -165,14 +165,14 @@ public class AdDaoImpl implements AdDao {
                 long authorId = resultSet.getLong(AdTable.ID_AUTHOR);
                 BigDecimal price = new BigDecimal(resultSet.getString(AdTable.PRICE));
                 long apartmentId = resultSet.getLong(AdTable.ID_APARTMENT);
-                Ad ad = new Ad(title, authorId, price, apartmentId);
-                ad.setId(resultSet.getLong(AdTable.ID_AD));
+                Advertisement advertisement = new Advertisement(title, authorId, price, apartmentId);
+                advertisement.setId(resultSet.getLong(AdTable.ID_AD));
                 long creationMillis = resultSet.getLong(AdTable.ISSUE_DATE);
                 LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).
                         toLocalDateTime();
-                ad.setCreationDate(creationDate);
-                ad.setVisibility(true);
-                listAd.add(ad);
+                advertisement.setCreationDate(creationDate);
+                advertisement.setVisibility(true);
+                listAdvertisement.add(advertisement);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -180,43 +180,43 @@ public class AdDaoImpl implements AdDao {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return listAd;
+        return listAdvertisement;
     }
 
     @Override
-    public List<Ad> findByAuthor(long id) {
+    public List<Advertisement> findByAuthor(long id) {
         return null;
     }
 
     @Override
-    public Optional<Ad> findByApartmentId(long id) throws DaoException {
+    public Optional<Advertisement> findByApartmentId(long id) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
-        Optional<Ad> optionalAd = Optional.empty();
+        Optional<Advertisement> optionalAd = Optional.empty();
         try{
             statement = connection.prepareStatement(SELECT_AD_BY_APARTMENT_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
-            Ad ad = null;
+            Advertisement advertisement = null;
             while (resultSet.next()){
-                ad = new Ad();
-                ad.setId(resultSet.getLong(AdTable.ID_AD));
-                ad.setTitle(resultSet.getString(AdTable.TITLE));
+                advertisement = new Advertisement();
+                advertisement.setId(resultSet.getLong(AdTable.ID_AD));
+                advertisement.setTitle(resultSet.getString(AdTable.TITLE));
                 BigDecimal price = new BigDecimal(resultSet.getString(AdTable.PRICE));
-                ad.setPrice(price);
-                ad.setApartmentId(id);
+                advertisement.setPrice(price);
+                advertisement.setApartmentId(id);
                 long creationMillis = resultSet.getLong(AdTable.ISSUE_DATE);
                 LocalDateTime creationDate = Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).
                         toLocalDateTime();
-                ad.setCreationDate(creationDate);
-                ad.setVisibility(resultSet.getBoolean(AdTable.VISIBILITY));
+                advertisement.setCreationDate(creationDate);
+                advertisement.setVisibility(resultSet.getBoolean(AdTable.VISIBILITY));
             }
-            if(ad != null){
-                optionalAd = Optional.of(ad);
+            if(advertisement != null){
+                optionalAd = Optional.of(advertisement);
             }
         } catch (SQLException e) {
             throw new DaoException(e);
@@ -228,7 +228,7 @@ public class AdDaoImpl implements AdDao {
     }
 
     @Override
-    public boolean update(Ad ad) throws DaoException{
+    public boolean update(Advertisement advertisement) throws DaoException{
         boolean result = false;
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -238,10 +238,10 @@ public class AdDaoImpl implements AdDao {
         PreparedStatement statement = null;
         try{
             statement = connection.prepareStatement(UPDATE_AD_BY_ID);
-            statement.setString(1, ad.getTitle());
-            statement.setBigDecimal(2, ad.getPrice());
-            statement.setBoolean(3, ad.isVisible());
-            statement.setLong(4, ad.getId());
+            statement.setString(1, advertisement.getTitle());
+            statement.setBigDecimal(2, advertisement.getPrice());
+            statement.setBoolean(3, advertisement.isVisible());
+            statement.setLong(4, advertisement.getId());
             int rows = statement.executeUpdate();
             if(rows != 0){
                 result = true;

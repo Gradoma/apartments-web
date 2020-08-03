@@ -2,11 +2,9 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Apartment;
-import by.gradomski.apartments.entity.Request;
+import by.gradomski.apartments.entity.Demand;
 import by.gradomski.apartments.exception.ServiceException;
-import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.service.impl.DemandServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +22,7 @@ public class AdminToDemandListCommand implements Command {
         Router router = new Router();
         String page;
         try{
-            List<Request> allDemands = RequestServiceImpl.getInstance().getAll();
+            List<Demand> allDemands = DemandServiceImpl.getInstance().getAll();
             request.setAttribute(DEMAND_LIST, allDemands);
             page = ADMIN_DEMANDS;
         } catch (ServiceException e){

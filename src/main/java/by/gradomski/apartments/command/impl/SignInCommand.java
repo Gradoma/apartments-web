@@ -3,7 +3,7 @@ package by.gradomski.apartments.command.impl;
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.command.PagePath;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Ad;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.Role;
 import by.gradomski.apartments.entity.User;
@@ -50,9 +50,9 @@ public class SignInCommand implements Command {
                     if(session != null){
                         Long advertisementId = (Long) session.getAttribute(ADVERTISEMENT_ID);
                         if(advertisementId != null){
-                            Ad ad = AdServiceImpl.getInstance().getAdById(advertisementId);
-                            session.setAttribute(ADVERTISEMENT, ad);      //todo as tmp atr
-                            long apartmentId = ad.getApartmentId();
+                            Advertisement advertisement = AdServiceImpl.getInstance().getAdById(advertisementId);
+                            session.setAttribute(ADVERTISEMENT, advertisement);      //todo as tmp atr
+                            long apartmentId = advertisement.getApartmentId();
                             Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
                             session.setAttribute(APARTMENT, apartment);      //todo as tmp atr
                             page = PagePath.ADVERTISEMENT;

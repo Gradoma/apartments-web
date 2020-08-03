@@ -41,15 +41,16 @@
         <input type="submit" name="button" value="<fmt:message key="setting.browseButton"/>">
     </form>
     <form name="Simple" action="${pageContext.request.contextPath}/control" method="post">
+        <small><fmt:message key="message.required"/> </small><br/>
         <input type="hidden" name="command" value="update_user"/>
         <input type="hidden" name="login" value="${user.getLoginName()}"/>
-        <fmt:message key="setting.firstName"/> : <input required name="firstName" value="${user.getFirstName()}" pattern="^[а-яА-я-]{1,45}$"><br/>
+        <fmt:message key="setting.firstName"/>* : <input required name="firstName" value="${user.getFirstName()}" pattern="^[а-яА-я-]{1,45}$"><br/>
         <c:choose>
             <c:when test="${firstNameError eq true}">
                 <fmt:message key="setting.firstNameErrorMessage"/>
             </c:when>
         </c:choose>
-        <fmt:message key="setting.lastName"/> : <input required name="lastName" value="${user.getLastName()}" pattern="^[а-яА-я-]{1,45}$"><br/>
+        <fmt:message key="setting.lastName"/>* : <input required name="lastName" value="${user.getLastName()}" pattern="^[а-яА-я-]{1,45}$"><br/>
         <c:choose>
             <c:when test="${lastNameError eq true}">
                 <fmt:message key="setting.lastNameErrorMessage"/>

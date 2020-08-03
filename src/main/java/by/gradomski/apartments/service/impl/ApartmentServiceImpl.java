@@ -3,7 +3,7 @@ package by.gradomski.apartments.service.impl;
 import by.gradomski.apartments.dao.impl.ApartmentDaoImpl;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.ApartmentStatus;
-import by.gradomski.apartments.entity.Request;
+import by.gradomski.apartments.entity.Demand;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
@@ -231,11 +231,11 @@ public class ApartmentServiceImpl implements ApartmentService {
                     }
                     break;
                 case IN_DEMAND:
-                    List<Request> requestList = RequestServiceImpl.getInstance().getActiveRequestsByApartmentId(id);
-                    for(Request request : requestList){
-                        boolean refusingResult = RequestServiceImpl.getInstance().refuseRequest(request.getId());
+                    List<Demand> demandList = DemandServiceImpl.getInstance().getActiveDemandsByApartmentId(id);
+                    for(Demand demand : demandList){
+                        boolean refusingResult = DemandServiceImpl.getInstance().refuseDemand(demand.getId());
                         if(!refusingResult){
-                            log.error("can't refuse demand: id=" + request.getId());
+                            log.error("can't refuse demand: id=" + demand.getId());
                         }
                     }
                     flag = true;

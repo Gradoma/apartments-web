@@ -11,7 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import static by.gradomski.apartments.command.PagePath.*;
 
-public class TransitionToNewRequestCommand implements Command {
+public class TransitionToNewDemandCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String USER = "user";
     private static final String APARTMENT_ID = "apartmentId";
@@ -37,7 +37,7 @@ public class TransitionToNewRequestCommand implements Command {
                 page = ERROR_PAGE;
             }
         } else {
-            page = NEW_REQUEST;
+            page = NEW_DEMAND;
         }
         router.setPage(page);
         return router;

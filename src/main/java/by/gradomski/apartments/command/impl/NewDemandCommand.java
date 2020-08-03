@@ -2,23 +2,21 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Request;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
-import by.gradomski.apartments.validator.RequestValidator;
+import by.gradomski.apartments.service.impl.DemandServiceImpl;
+import by.gradomski.apartments.validator.DemandValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.Optional;
 
 import static by.gradomski.apartments.command.PagePath.*;
 
-public class NewRequestCommand implements Command {
+public class NewDemandCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String USER = "user";
     private static final String APARTMENT_ID = "apartmentId";
@@ -36,15 +34,15 @@ public class NewRequestCommand implements Command {
         String apartmentIdString = (String) session.getAttribute(APARTMENT_ID);
         String expectedDateString = request.getParameter(EXPECTED_DATE);
         String description = request.getParameter(DESCRIPTION);
-        Map<String, String> validationResult = RequestValidator.isValid(expectedDateString, description);
+        Map<String, String> validationResult = DemandValidator.isValid(expectedDateString, description);
         try{
             if(!validationResult.containsValue(FALSE)) {
-                boolean result = RequestServiceImpl.getInstance().addRequest(currentUser, apartmentIdString,
+                boolean result = DemandServiceImpl.getInstance().addDemand(currentUser, apartmentIdString,
                         expectedDateString, description);
                 if (!result) {
                     router.setForward();
                     request.setAttribute("error", true);
-                    page = NEW_REQUEST;
+                    page = NEW_DEMAND;
                 } else {
                     session.removeAttribute(APARTMENT_ID);
                     page = USER_PAGE;
@@ -61,7 +59,7 @@ public class NewRequestCommand implements Command {
                         request.setAttribute("descriptionError",true);
                         break;
                 }
-                page = NEW_REQUEST;
+                page = NEW_DEMAND;
             }
         } catch (ServiceException e){
             log.error(e);

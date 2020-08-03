@@ -3,18 +3,16 @@ package by.gradomski.apartments.command.impl;
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Apartment;
-import by.gradomski.apartments.entity.Request;
+import by.gradomski.apartments.entity.Demand;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
-import by.gradomski.apartments.service.ApartmentService;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.service.impl.DemandServiceImpl;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 import static by.gradomski.apartments.command.PagePath.*;
 
@@ -32,7 +30,7 @@ public class AdminToDemandProfileCommand implements Command {
         String demandIdString = request.getParameter(ID);
         long demandId = Long.parseLong(demandIdString);
         try{
-            Request demand = RequestServiceImpl.getInstance().getRequestById(demandId);
+            Demand demand = DemandServiceImpl.getInstance().getDemandById(demandId);
             request.setAttribute(DEMAND, demand);
             long apartmentId = demand.getApartmentId();
             Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);

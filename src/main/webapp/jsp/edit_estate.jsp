@@ -112,30 +112,31 @@
 </div>
 
 <form name="update_apartment" action="${pageContext.request.contextPath}/control" method="get">
+    <small><fmt:message key="message.required"/> </small><br/>
     <input type="hidden" name="command" value="edit_apartment">
 <%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
-    <fmt:message key="newEstate.region"/> : <input required name="region" value="${apartment.getRegion()}"
+    <fmt:message key="newEstate.region"/>* : <input required name="region" value="${apartment.getRegion()}"
                                                    pattern="^[а-яА-я-.\s]{1,45}$"><br/>
     <c:choose>
         <c:when test="${regionError eq true}">
             <fmt:message key="estate.regionErrorMessage"/><br/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.city"/> : <input required name="city" value="${apartment.getCity()}"
+    <fmt:message key="newEstate.city"/>* : <input required name="city" value="${apartment.getCity()}"
                                                  pattern="^[а-яА-я-.\s]{1,45}$"><br/>
     <c:choose>
         <c:when test="${cityError eq true}">
             <fmt:message key="estate.cityErrorMessage"/><br/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.address"/> : <input required name="address" value="${apartment.getAddress()}"
+    <fmt:message key="newEstate.address"/>* : <input required name="address" value="${apartment.getAddress()}"
                                                     pattern="^.{1,45}$"><br/>
     <c:choose>
         <c:when test="${addressError eq true}">
             <fmt:message key="estate.addressErrorMessage"/><br/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.rooms"/> : <input required type="number" name="rooms" value="${apartment.getRooms()}"
+    <fmt:message key="newEstate.rooms"/>* : <input required type="number" name="rooms" value="${apartment.getRooms()}"
                                                   pattern="\p{Digit}{1,2}"><br/>
     <c:choose>
         <c:when test="${roomsError eq true}">
@@ -189,7 +190,7 @@
     <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>
     <input type="submit" name="button" value="<fmt:message key="setting.browseButton"/>">
 </form>
-<%--<form name="${pageContext.request.contextPath}/delete_apartment" action="control" method="get">--%>
+<%--<form name="${pageContext.demand.contextPath}/delete_apartment" action="control" method="get">--%>
 <%--    <input type="hidden" name="command" value="delete_apartment">--%>
 <%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
 <%--    <input type="submit" name="button" value="<fmt:message key="estate.deleteButton"/>"/>--%>

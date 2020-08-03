@@ -2,7 +2,7 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Ad;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
@@ -31,17 +31,17 @@ public class TransitionFromIndexCommand implements Command {
         Router router = new Router();
         String page;
         try{
-            List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
-            int pages = PageCounter.countPages(adList);
+            List<Advertisement> advertisementList = AdServiceImpl.getInstance().getAllVisible();
+            int pages = PageCounter.countPages(advertisementList);
             request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
             Map<Long, Apartment> apartmentMap = new HashMap<>();
-            for(Ad advetisement : adList){
+            for(Advertisement advetisement : advertisementList){
                 long apartmentId = advetisement.getApartmentId();
                 Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
                 apartmentMap.put(advetisement.getId(), apartment);
             }
             request.getServletContext().setAttribute(APARTMENT_MAP, apartmentMap);
-            request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
+            request.getServletContext().setAttribute(ADVERTISEMENT_LIST, advertisementList);
             page = SIGN_IN;
         } catch (ServiceException e){
             log.error(e);

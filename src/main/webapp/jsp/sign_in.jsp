@@ -21,7 +21,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Offcanvas template for Bootstrap</title>
+    <title>Apartment project</title>
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -117,9 +117,9 @@
 
 <%--        <div class="media text-muted pt-3 border-bottom border-gray" style=""><img class="mr-3" src="https://getbootstrap.com/assets/brand/bootstrap-outline.svg" alt="" width="250" height="170">--%>
 
-            <c:forEach var="ad" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"
+            <c:forEach var="advertisement" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"
                        end="${ not empty lastAdvertisement ? lastAdvertisement : 4}">
-                <c:set var="apartment" value="${apartmentMap[ad.getId()]}"/>
+                <c:set var="apartment" value="${apartmentMap[advertisement.getId()]}"/>
                 <c:set var="photoMap" value="${apartment.getUnmodifiablePhotoMap()}"/>
                 <div class="media text-muted pt-3 border-bottom border-gray" style="">
                     <c:choose>
@@ -134,12 +134,12 @@
                     </c:choose>
                     <p class="media-body pb-3 mb-0 small lh-125" style="width: 322px;">
                         <strong class="d-block text-gray-dark">
-                            <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${ad.getId()}>${ad.getTitle()}</a>
+                            <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${advertisement.getId()}>${advertisement.getTitle()}</a>
                         </strong>
                             ${apartment.getAddress()}, ${apartment.getRegion()}, ${apartment.getCity()} <br/>
-                        <small><ctg:dateTime dateTimeValue="${ad.getCreationDate()}"/></small>
+                        <small><ctg:dateTime dateTimeValue="${advertisement.getCreationDate()}"/></small>
                     </p>
-                    <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">${ad.getPrice()} <fmt:message key="advertisement.currency"/> </p>
+                    <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">${advertisement.getPrice()} <fmt:message key="advertisement.currency"/> </p>
                 </div>
 <%--        <div class="media text-muted pt-3 border-bottom border-gray" style="">--%>
             </c:forEach>

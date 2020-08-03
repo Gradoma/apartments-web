@@ -36,20 +36,20 @@
 <%--<c:import url="header.jsp"/>--%>
 <%--<img src="data:image/jpg;base64,${user.getPhotoBase64()}" width="100" height="100">--%>
 <%--<h3>${user.getFirstName()} ${user.getLastName()}</h3><br/>--%>
-<%--<form name="Simple" action="${pageContext.request.contextPath}/control" method="get">--%>
+<%--<form name="Simple" action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--    <input type="hidden" name="command" value="transition_to_settings"/>--%>
 <%--    <input type="hidden" name="login" value="${user.getLoginName()}"/>--%>
 <%--    <input type="submit" name="button" value=<fmt:message key="main.settingsButton"/>>--%>
 <%--</form>--%>
-<%--<form action="${pageContext.request.contextPath}/control" method="get">--%>
+<%--<form action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--    <input type="hidden" name="command" value="transition_to_estate"/>--%>
 <%--    <input type="submit" name="button" value="<fmt:message key="main.estateButton"/>">--%>
 <%--</form>--%>
-<%--<form action="${pageContext.request.contextPath}/control" method="get">--%>
+<%--<form action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--    <input type="hidden" name="command" value="transition_to_my_rent"/>--%>
-<%--    <input type="submit" name="button" value="<fmt:message key="main.myRequestsButton"/>">--%>
+<%--    <input type="submit" name="button" value="<fmt:message key="main.myRentButton"/>">--%>
 <%--</form>--%>
-<%--<form action="${pageContext.request.contextPath}/control" method="get">--%>
+<%--<form action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--    <input type="hidden" name="command" value="log_out"/>--%>
 <%--    <input type="submit" name="button" value="<fmt:message key="main.logoutButton"/>">--%>
 <%--</form>--%>
@@ -59,9 +59,9 @@
 <%--    </c:forEach>--%>
 <%--</div><br/>--%>
 <%--<table>--%>
-<%--    <c:forEach var="ad" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"--%>
+<%--    <c:forEach var="advertisement" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"--%>
 <%--               end="${ not empty lastAdvertisement ? lastAdvertisement : 4}">--%>
-<%--        <c:set var="apartment" value="${apartmentMap[ad.getId()]}"/>--%>
+<%--        <c:set var="apartment" value="${apartmentMap[advertisement.getId()]}"/>--%>
 <%--        <c:set var="photoMap" value="${apartment.getUnmodifiablePhotoMap()}"/>--%>
 <%--        <tr>--%>
 <%--            <td>--%>
@@ -76,15 +76,15 @@
 <%--            </c:choose>--%>
 <%--            </td>--%>
 <%--            <td>--%>
-<%--                <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${ad.getId()}>${ad.getTitle()}</a><br/>--%>
+<%--                <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${advertisement.getId()}>${advertisement.getTitle()}</a><br/>--%>
 <%--                <strong>${apartment.getAddress()}</strong><br/>--%>
 <%--                ${apartment.getRegion()}, ${apartment.getCity()}--%>
 <%--            </td>--%>
-<%--            <td><c:out value="${ad.getPrice() }" /></td>--%>
+<%--            <td><c:out value="${advertisement.getPrice() }" /></td>--%>
 <%--        </tr>--%>
 <%--        <tr>--%>
-<%--            <td><small><ctg:dateTime dateTimeValue="${ad.getCreationDate()}"/></small></td>--%>
-<%--&lt;%&ndash;            <td><small><c:out value="${ad.getCreationDate() }" /></small></td>&ndash;%&gt;--%>
+<%--            <td><small><ctg:dateTime dateTimeValue="${advertisement.getCreationDate()}"/></small></td>--%>
+<%--&lt;%&ndash;            <td><small><c:out value="${advertisement.getCreationDate() }" /></small></td>&ndash;%&gt;--%>
 <%--        </tr>--%>
 <%--    </c:forEach>--%>
 <%--</table><br/>--%>
@@ -146,9 +146,9 @@
 
         <%--        <div class="media text-muted pt-3 border-bottom border-gray" style=""><img class="mr-3" src="https://getbootstrap.com/assets/brand/bootstrap-outline.svg" alt="" width="250" height="170">--%>
 
-        <c:forEach var="ad" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"
+        <c:forEach var="advertisement" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"
                    end="${ not empty lastAdvertisement ? lastAdvertisement : 4}">
-            <c:set var="apartment" value="${apartmentMap[ad.getId()]}"/>
+            <c:set var="apartment" value="${apartmentMap[advertisement.getId()]}"/>
             <c:set var="photoMap" value="${apartment.getUnmodifiablePhotoMap()}"/>
             <div class="media text-muted pt-3 border-bottom border-gray" style="">
                 <c:choose>
@@ -163,12 +163,12 @@
                 </c:choose>
                 <p class="media-body pb-3 mb-0 small lh-125" style="width: 322px;">
                     <strong class="d-block text-gray-dark">
-                        <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${ad.getId()}>${ad.getTitle()}</a>
+                        <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${advertisement.getId()}>${advertisement.getTitle()}</a>
                     </strong>
                         ${apartment.getAddress()}, ${apartment.getRegion()}, ${apartment.getCity()} <br/>
-                    <small><ctg:dateTime dateTimeValue="${ad.getCreationDate()}"/></small>
+                    <small><ctg:dateTime dateTimeValue="${advertisement.getCreationDate()}"/></small>
                 </p>
-                <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">${ad.getPrice()}</p>
+                <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">${advertisement.getPrice()}</p>
             </div>
             <%--        <div class="media text-muted pt-3 border-bottom border-gray" style="">--%>
         </c:forEach>

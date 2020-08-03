@@ -83,7 +83,7 @@
                                 </strong>
                             </c:when>
                             <c:when test="${elem.getStatus() == demand}">
-                                <c:set var="contains" value="${requestMap[apartmentId]}"/>
+                                <c:set var="contains" value="${demandMap[apartmentId]}"/>
                                 <h6><fmt:message key="estate.demandMessage"/></h6><br/>
                                 <c:choose>
                                     <c:when test="${contains eq true}">
@@ -100,7 +100,7 @@
                                     </c:otherwise>
                                 </c:choose>
                                     <strong class="d-block text-gray-dark">
-                                        <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_request_list&apartmentId=${elem.getId()}><fmt:message key="estate.requests"/> </a>
+                                        <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_demand_list&apartmentId=${elem.getId()}><fmt:message key="estate.demands"/> </a>
                                     </strong>
                             </c:when>
                             <c:when test="${elem.getStatus() == rent}">
@@ -117,7 +117,7 @@
             <span class="glyphicon glyphicon-plus"></span><fmt:message key="estate.newApartmentButton"/>
         </a>
 
-<%--        <form action="${pageContext.request.contextPath}/control" method="get">--%>
+<%--        <form action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--            <input type="hidden" name="command" value="transition_to_new_estate"/>--%>
 <%--            <input type="submit" name="button" value="<fmt:message key="estate.newApartmentButton"/>">--%>
 <%--        </form>--%>

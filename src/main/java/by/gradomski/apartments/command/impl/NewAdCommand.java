@@ -2,7 +2,7 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Ad;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.entity.Apartment;
 import by.gradomski.apartments.entity.ApartmentStatus;
 import by.gradomski.apartments.entity.User;
@@ -18,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -64,20 +63,20 @@ public class NewAdCommand implements Command {
                             session.removeAttribute(APARTMENT_ID);
                             session.setAttribute("apartmentList", updatedApartmentList); //TODO(change to request.attr?)
 
-                            Ad newAd = AdServiceImpl.getInstance().getAdById(newAdvertisementId);
+                            Advertisement newAdvertisement = AdServiceImpl.getInstance().getAdById(newAdvertisementId);
                             Object obj = request.getServletContext().getAttribute(ADVERTISEMENT_LIST);
                             log.debug("obj from servletContext ADVERTISEMENT_LIST: " + obj);    //FIXME(if this first ad -> obj == null?)
-                            List<Ad> adList = (List<Ad>) obj;
-                            adList.add(newAd);
-                            adList.sort(new AdvertisementComparator());
+                            List<Advertisement> advertisementList = (List<Advertisement>) obj;
+                            advertisementList.add(newAdvertisement);
+                            advertisementList.sort(new AdvertisementComparator());
 
                             Map<Long, Apartment> apartmentMap = (Map<Long, Apartment>) request.getServletContext().getAttribute(APARTMENT_MAP);
                             Apartment apartment = apartmentService.getApartmentByIdWithOwner(apartmentId);
-                            apartmentMap.put(newAd.getId(), apartment);
+                            apartmentMap.put(newAdvertisement.getId(), apartment);
 
-                            request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
+                            request.getServletContext().setAttribute(ADVERTISEMENT_LIST, advertisementList);
                             request.getServletContext().setAttribute(APARTMENT_MAP, apartmentMap);
-                            int pages = PageCounter.countPages(adList);
+                            int pages = PageCounter.countPages(advertisementList);
                             request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
                             page = ESTATE;
                         } else {

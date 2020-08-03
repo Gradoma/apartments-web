@@ -2,9 +2,8 @@ package by.gradomski.apartments.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-public class Ad implements Comparable<Ad>{
+public class Advertisement implements Comparable<Advertisement>{
     private long id;
     private String title;
     private BigDecimal price;
@@ -13,8 +12,8 @@ public class Ad implements Comparable<Ad>{
     private LocalDateTime creationDate;
     private boolean visibility;
 
-    public Ad(){};
-    public Ad(String title, long authorId, BigDecimal price, long apartmentId){
+    public Advertisement(){};
+    public Advertisement(String title, long authorId, BigDecimal price, long apartmentId){
         this.title = title;
         this.authorId = authorId;
         this.price = price;
@@ -83,15 +82,15 @@ public class Ad implements Comparable<Ad>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Ad ad = (Ad) o;
+        Advertisement advertisement = (Advertisement) o;
 
-        if (id != ad.id) return false;
-        if (apartmentId != ad.apartmentId) return false;
-        if (authorId != ad.authorId) return false;
-        if (visibility != ad.visibility) return false;
-        if (title != null ? !title.equals(ad.title) : ad.title != null) return false;
-        if (price != null ? !price.equals(ad.price) : ad.price != null) return false;
-        return creationDate != null ? creationDate.equals(ad.creationDate) : ad.creationDate == null;
+        if (id != advertisement.id) return false;
+        if (apartmentId != advertisement.apartmentId) return false;
+        if (authorId != advertisement.authorId) return false;
+        if (visibility != advertisement.visibility) return false;
+        if (title != null ? !title.equals(advertisement.title) : advertisement.title != null) return false;
+        if (price != null ? !price.equals(advertisement.price) : advertisement.price != null) return false;
+        return creationDate != null ? creationDate.equals(advertisement.creationDate) : advertisement.creationDate == null;
     }
 
     @Override
@@ -129,7 +128,7 @@ public class Ad implements Comparable<Ad>{
     }
 
     @Override
-    public int compareTo(Ad o) {
+    public int compareTo(Advertisement o) {
         return creationDate.compareTo(o.creationDate);
     }
 }

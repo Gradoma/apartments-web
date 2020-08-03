@@ -2,14 +2,14 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Ad;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.entity.Apartment;
-import by.gradomski.apartments.entity.Request;
+import by.gradomski.apartments.entity.Demand;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.service.impl.DemandServiceImpl;
 import by.gradomski.apartments.util.PageCounter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,10 +27,10 @@ import static by.gradomski.apartments.command.PagePath.MY_RENT;
 public class DeclineInvitationCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String ADVERTISEMENT_ID = "advertisementId";
-    private static final String REQUEST_ID = "requestId";
+    private static final String DEMAND_ID = "demandId";
     private static final String ADVERTISEMENT_LIST = "advertisementList";
     private static final String USER = "user";
-    private static final String REQUEST_LIST = "requestList";
+    private static final String DEMAND_LIST = "demandList";
     private static final String ADVERTISEMENT_MAP = "advertisementMap";
     private static final String APARTMENT_MAP = "apartmentMap";
     private static final String PAGES_AMOUNT = "pagesAmount";
@@ -40,32 +40,32 @@ public class DeclineInvitationCommand implements Command {
         Router router = new Router();
         router.setRedirect();
         String page;
-        long requestId = Long.parseLong(request.getParameter(REQUEST_ID));
+        long requestId = Long.parseLong(request.getParameter(DEMAND_ID));
         long advertisementId = Long.parseLong(request.getParameter(ADVERTISEMENT_ID));
         try{
-            boolean cancelResult = RequestServiceImpl.getInstance().cancelRequest(requestId);
+            boolean cancelResult = DemandServiceImpl.getInstance().cancelDemand(requestId);
             if(cancelResult){
                 boolean advertisementStatusResult = AdServiceImpl.getInstance().changeVisibility(advertisementId);
                 if(advertisementStatusResult){
-                    List<Ad> adList= AdServiceImpl.getInstance().getAllVisible();
-                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
+                    List<Advertisement> advertisementList = AdServiceImpl.getInstance().getAllVisible();
+                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, advertisementList);
 
                     HttpSession session = request.getSession(false);
                     User currentUser = (User) session.getAttribute(USER);
                     long userId = currentUser.getId();
-                    List<Request> requestList = RequestServiceImpl.getInstance().getRequestsByApplicantId(userId);  //TODO(has same command - maybe filter?)
-                    session.setAttribute(REQUEST_LIST, requestList);        //TODO(as tmp atr)
-                    Map<Long, Ad> advertisementMap = new HashMap<>();
+                    List<Demand> demandList = DemandServiceImpl.getInstance().getDemandsByApplicantId(userId);  //TODO(has same command - maybe filter?)
+                    session.setAttribute(DEMAND_LIST, demandList);        //TODO(as tmp atr)
+                    Map<Long, Advertisement> advertisementMap = new HashMap<>();
                     Map<Long, Apartment> apartmentMap = new HashMap<>();
-                    for(Request req : requestList){
+                    for(Demand req : demandList){
                         long apartmentId = req.getApartmentId();
-                        Ad ad = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
-                        advertisementMap.put(req.getId(), ad);
+                        Advertisement advertisement = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
+                        advertisementMap.put(req.getId(), advertisement);
                         //copy-paste from transectionToMyRent
                         Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
                         apartmentMap.put(req.getId(), apartment);
                     }
-                    int pages = PageCounter.countPages(adList);
+                    int pages = PageCounter.countPages(advertisementList);
                     request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
                     session.setAttribute(APARTMENT_MAP, apartmentMap);      //TODO(as tmp atr)
                     session.setAttribute(ADVERTISEMENT_MAP, advertisementMap);      //TODO(as tmp atr)

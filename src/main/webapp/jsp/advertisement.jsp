@@ -84,14 +84,14 @@
                                     <b style="color: #3e8e41"><br/><fmt:message key="advertisement.wasCreatedMessage"/></b>
                                     <form action="${pageContext.request.contextPath}/control" method="get">
                                         <input type="hidden" name="command" value="transition_to_my_rent"/>
-                                        <input type="submit" name="button" value="<fmt:message key="main.myRequestsButton"/>">
+                                        <input type="submit" name="button" value="<fmt:message key="main.myRentButton"/>">
                                     </form>
                                 </c:when>
                                 <c:otherwise>
                                     <c:choose>
                                         <c:when test="${advertisement.isVisible() eq true}">
                                             <form action="${pageContext.request.contextPath}/control" method="get">
-                                                <input type="hidden" name="command" value="transition_to_new_request"/>
+                                                <input type="hidden" name="command" value="transition_to_new_demand"/>
                                                 <input type="hidden" name="advertisementId" value="${advertisement.getId()}">
                                                 <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>
                                                 <input type="submit" name="button" value="<fmt:message key="advertisement.wantToRentButton"/>">

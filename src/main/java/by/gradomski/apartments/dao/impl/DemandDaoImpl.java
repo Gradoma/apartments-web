@@ -1,15 +1,13 @@
 package by.gradomski.apartments.dao.impl;
 
-import by.gradomski.apartments.dao.RequestDao;
+import by.gradomski.apartments.dao.DemandDao;
 import by.gradomski.apartments.dao.column.ApartmentTable;
-import by.gradomski.apartments.dao.column.RequestTable;
+import by.gradomski.apartments.dao.column.DemandTable;
 import by.gradomski.apartments.dao.column.UserTable;
 import by.gradomski.apartments.entity.*;
 import by.gradomski.apartments.exception.DaoException;
-import by.gradomski.apartments.exception.IncorrectRoleException;
 import by.gradomski.apartments.exception.IncorrectStatusException;
 import by.gradomski.apartments.pool.ConnectionPool;
-import by.gradomski.apartments.util.PasswordEncoder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +21,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-public class RequestDaoImpl implements RequestDao {
+public class DemandDaoImpl implements DemandDao {
     private static final Logger log = LogManager.getLogger();
     private static final String INSERT_NEW_REQUEST = "INSERT INTO request (idApplicant, idApartment, expectedDate, description," +
             " creationDate, idStatusReq) VALUES (?, ?, ?, ?, ?, ?)";
@@ -38,19 +36,19 @@ public class RequestDaoImpl implements RequestDao {
             "registrationDate FROM request JOIN user ON idApplicant=idUser WHERE idApartment=? AND idStatusReq!=4;";
     private static final String UPDATE_REQUEST = "UPDATE request SET expectedDate=?, description=?, idStatusReq=? WHERE idRequest=?";
     private static final String UPDATE_STATUS_BY_ID = "UPDATE request SET idStatusReq=? WHERE idRequest=?";
-    private static RequestDaoImpl instance;
+    private static DemandDaoImpl instance;
 
-    private RequestDaoImpl(){}
+    private DemandDaoImpl(){}
 
-    public static RequestDaoImpl getInstance(){
+    public static DemandDaoImpl getInstance(){
         if(instance == null){
-            instance = new RequestDaoImpl();
+            instance = new DemandDaoImpl();
         }
         return instance;
     }
 
     @Override
-    public boolean add(Request request) throws DaoException{
+    public boolean add(Demand demand) throws DaoException{
         boolean flag = false;
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
@@ -60,20 +58,20 @@ public class RequestDaoImpl implements RequestDao {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(INSERT_NEW_REQUEST);
-            statement.setLong(1, request.getApplicant().getId());
-            statement.setLong(2, request.getApartmentId());
-            Instant expectedInstant = request.getExpectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
+            statement.setLong(1, demand.getApplicant().getId());
+            statement.setLong(2, demand.getApartmentId());
+            Instant expectedInstant = demand.getExpectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
             long expectedMillis = expectedInstant.toEpochMilli();
             statement.setLong(3, expectedMillis);
-            if(request.getDescription() != null){
-                statement.setString(4, request.getDescription());
+            if(demand.getDescription() != null){
+                statement.setString(4, demand.getDescription());
             } else {
                 statement.setNull(4, Types.VARCHAR);
             }
-            Instant creationInstant = request.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
+            Instant creationInstant = demand.getCreationDate().atZone(ZoneId.systemDefault()).toInstant();
             long creationMillis = creationInstant.toEpochMilli();
             statement.setLong(5, creationMillis);
-            statement.setLong(6, request.getStatus().getValue());
+            statement.setLong(6, demand.getStatus().getValue());
             int rows = statement.executeUpdate();
             if(rows != 0){
                 flag = true;
@@ -88,33 +86,33 @@ public class RequestDaoImpl implements RequestDao {
     }
 
     @Override
-    public List<Request> findAll() throws DaoException{
+    public List<Demand> findAll() throws DaoException{
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
             throw new DaoException("connection is null");
         }
         Statement statement = null;
-        List<Request> requestList = new ArrayList<>();
+        List<Demand> demandList = new ArrayList<>();
         try {
             statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_REQUESTS);
             while (resultSet.next()){
-                Request request = new Request();
-                request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
-                request.setApartmentId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
-                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
+                Demand demand = new Demand();
+                demand.setId(resultSet.getLong(DemandTable.ID_REQUEST));
+                demand.setApartmentId(resultSet.getLong(ApartmentTable.ID_APARTMENT));
+                long expectedMillis = resultSet.getLong(DemandTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
-                request.setExpectedDate(expectedDate);
-                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE);
+                demand.setExpectedDate(expectedDate);
+                long creationMillis = resultSet.getLong(DemandTable.CREATION_DATE);
                 LocalDateTime creationDate =
                         Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
-                request.setCreationDate(creationDate);
-                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION));
-                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST);
-                request.setStatus(RequestStatus.getByValue(statusId));
-                requestList.add(request);
+                demand.setCreationDate(creationDate);
+                demand.setDescription(resultSet.getString(DemandTable.DESCRIPTION));
+                long statusId = resultSet.getLong(DemandTable.ID_STATUS_REQUEST);
+                demand.setStatus(DemandStatus.getByValue(statusId));
+                demandList.add(demand);
             }
         }catch (SQLException | IncorrectStatusException e){
             throw new DaoException(e);
@@ -122,43 +120,43 @@ public class RequestDaoImpl implements RequestDao {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return requestList;
+        return demandList;
     }
 
     @Override
-    public Optional<Request> findById(long id) throws DaoException {
+    public Optional<Demand> findById(long id) throws DaoException {
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
-        Optional<Request> optionalRequest = Optional.empty();
+        Optional<Demand> optionalRequest = Optional.empty();
         try{
             statement = connection.prepareStatement(SELECT_REQUEST_BY_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
-            Request request = null;
+            Demand demand = null;
             while (resultSet.next()) {
-                request = new Request();
-                request.setId(id);
-                request.setApartmentId(resultSet.getLong(RequestTable.ID_APARTMENT));
-                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
+                demand = new Demand();
+                demand.setId(id);
+                demand.setApartmentId(resultSet.getLong(DemandTable.ID_APARTMENT));
+                long expectedMillis = resultSet.getLong(DemandTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
-                request.setExpectedDate(expectedDate);
-                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE);
+                demand.setExpectedDate(expectedDate);
+                long creationMillis = resultSet.getLong(DemandTable.CREATION_DATE);
                 LocalDateTime creationDate =
                         Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
-                request.setCreationDate(creationDate);
-                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION));
-                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST);
-                request.setStatus(RequestStatus.getByValue(statusId));
+                demand.setCreationDate(creationDate);
+                demand.setDescription(resultSet.getString(DemandTable.DESCRIPTION));
+                long statusId = resultSet.getLong(DemandTable.ID_STATUS_REQUEST);
+                demand.setStatus(DemandStatus.getByValue(statusId));
                 User applicant = new User();
-                applicant.setId(resultSet.getLong(RequestTable.ID_APPLICANT));
-                request.setApplicant(applicant);
+                applicant.setId(resultSet.getLong(DemandTable.ID_APPLICANT));
+                demand.setApplicant(applicant);
             }
-            if(request != null) optionalRequest = Optional.of(request);
+            if(demand != null) optionalRequest = Optional.of(demand);
         } catch (SQLException | IncorrectStatusException e){
             throw new DaoException(e);
         } finally {
@@ -169,34 +167,34 @@ public class RequestDaoImpl implements RequestDao {
     }
 
     @Override
-    public List<Request> findByApplicant(long id) throws DaoException{
+    public List<Demand> findByApplicant(long id) throws DaoException{
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
-        List<Request> requestList = new ArrayList<>();
+        List<Demand> demandList = new ArrayList<>();
         try{
             statement = connection.prepareStatement(SELECT_REQUEST_BY_APPLICANT_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Request request = new Request();
-                request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
-                request.setApartmentId(resultSet.getLong(RequestTable.ID_APARTMENT));
-                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
+                Demand demand = new Demand();
+                demand.setId(resultSet.getLong(DemandTable.ID_REQUEST));
+                demand.setApartmentId(resultSet.getLong(DemandTable.ID_APARTMENT));
+                long expectedMillis = resultSet.getLong(DemandTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
-                request.setExpectedDate(expectedDate);
-                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE);
+                demand.setExpectedDate(expectedDate);
+                long creationMillis = resultSet.getLong(DemandTable.CREATION_DATE);
                 LocalDateTime creationDate =
                         Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
-                request.setCreationDate(creationDate);
-                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION));
-                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST);
-                request.setStatus(RequestStatus.getByValue(statusId));
-                requestList.add(request);
+                demand.setCreationDate(creationDate);
+                demand.setDescription(resultSet.getString(DemandTable.DESCRIPTION));
+                long statusId = resultSet.getLong(DemandTable.ID_STATUS_REQUEST);
+                demand.setStatus(DemandStatus.getByValue(statusId));
+                demandList.add(demand);
             }
         } catch (SQLException | IncorrectStatusException e){
                 throw new DaoException(e);
@@ -204,39 +202,39 @@ public class RequestDaoImpl implements RequestDao {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return requestList;
+        return demandList;
     }
 
     @Override
-    public List<Request> findByApartment(long id) throws DaoException{
+    public List<Demand> findByApartment(long id) throws DaoException{
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
             throw new DaoException("connection is null");
         }
         PreparedStatement statement = null;
-        List<Request> requestList = new ArrayList<>();
+        List<Demand> demandList = new ArrayList<>();
         try{
             statement = connection.prepareStatement(SELECT_REQUEST_BY_APARTMENT_ID);
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                Request request = new Request();
-                request.setId(resultSet.getLong(RequestTable.ID_REQUEST));
-                request.setApartmentId(resultSet.getLong(RequestTable.ID_APARTMENT));
-                long expectedMillis = resultSet.getLong(RequestTable.EXPECTED_DATE);
+                Demand demand = new Demand();
+                demand.setId(resultSet.getLong(DemandTable.ID_REQUEST));
+                demand.setApartmentId(resultSet.getLong(DemandTable.ID_APARTMENT));
+                long expectedMillis = resultSet.getLong(DemandTable.EXPECTED_DATE);
                 LocalDate expectedDate =
                         Instant.ofEpochMilli(expectedMillis).atZone(ZoneId.systemDefault()).toLocalDate();
-                request.setExpectedDate(expectedDate);
-                long creationMillis = resultSet.getLong(RequestTable.CREATION_DATE);
+                demand.setExpectedDate(expectedDate);
+                long creationMillis = resultSet.getLong(DemandTable.CREATION_DATE);
                 LocalDateTime creationDate =
                         Instant.ofEpochMilli(creationMillis).atZone(ZoneId.systemDefault()).toLocalDateTime();
-                request.setCreationDate(creationDate);
-                request.setDescription(resultSet.getString(RequestTable.DESCRIPTION));
-                long statusId = resultSet.getLong(RequestTable.ID_STATUS_REQUEST);
-                request.setStatus(RequestStatus.getByValue(statusId));
+                demand.setCreationDate(creationDate);
+                demand.setDescription(resultSet.getString(DemandTable.DESCRIPTION));
+                long statusId = resultSet.getLong(DemandTable.ID_STATUS_REQUEST);
+                demand.setStatus(DemandStatus.getByValue(statusId));
 
-                long applicantId = resultSet.getLong(RequestTable.ID_APPLICANT);
+                long applicantId = resultSet.getLong(DemandTable.ID_APPLICANT);
                 User applicant = new User();
                 applicant.setId(resultSet.getLong(UserTable.ID_USER));
                 applicant.setFirstName(resultSet.getString(UserTable.FIRST_NAME));
@@ -259,8 +257,8 @@ public class RequestDaoImpl implements RequestDao {
                 String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
                 applicant.setPhotoBase64(photoBase64);
 
-                request.setApplicant(applicant);
-                requestList.add(request);
+                demand.setApplicant(applicant);
+                demandList.add(demand);
             }
         } catch (SQLException | IncorrectStatusException e){
             throw new DaoException(e);
@@ -268,11 +266,11 @@ public class RequestDaoImpl implements RequestDao {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return requestList;
+        return demandList;
     }
 
     @Override
-    public Request update(Request request) throws DaoException{
+    public Demand update(Demand demand) throws DaoException{
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();
         if(connection == null){
@@ -281,12 +279,12 @@ public class RequestDaoImpl implements RequestDao {
         PreparedStatement statement = null;
         try {
             statement = connection.prepareStatement(UPDATE_REQUEST);
-            Instant expectedInstant = request.getExpectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
+            Instant expectedInstant = demand.getExpectedDate().atStartOfDay(ZoneId.systemDefault()).toInstant();
             long expectedMillis = expectedInstant.toEpochMilli();
             statement.setLong(1, expectedMillis);
-            statement.setString(2, request.getDescription());
-            statement.setLong(3, request.getStatus().getValue());
-            statement.setLong(4, request.getId());
+            statement.setString(2, demand.getDescription());
+            statement.setLong(3, demand.getStatus().getValue());
+            statement.setLong(4, demand.getId());
             statement.executeUpdate();
         }catch (SQLException e){
                 throw new DaoException(e);
@@ -294,11 +292,11 @@ public class RequestDaoImpl implements RequestDao {
             closeStatement(statement);
             pool.releaseConnection(connection);
         }
-        return request;
+        return demand;
     }
 
     @Override
-    public boolean updateStatusById(long id, RequestStatus status) throws DaoException {
+    public boolean updateStatusById(long id, DemandStatus status) throws DaoException {
         boolean flag = false;
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.getConnection();

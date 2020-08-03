@@ -1,10 +1,7 @@
 package by.gradomski.apartments.service.impl;
 
 import by.gradomski.apartments.dao.impl.AdDaoImpl;
-import by.gradomski.apartments.dao.impl.ApartmentDaoImpl;
-import by.gradomski.apartments.entity.Ad;
-import by.gradomski.apartments.entity.Apartment;
-import by.gradomski.apartments.entity.ApartmentStatus;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.DaoException;
 import by.gradomski.apartments.exception.ServiceException;
@@ -14,9 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,9 +34,9 @@ public class AdServiceImpl implements AdService {
         long generatedId;
         price = price.replace(COMMA, DOT);
         BigDecimal decimalPrice = new BigDecimal(price);
-        Ad newAd = new Ad(title, author.getId(), decimalPrice, apartmentId);
+        Advertisement newAdvertisement = new Advertisement(title, author.getId(), decimalPrice, apartmentId);
         try{
-            generatedId = AdDaoImpl.getInstance().add(newAd);
+            generatedId = AdDaoImpl.getInstance().add(newAdvertisement);
 //            if(advertisementId > 0){
 //                boolean updateStatusResult = ApartmentServiceImpl.getInstance().
 //                        updateApartmentStatus(apartmentId, ApartmentStatus.IN_DEMAND);
@@ -61,8 +55,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<Ad> getAll() throws ServiceException {
-        List<Ad> resultList;
+    public List<Advertisement> getAll() throws ServiceException {
+        List<Advertisement> resultList;
         try{
             resultList = AdDaoImpl.getInstance().findAll();
         } catch (DaoException e){
@@ -72,8 +66,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad getAdByApartmentId(long id) throws ServiceException {
-        Optional<Ad> optionalAd;
+    public Advertisement getAdByApartmentId(long id) throws ServiceException {
+        Optional<Advertisement> optionalAd;
         try {
             optionalAd = AdDaoImpl.getInstance().findByApartmentId(id);
         } catch (DaoException e){
@@ -86,8 +80,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public Ad getAdById(long id) throws ServiceException {
-        Optional<Ad> optionalAd;
+    public Advertisement getAdById(long id) throws ServiceException {
+        Optional<Advertisement> optionalAd;
         try {
             optionalAd = AdDaoImpl.getInstance().findById(id);
         } catch (DaoException e){
@@ -100,8 +94,8 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public List<Ad> getAllVisible() throws ServiceException {
-        List<Ad> resultList;
+    public List<Advertisement> getAllVisible() throws ServiceException {
+        List<Advertisement> resultList;
         try{
             resultList = AdDaoImpl.getInstance().findAllVisible();
         } catch (DaoException e){
@@ -112,7 +106,7 @@ public class AdServiceImpl implements AdService {
     }
 
     @Override
-    public boolean updateAd(Ad advertisement, String title, String price) throws ServiceException {
+    public boolean updateAd(Advertisement advertisement, String title, String price) throws ServiceException {
         boolean flag;
         if(title == null || title.isBlank() || price == null || price.isBlank()){
             log.debug("title or price null or blank");
@@ -133,12 +127,12 @@ public class AdServiceImpl implements AdService {
     public boolean changeVisibility(long id) throws ServiceException {
         boolean flag;
         try{
-            Ad ad = getAdById(id);
-            boolean currentVisibility = ad.isVisible();
+            Advertisement advertisement = getAdById(id);
+            boolean currentVisibility = advertisement.isVisible();
             log.debug("current visibility" + currentVisibility);
-            ad.setVisibility(!currentVisibility);
-            log.debug("new visibility: " + ad.isVisible());
-            flag = AdDaoImpl.getInstance().update(ad);
+            advertisement.setVisibility(!currentVisibility);
+            log.debug("new visibility: " + advertisement.isVisible());
+            flag = AdDaoImpl.getInstance().update(advertisement);
         } catch (DaoException e){
             throw new ServiceException(e);
         }

@@ -1,12 +1,12 @@
 package by.gradomski.apartments.util;
 
-import by.gradomski.apartments.entity.Ad;
+import by.gradomski.apartments.entity.Advertisement;
 
 import java.util.Comparator;
 
-public class AdvertisementComparator implements Comparator<Ad> {
+public class AdvertisementComparator implements Comparator<Advertisement> {
     @Override
-    public int compare(Ad o1, Ad o2) {
+    public int compare(Advertisement o1, Advertisement o2) {
         return -o1.getCreationDate().compareTo(o2.getCreationDate());
     }
 }

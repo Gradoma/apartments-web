@@ -2,14 +2,14 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Ad;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.entity.Apartment;
-import by.gradomski.apartments.entity.Request;
+import by.gradomski.apartments.entity.Demand;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.service.impl.DemandServiceImpl;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,7 +37,7 @@ public class AdminToAdvertisementProfileCommand implements Command {
         String advertisementIdString = request.getParameter(ID);
         long advertisementId = Long.parseLong(advertisementIdString);
         try{
-            Ad advertisement = AdServiceImpl.getInstance().getAdById(advertisementId);
+            Advertisement advertisement = AdServiceImpl.getInstance().getAdById(advertisementId);
             request.setAttribute(ADVERTISEMENT, advertisement);
             long apartmentId = advertisement.getApartmentId();
             Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
@@ -45,8 +45,8 @@ public class AdminToAdvertisementProfileCommand implements Command {
             long authorId = advertisement.getAuthorId();
             User author = UserServiceImpl.getInstance().getUserById(authorId);
             request.setAttribute(AUTHOR, author);
-            List<Request> requestList = RequestServiceImpl.getInstance().getActiveRequestsByApartmentId(apartmentId);
-            List<Request> filteredList = filterOldRequests(requestList, advertisement);
+            List<Demand> demandList = DemandServiceImpl.getInstance().getActiveDemandsByApartmentId(apartmentId);
+            List<Demand> filteredList = filterOldDemands(demandList, advertisement);
             request.setAttribute(DEMAND_LIST, filteredList);
             page = ADMIN_ADVERTISEMENT_PROFILE;
         } catch (ServiceException e){
@@ -57,10 +57,10 @@ public class AdminToAdvertisementProfileCommand implements Command {
         return router;
     }
 
-    private List<Request> filterOldRequests(List<Request> requestList, Ad advertisement){
+    private List<Demand> filterOldDemands(List<Demand> demandList, Advertisement advertisement){
         LocalDateTime advertisementCreation = advertisement.getCreationDate();
-        return requestList.stream()
-                .filter(request -> request.getCreationDate()
+        return demandList.stream()
+                .filter(demand -> demand.getCreationDate()
                         .isAfter(advertisementCreation))
                 .collect(Collectors.toList());
     }

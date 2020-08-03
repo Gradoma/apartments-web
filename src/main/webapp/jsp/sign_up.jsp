@@ -23,10 +23,11 @@
 
         <!-- Form Name -->
         <legend><fmt:message key="legend.signUp"/> </legend>
+        <small><fmt:message key="message.required"/> </small>
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="textinput"><fmt:message key="label.login"/></label>
+            <label class="col-md-4 control-label" for="textinput"><fmt:message key="label.login"/>*</label>
             <div class="col-md-4">
                 <input name="login" type="text" class="form-control input-md" required="" width="50" pattern="^[\p{Digit}\p{Alpha}_-]{3,15}$">
             </div>
@@ -42,7 +43,7 @@
 
         <!-- Password input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="passwordinput"><fmt:message key="label.password"/></label>
+            <label class="col-md-4 control-label" for="passwordinput"><fmt:message key="label.password"/>*</label>
             <div class="col-md-4">
                 <input id="passwordinput" name="password" type="password" class="form-control input-md" required="" width="100" pattern="^.{5,45}$">
             </div>
@@ -55,7 +56,7 @@
 
         <!-- Text input-->
         <div class="form-group">
-            <label class="col-md-4 control-label" for="textinput"><fmt:message key="label.mail"/></label>
+            <label class="col-md-4 control-label" for="textinput"><fmt:message key="label.mail"/>*</label>
             <div class="col-md-4">
                 <input id="textinput" name="email" type="text" class="form-control input-md" required="" width="100" pattern="[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+">
 

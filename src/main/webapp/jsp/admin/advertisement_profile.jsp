@@ -17,7 +17,7 @@
     Price : ${advertisement.getPrice()}<br/>
     Visibility : ${advertisement.isVisible()}<br/>
 
-    <form action="${pageContext.request.contextPath}/control" method="get">
+    <form action="${pageContext.demand.contextPath}/control" method="get">
         <input type="hidden" name="command" value="admin_ban_advertisement"/>
         <input type="hidden" name="id" value="${advertisement.getId()}">
         <input type="submit" name="button" value="Ban Advertisement">

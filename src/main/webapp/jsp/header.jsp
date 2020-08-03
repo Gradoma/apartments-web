@@ -128,7 +128,7 @@
                     <%--                    <span class="badge badge-pill bg-light align-text-bottom">27</span>todo add on requests--%>
             </a>
             <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_my_rent">
-                <fmt:message key="main.myRequestsButton"/>
+                <fmt:message key="main.myRentButton"/>
             </a>
         </nav>
     </div>
@@ -202,7 +202,7 @@
 <%--                    &lt;%&ndash;                    <span class="badge badge-pill bg-light align-text-bottom">27</span>todo add on requests&ndash;%&gt;--%>
 <%--            </a>--%>
 <%--            <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_my_rent">--%>
-<%--                <fmt:message key="main.myRequestsButton"/>--%>
+<%--                <fmt:message key="main.myRentButton"/>--%>
 <%--            </a>--%>
 <%--        </nav>--%>
 <%--    </div>--%>
@@ -221,14 +221,14 @@
 
 <%--<body >--%>
 <%--<h2>Gradomski apartment project</h2>--%>
-<%--    <form action="${pageContext.request.contextPath}/control">--%>
+<%--    <form action="${pageContext.demand.contextPath}/control">--%>
 <%--        <select name="language" onchange="submit()">--%>
 <%--            <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>--%>
 <%--            <option value="ru" ${language == 'ru' ? 'selected' : ''}>Русский</option>--%>
 <%--        </select>--%>
 <%--    </form>--%>
 <%--    <c:if test="${not empty user}">--%>
-<%--        <form name="Simple" action="${pageContext.request.contextPath}/control" method="get">--%>
+<%--        <form name="Simple" action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--            <input type="hidden" name="command" value="transition_to_user_page"/>--%>
 <%--            <input type="submit" name="button" value="<fmt:message key="header.home"/>">--%>
 <%--        </form>--%>

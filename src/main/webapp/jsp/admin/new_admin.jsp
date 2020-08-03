@@ -13,7 +13,7 @@
 </head>
 <body>
     <c:import url="admin_header.jsp"/>
-    <form class="form-horizontal" action="${pageContext.request.contextPath}/control" method="post">
+    <form class="form-horizontal" action="${pageContext.demand.contextPath}/control" method="post">
         <input type="hidden" name="command" value="register_new_admin">
         <fieldset>
 

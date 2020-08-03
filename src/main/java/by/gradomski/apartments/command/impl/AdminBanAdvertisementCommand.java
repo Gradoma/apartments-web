@@ -8,7 +8,7 @@ import by.gradomski.apartments.mail.MailConstructor;
 import by.gradomski.apartments.mail.MailSender;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.service.impl.DemandServiceImpl;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import by.gradomski.apartments.util.PageCounter;
 import org.apache.logging.log4j.LogManager;
@@ -16,9 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static by.gradomski.apartments.command.PagePath.ADMIN_APARTMENTS;
 import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
@@ -38,26 +36,26 @@ public class AdminBanAdvertisementCommand implements Command {
         String advertisementIdString = request.getParameter(ID);
         long advertisementId = Long.parseLong(advertisementIdString);
         try {
-            Ad advertisement = AdServiceImpl.getInstance().getAdById(advertisementId);
+            Advertisement advertisement = AdServiceImpl.getInstance().getAdById(advertisementId);
             long apartmentId = advertisement.getApartmentId();
-            List<Request> demandList = RequestServiceImpl.getInstance()
-                    .getActiveRequestsByApartmentId(apartmentId);
+            List<Demand> demandList = DemandServiceImpl.getInstance()
+                    .getActiveDemandsByApartmentId(apartmentId);
             if(advertisement.isVisible() == true){
                 AdServiceImpl.getInstance().changeVisibility(advertisementId);
             }
-            for(Request demand : demandList){
+            for(Demand demand : demandList){
                 switch (demand.getStatus()){
                     case CREATED:
-                        RequestServiceImpl.getInstance().refuseRequest(demand.getId());
+                        DemandServiceImpl.getInstance().refuseDemand(demand.getId());
 
                         break;
                     case APPROVED:
-                        RequestServiceImpl.getInstance().cancelRequest(demand.getId());
+                        DemandServiceImpl.getInstance().cancelDemand(demand.getId());
                         break;
                 }
             }
             ApartmentServiceImpl.getInstance().updateApartmentStatus(apartmentId, ApartmentStatus.REGISTERED);
-            List<Ad> advertisementList = (List<Ad>) request.getServletContext().getAttribute(ADVERTISEMENT_LIST);
+            List<Advertisement> advertisementList = (List<Advertisement>) request.getServletContext().getAttribute(ADVERTISEMENT_LIST);
             advertisementList.remove(advertisement);
             request.getServletContext().setAttribute(ADVERTISEMENT_LIST, advertisementList);
             int pages = PageCounter.countPages(advertisementList);

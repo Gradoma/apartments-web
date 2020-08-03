@@ -1,14 +1,12 @@
 package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
-import by.gradomski.apartments.command.PagePath;
 import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.*;
 import by.gradomski.apartments.exception.ServiceException;
-import by.gradomski.apartments.service.ApartmentService;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.service.impl.DemandServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,19 +23,19 @@ public class AcceptInvitationCommand implements Command {
     private static final String USER = "user";
     private static final String APARTMENT_ID = "apartmentId";
     private static final String ADVERTISEMENT_ID = "advertisementId";
-    private static final String REQUEST_ID = "requestId";
+    private static final String DEMAND_ID = "demandId";
     private static final String ADVERTISEMENT_LIST = "advertisementList";
 
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
         router.setRedirect();
-        long acceptingRequestId = Long.parseLong(request.getParameter(REQUEST_ID));
+        long acceptingRequestId = Long.parseLong(request.getParameter(DEMAND_ID));
         HttpSession session = request.getSession(false);
         User currentUser = (User) session.getAttribute(USER);
         try{
-            List<Request> userRequestList = RequestServiceImpl.getInstance().getRequestsByApplicantId(currentUser.getId());
-            for(Request userReq : userRequestList){
+            List<Demand> userDemandList = DemandServiceImpl.getInstance().getDemandsByApplicantId(currentUser.getId());
+            for(Demand userReq : userDemandList){
                 if(userReq.getId() == acceptingRequestId){
                     log.debug("accepting Req id=" + acceptingRequestId);
                     log.debug("accepting Req status=" + userReq.getStatus());
@@ -46,23 +44,23 @@ public class AcceptInvitationCommand implements Command {
                 }
                 switch (userReq.getStatus()){
                     case APPROVED:
-                        boolean cancelResult = RequestServiceImpl.getInstance().cancelRequest(userReq.getId());
+                        boolean cancelResult = DemandServiceImpl.getInstance().cancelDemand(userReq.getId());
                         if(cancelResult) {
                             long apartmentId = userReq.getApartmentId();
-                            Ad ad = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
-                            boolean advertisementStatusResult = AdServiceImpl.getInstance().changeVisibility(ad.getId());
+                            Advertisement advertisement = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
+                            boolean advertisementStatusResult = AdServiceImpl.getInstance().changeVisibility(advertisement.getId());
                             if (advertisementStatusResult) {
-                                List<Ad> adList = AdServiceImpl.getInstance().getAllVisible();
-                                request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
+                                List<Advertisement> advertisementList = AdServiceImpl.getInstance().getAllVisible();
+                                request.getServletContext().setAttribute(ADVERTISEMENT_LIST, advertisementList);
                             } else {
-                                log.error("can't change ad status: advertisementId=" + ad.getId());
+                                log.error("can't change advertisement status: advertisementId=" + advertisement.getId());
                             }
                         } else {
                             log.error("can't change request status: id=" + userReq.getId());
                         }
                         break;
                     case CREATED:
-                        boolean cancelingResult = RequestServiceImpl.getInstance().cancelRequest(userReq.getId());
+                        boolean cancelingResult = DemandServiceImpl.getInstance().cancelDemand(userReq.getId());
                         if(!cancelingResult){
                             log.error("can't cancel request: " + userReq.getId());
                         }
@@ -70,10 +68,10 @@ public class AcceptInvitationCommand implements Command {
                 }
             }
             long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
-            List<Request> apartmentRequestList = RequestServiceImpl.getInstance().getActiveRequestsByApartmentId(apartmentId);
-            for(Request apartmentReq : apartmentRequestList){
-                if(apartmentReq.getStatus() != RequestStatus.APPROVED){ ;
-                    boolean updateStatusResult = RequestServiceImpl.getInstance().refuseRequest(apartmentReq.getId());
+            List<Demand> apartmentDemandList = DemandServiceImpl.getInstance().getActiveDemandsByApartmentId(apartmentId);
+            for(Demand apartmentReq : apartmentDemandList){
+                if(apartmentReq.getStatus() != DemandStatus.APPROVED){ ;
+                    boolean updateStatusResult = DemandServiceImpl.getInstance().refuseDemand(apartmentReq.getId());
                     if(!updateStatusResult){
                         log.error("can't refuse apartment request: id=" + apartmentReq.getId());
                     }

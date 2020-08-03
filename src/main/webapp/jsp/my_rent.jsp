@@ -109,38 +109,38 @@
 <main role="main" class="container">
 
     <div class="my-3 p-3 bg-white rounded box-shadow">
-        <h6 class="border-bottom border-gray pb-2 mb-0"><fmt:message key="main.myRequestsButton"/></h6>
+        <h6 class="border-bottom border-gray pb-2 mb-0"><fmt:message key="main.myRentButton"/></h6>
         <c:choose>
-            <c:when test="${requestList == null}">
-                <fmt:message key="myRequests.messageNoRequests"/>
+            <c:when test="${demandList == null}">
+                <fmt:message key="myDemands.messageNoDemands"/>
             </c:when>
             <c:otherwise>
-                <c:forEach var="request" items="${requestList}" varStatus="status">
-                    <c:set var="requestId" value="${request.getId()}"/>
-                    <c:set var="advertisement" value="${advertisementMap[requestId]}"/>
-                    <c:set var="apartment" value="${apartmentMap[requestId]}"/>
+                <c:forEach var="demand" items="${demandList}" varStatus="status">
+                    <c:set var="demandId" value="${demand.getId()}"/>
+                    <c:set var="advertisement" value="${advertisementMap[demandId]}"/>
+                    <c:set var="apartment" value="${apartmentMap[demandId]}"/>
                     <div class="media text-muted pt-3 border-bottom border-gray">
 
                         <p class="media-body pb-3 mb-0 small lh-125" style="width: 350px; min-width: 80px; height: 40px; max-width: 120px;">
                                 <c:choose>
-                                    <c:when test="${request.getStatus() == created}">
+                                    <c:when test="${demand.getStatus() == created}">
                                         <strong style="color: #005cbf">
-                                            <fmt:message key="myRequests.statusCreated"/>
+                                            <fmt:message key="myDemands.statusCreated"/>
                                         </strong>
                                     </c:when>
-                                    <c:when test="${request.getStatus() == approved}">
+                                    <c:when test="${demand.getStatus() == approved}">
                                         <strong style="color: #4CAF50">
-                                            <fmt:message key="myRequests.statusApproved"/>
+                                            <fmt:message key="myDemands.statusApproved"/>
                                         </strong>
                                     </c:when>
-                                    <c:when test="${request.getStatus() == refused}">
+                                    <c:when test="${demand.getStatus() == refused}">
                                         <strong style="color: #b21f2d">
-                                            <fmt:message key="myRequests.statusRefused"/>
+                                            <fmt:message key="myDemands.statusRefused"/>
                                         </strong>
                                     </c:when>
-                                    <c:when test="${request.getStatus() == canceled}">
+                                    <c:when test="${demand.getStatus() == canceled}">
                                         <strong class="d-block text-gray-dark">
-                                            <fmt:message key="myRequests.statusCanceled"/>
+                                            <fmt:message key="myDemands.statusCanceled"/>
                                         </strong>
                                     </c:when>
                                 </c:choose>
@@ -155,21 +155,21 @@
                         </p>
 
                         <p class="media-body pb-3 mb-0 small lh-125">
-                            <ctg:dateTime dateTimeValue="${ request.getCreationDate() }"/>
+                            <ctg:dateTime dateTimeValue="${ demand.getCreationDate() }"/>
                         </p>
 
                         <p class="media-body pb-3 mb-0 small lh-125">
                             <c:choose>
                                 <c:when test="${advertisement.isVisible() == 'true'}">
                                     <c:choose>
-                                        <c:when test="${request.getStatus() == created}">
+                                        <c:when test="${demand.getStatus() == created}">
                                         <strong>
-                                            <a href="http://localhost:8080/apartments_web_war/control?command=cancel_request&requestId=${ request.getId() }"
-                                               class="btn btn-sm btn-danger"><fmt:message key="myRequests.cancelButton"/></a>
-<%--                                            <form action="${pageContext.request.contextPath}/control" method="get">--%>
+                                            <a href="http://localhost:8080/apartments_web_war/control?command=cancel_demand&demandId=${ demand.getId() }"
+                                               class="btn btn-sm btn-danger"><fmt:message key="myDemands.cancelButton"/></a>
+<%--                                            <form action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--                                                <input type="hidden" name="command" value="cancel_request"/>--%>
-<%--                                                <input type="hidden" name="requestId" value="${ request.getId() }"/>--%>
-<%--                                                <input type="submit" name="button" value="<fmt:message key="myRequests.cancelButton"/>">--%>
+<%--                                                <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
+<%--                                                <input type="submit" name="button" value="<fmt:message key="myDemands.cancelButton"/>">--%>
 <%--                                            </form>--%>
                                         </strong>
                                         </c:when>
@@ -179,63 +179,63 @@
                                 <c:otherwise>
                                     <c:choose>
                                         <c:when test="${apartment.getStatus() == apartmentRent}">
-                                            <strong><fmt:message key="myRequests.apartmentRent"/></strong>
+                                            <strong><fmt:message key="myDemands.apartmentRent"/></strong>
                                             <strong>
-                                                <a href="http://localhost:8080/apartments_web_war/control?command=finish_rent&apartmentId=${apartment.getId() }&requestId=${ request.getId() }"
-                                                   class="btn btn-sm btn-primary"><fmt:message key="myRequests.finishRentButton"/></a>
-<%--                                                <form action="${pageContext.request.contextPath}/control" method="get">--%>
+                                                <a href="http://localhost:8080/apartments_web_war/control?command=finish_rent&apartmentId=${apartment.getId() }&demandId=${ demand.getId() }"
+                                                   class="btn btn-sm btn-primary"><fmt:message key="myDemands.finishRentButton"/></a>
+<%--                                                <form action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--                                                    <input type="hidden" name="command" value="finish_rent"/>--%>
 <%--                                                    <input type="hidden" name="apartmentId" value="${apartment.getId() }"/>--%>
-<%--                                                    <input type="hidden" name="requestId" value="${ request.getId() }"/>--%>
-<%--                                                    <input type="submit" name="button" value="<fmt:message key="myRequests.finishRentButton"/>">--%>
+<%--                                                    <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
+<%--                                                    <input type="submit" name="button" value="<fmt:message key="myDemands.finishRentButton"/>">--%>
 <%--                                                </form>--%>
                                             </strong>
                                         </c:when>
                                         <c:otherwise>
                                             <c:choose>
-                                                <c:when test="${request.getStatus() == approved}">
+                                                <c:when test="${demand.getStatus() == approved}">
                                                     <strong>
                                                         <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;" class="btn btn-sm btn-success">
-                                                            <fmt:message key="myRequests.acceptButton"/>
+                                                            <fmt:message key="myDemands.acceptButton"/>
                                                         </button>
                                                         <div id="id01" class="modal">
 
                                                             <form class="modal-content animate" action="${pageContext.request.contextPath}/control" method="post">
                                                                 <input type="hidden" name="command" value="accept_invitation">
-                                                                <input type="hidden" name="requestId" value="${ request.getId() }"/>
-                                                                <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>
+                                                                <input type="hidden" name="demandId" value="${ demand.getId() }"/>
+                                                                <input type="hidden" name="apartmentId" value="${ demand.getApartmentId() }"/>
                                                                 <div class="imgcontainer">
                                                                     <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
                                                                 </div>
 
                                                                 <div class="container">
-                                                                    <b><fmt:message key="myRequests.acceptConfirmText"/></b><br/>
-                                                                    <p><fmt:message key="myRequests.acceptConfirmText2"/></p>
-                                                                    <button type="submit" style=""><fmt:message key="myRequests.acceptButton"/></button>
+                                                                    <b><fmt:message key="myDemands.acceptConfirmText"/></b><br/>
+                                                                    <p><fmt:message key="myDemands.acceptConfirmText2"/></p>
+                                                                    <button type="submit" style=""><fmt:message key="myDemands.acceptButton"/></button>
                                                                 </div>
                                                                 </form>
                                                             </div>
-<%--                                                        <form action="${pageContext.request.contextPath}/control" method="get">--%>
+<%--                                                        <form action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--                                                            <input type="hidden" name="command" value="accept_invitation"/>--%>
-<%--                                                            <input type="hidden" name="requestId" value="${ request.getId() }"/>--%>
-<%--                                                            <input type="hidden" name="apartmentId" value="${ request.getApartmentId() }"/>--%>
-<%--                                                            <input type="submit" name="button" value="<fmt:message key="myRequests.acceptButton"/>">--%>
+<%--                                                            <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
+<%--                                                            <input type="hidden" name="apartmentId" value="${ demand.getApartmentId() }"/>--%>
+<%--                                                            <input type="submit" name="button" value="<fmt:message key="myDemands.acceptButton"/>">--%>
 <%--                                                        </form>--%>
                                                     </strong>
                                                     <strong>
-                                                        <a href="http://localhost:8080/apartments_web_war/control?command=decline_invitation&=requestId=${ request.getId() }&advertisementId=${ advertisement.getId() }"
-                                                           class="btn btn-sm btn-danger"><fmt:message key="myRequests.declineButton"/></a>
-<%--                                                        <form action="${pageContext.request.contextPath}/control" method="get">--%>
+                                                        <a href="http://localhost:8080/apartments_web_war/control?command=decline_invitation&=demandId=${ demand.getId() }&advertisementId=${ advertisement.getId() }"
+                                                           class="btn btn-sm btn-danger"><fmt:message key="myDemands.declineButton"/></a>
+<%--                                                        <form action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--                                                            <input type="hidden" name="command" value="decline_invitation"/>--%>
-<%--                                                            <input type="hidden" name="requestId" value="${ request.getId() }"/>--%>
+<%--                                                            <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
 <%--                                                            <input type="hidden" name="advertisementId" value="${ advertisement.getId() }"/>--%>
-<%--                                                            <input type="submit" name="button" value="<fmt:message key="myRequests.declineButton"/>">--%>
+<%--                                                            <input type="submit" name="button" value="<fmt:message key="myDemands.declineButton"/>">--%>
 <%--                                                        </form>--%>
                                                     </strong>
                                                     <br/>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <fmt:message key="myRequests.advetisementStatus"/>
+                                                    <fmt:message key="myDemands.advetisementStatus"/>
                                                 </c:otherwise>
                                             </c:choose>
                                         </c:otherwise>

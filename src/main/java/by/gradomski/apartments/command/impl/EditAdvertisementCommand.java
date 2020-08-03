@@ -2,9 +2,8 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Ad;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.exception.ServiceException;
-import by.gradomski.apartments.service.AdService;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
 import by.gradomski.apartments.validator.AdvertisementValidator;
 import org.apache.logging.log4j.LogManager;
@@ -43,7 +42,7 @@ public class EditAdvertisementCommand implements Command {
         router.setRedirect();
         String page;
         HttpSession session = request.getSession();
-        Ad advertisement = (Ad) session.getAttribute(ADVERTISEMENT);
+        Advertisement advertisement = (Advertisement) session.getAttribute(ADVERTISEMENT);
         String title = request.getParameter(TITLE);
         String price = request.getParameter(PRICE);
         Map<String, String> validationResult = AdvertisementValidator.isValid(title, price);
@@ -55,8 +54,8 @@ public class EditAdvertisementCommand implements Command {
                     request.setAttribute("errorUpdate", true);
                     page = EDIT_ADVERTISEMENT;
                 } else {
-                    List<Ad> adList = AdServiceImpl.getInstance().getAllVisible();
-                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, adList);
+                    List<Advertisement> advertisementList = AdServiceImpl.getInstance().getAllVisible();
+                    request.getServletContext().setAttribute(ADVERTISEMENT_LIST, advertisementList);
                     session.removeAttribute(ADVERTISEMENT);
                     session.removeAttribute(APARTMENT_ID);
                     session.removeAttribute(REGION);

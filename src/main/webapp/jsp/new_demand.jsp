@@ -12,31 +12,32 @@
 <fmt:setBundle basename="prop.pagecontent" />
 <html>
 <head>
-    <title>New Request</title>
+    <title>New Demand</title>
 </head>
 <body>
 <c:import url="header.jsp"/>
-<form name="Request" action="${pageContext.request.contextPath}/control" method="get">
-    <input type="hidden" name="command" value="new_request">
+<form name="Demand" action="${pageContext.request.contextPath}/control" method="get">
+    <input type="hidden" name="command" value="new_demand">
     <input type="hidden" name="apartmentId" value="${apartmentId}">
-    <h3><fmt:message key="newRequest.head"/><br/></h3>
-    <fmt:message key="newRequest.date"/> : <input type="date" required name="expectedDate"><br/>
+    <h3><fmt:message key="newDemand.head"/><br/></h3>
+    <small><fmt:message key="message.required"/> </small><br/>
+    <fmt:message key="newDemand.date"/>* : <input type="date" required name="expectedDate"><br/>
     <c:choose>
         <c:when test="${dateError eq true}">
-            <fmt:message key="newRequest.dateErrorMessage"/><br/>
+            <fmt:message key="newDemand.dateErrorMessage"/><br/>
         </c:when>
     </c:choose>
-    <fmt:message key="newRequest.description"/> : <input name="description" pattern="^.{1,150}$"><br/>
+    <fmt:message key="newDemand.description"/> : <input name="description" pattern="^.{1,150}$"><br/>
     <c:choose>
         <c:when test="${descriptionError eq true}">
-            <fmt:message key="newRequest.descriptionErrorMessage"/><br/>
+            <fmt:message key="newDemand.descriptionErrorMessage"/><br/>
         </c:when>
     </c:choose>
-    <i><fmt:message key="newRequest.note"/> </i>
-    <input type="submit" name="button" value="<fmt:message key="newRequest.applyButton"/>"/>
+    <i><fmt:message key="newDemand.note"/> </i>
+    <input type="submit" name="button" value="<fmt:message key="newDemand.applyButton"/>"/>
     <c:choose>
         <c:when test="${error eq true}">
-            <fmt:message key="newRequest.errorMessage"/><br/>
+            <fmt:message key="newDemand.errorMessage"/><br/>
         </c:when>
     </c:choose>
 </form>

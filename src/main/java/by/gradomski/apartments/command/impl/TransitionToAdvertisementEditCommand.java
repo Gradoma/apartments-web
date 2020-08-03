@@ -2,20 +2,14 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.Ad;
-import by.gradomski.apartments.entity.Request;
-import by.gradomski.apartments.entity.RequestStatus;
+import by.gradomski.apartments.entity.Advertisement;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.AdServiceImpl;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import java.util.List;
-import java.util.Optional;
 
 import static by.gradomski.apartments.command.PagePath.EDIT_ADVERTISEMENT;
 import static by.gradomski.apartments.command.PagePath.ERROR_PAGE;
@@ -40,7 +34,7 @@ public class TransitionToAdvertisementEditCommand implements Command {
         String page;
         long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
         try {
-            Ad advertisement = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
+            Advertisement advertisement = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
             HttpSession session = request.getSession();
             session.setAttribute(ADVERTISEMENT, advertisement);
             session.setAttribute(APARTMENT_ID, request.getParameter(APARTMENT_ID));

@@ -3,24 +3,23 @@ package by.gradomski.apartments.entity;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
-public class Request {
+public class Demand {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private long id;
     private User applicant;
     private long apartmentId;
     private String description;
     private LocalDate expectedDate;
-    private RequestStatus status;
+    private DemandStatus status;
     private LocalDateTime creationDate;
 
-    public Request(){};
-    public Request(User applicant, long apartmentId, LocalDate expectedDate){
+    public Demand(){};
+    public Demand(User applicant, long apartmentId, LocalDate expectedDate){
         this.applicant = applicant;
         this.apartmentId = apartmentId;
         this.expectedDate = expectedDate;
-        status = RequestStatus.CREATED;
+        status = DemandStatus.CREATED;
         creationDate = LocalDateTime.now();
     }
 
@@ -64,11 +63,11 @@ public class Request {
         this.expectedDate = expectedDate;
     }
 
-    public RequestStatus getStatus() {
+    public DemandStatus getStatus() {
         return status;
     }
 
-    public void setStatus(RequestStatus status) {
+    public void setStatus(DemandStatus status) {
         this.status = status;
     }
 
@@ -85,16 +84,16 @@ public class Request {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Request request = (Request) o;
+        Demand demand = (Demand) o;
 
-        if (id != request.id) return false;
-        if (apartmentId != request.apartmentId) return false;
-        if (applicant != null ? !applicant.equals(request.applicant) : request.applicant != null) return false;
-        if (description != null ? !description.equals(request.description) : request.description != null) return false;
-        if (expectedDate != null ? !expectedDate.equals(request.expectedDate) : request.expectedDate != null)
+        if (id != demand.id) return false;
+        if (apartmentId != demand.apartmentId) return false;
+        if (applicant != null ? !applicant.equals(demand.applicant) : demand.applicant != null) return false;
+        if (description != null ? !description.equals(demand.description) : demand.description != null) return false;
+        if (expectedDate != null ? !expectedDate.equals(demand.expectedDate) : demand.expectedDate != null)
             return false;
-        if (status != request.status) return false;
-        return creationDate != null ? creationDate.equals(request.creationDate) : request.creationDate == null;
+        if (status != demand.status) return false;
+        return creationDate != null ? creationDate.equals(demand.creationDate) : demand.creationDate == null;
     }
 
     @Override

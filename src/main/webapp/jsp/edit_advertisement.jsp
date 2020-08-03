@@ -108,18 +108,19 @@
 </div>
 
 <form action="${pageContext.request.contextPath}/control" method="get">
+    <small><fmt:message key="message.required"/> </small><br/>
     <input type="hidden" name="command" value="edit_advertisement">
-    <fmt:message key="newAd.title"/> : <input required name="title" pattern="^.{1,70}$" value="${advertisement.getTitle()}"><br/>
+    <fmt:message key="newAdvertisement.title"/> : <input required name="title" pattern="^.{1,70}$" value="${advertisement.getTitle()}"><br/>
     <c:choose>
         <c:when test="${titleError eq true}">
-            <fmt:message key="newAd.titleErrorMesage"/><br/>
+            <fmt:message key="newAdvertisement.titleErrorMesage"/><br/>
         </c:when>
     </c:choose>
-    <fmt:message key="newAd.price"/> : <input type="text" required name="price"
+    <fmt:message key="newAdvertisement.price"/>* : <input type="text" required name="price"
                                               pattern="^((\p{Digit}){1,5}([.,]\d{1,2})?)$" value="${advertisement.getPrice()}"><br/>
     <c:choose>
         <c:when test="${priceError eq true}">
-            <fmt:message key="newAd.priceErrorMesage"/><br/>
+            <fmt:message key="newAdvertisement.priceErrorMesage"/><br/>
         </c:when>
         <c:when test="${errorUpdate eq true}">
             <fmt:message key="advertisement.errorUpdateMessage"/>

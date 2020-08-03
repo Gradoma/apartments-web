@@ -8,7 +8,7 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestValidator {
+public class DemandValidator {
     private static final Logger log = LogManager.getLogger();
     private static final int DESCRIPTION_LENGTH = 150;
     private static final String DESCRIPTION = "description";

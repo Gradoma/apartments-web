@@ -3,11 +3,11 @@ package by.gradomski.apartments.command.impl;
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Apartment;
-import by.gradomski.apartments.entity.Request;
+import by.gradomski.apartments.entity.Demand;
 import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
-import by.gradomski.apartments.service.impl.RequestServiceImpl;
+import by.gradomski.apartments.service.impl.DemandServiceImpl;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +35,7 @@ public class AdminToUserProfileCommand implements Command {
             request.setAttribute(CURRENT_USER, currentUser);
             List<Apartment> usersApartmentList = ApartmentServiceImpl.getInstance().getApartmentsByOwner(userId);
             request.setAttribute(APARTMENT_LIST, usersApartmentList);
-            List<Request> usersDemandList = RequestServiceImpl.getInstance().getRequestsByApplicantId(userId);
+            List<Demand> usersDemandList = DemandServiceImpl.getInstance().getDemandsByApplicantId(userId);
             request.setAttribute(DEMAND_LIST, usersDemandList);
             page = ADMIN_USER_PROFILE;
         } catch (ServiceException e){

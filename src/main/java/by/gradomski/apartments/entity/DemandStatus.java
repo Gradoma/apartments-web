@@ -5,7 +5,7 @@ import by.gradomski.apartments.exception.IncorrectStatusException;
 import java.util.Arrays;
 import java.util.Optional;
 
-public enum RequestStatus {
+public enum DemandStatus {
     CREATED(1),
     APPROVED(2),
     REFUSED(3),
@@ -14,7 +14,7 @@ public enum RequestStatus {
 
     private long value;
 
-    RequestStatus(long value){
+    DemandStatus(long value){
         this.value = value;
     }
 
@@ -22,9 +22,9 @@ public enum RequestStatus {
         return value;
     }
 
-    public static RequestStatus getByValue(long value) throws IncorrectStatusException {
-        RequestStatus[] statuses = RequestStatus.values();
-        Optional<RequestStatus> optionalRequestStatus = Arrays.stream(statuses).filter(r -> r.getValue() == value).findFirst();
+    public static DemandStatus getByValue(long value) throws IncorrectStatusException {
+        DemandStatus[] statuses = DemandStatus.values();
+        Optional<DemandStatus> optionalRequestStatus = Arrays.stream(statuses).filter(r -> r.getValue() == value).findFirst();
         if (optionalRequestStatus.isEmpty()){
             throw new IncorrectStatusException(value + " type not present in enum");
         }
