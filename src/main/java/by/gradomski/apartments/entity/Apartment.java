@@ -1,14 +1,10 @@
 package by.gradomski.apartments.entity;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class Apartment {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private long id;
     private String region;
     private String city;

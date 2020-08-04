@@ -1,12 +1,9 @@
 package by.gradomski.apartments.entity;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 public class User {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private long id;
     private String loginName;
     private String password;

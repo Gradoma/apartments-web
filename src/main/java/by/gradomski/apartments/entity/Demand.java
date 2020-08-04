@@ -1,11 +1,9 @@
 package by.gradomski.apartments.entity;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Demand {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private long id;
     private User applicant;
     private long apartmentId;
@@ -122,9 +120,9 @@ public class Demand {
         builder.append(", description=");
         builder.append(description);
         builder.append(", expectedDate=");
-        builder.append(dateFormat.format(expectedDate));
+        builder.append(expectedDate);
         builder.append(", creationDate=");
-        builder.append(dateFormat.format(creationDate));
+        builder.append(creationDate);
         builder.append(", status=");
         builder.append(status);
         return builder.toString();

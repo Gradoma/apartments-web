@@ -220,6 +220,14 @@ public class ApartmentServiceImpl implements ApartmentService {
         try {
             ApartmentStatus currentStatus = ApartmentDaoImpl.getInstance().findStatusByApartmentId(id);
             switch (currentStatus){
+                case IN_DEMAND:
+                    List<Demand> demandList = DemandServiceImpl.getInstance().getActiveDemandsByApartmentId(id);
+                    for(Demand demand : demandList){
+                        boolean refusingResult = DemandServiceImpl.getInstance().refuseDemand(demand.getId());
+                        if(!refusingResult){
+                            log.error("can't refuse demand: id=" + demand.getId());
+                        }
+                    }
                 case REGISTERED:
                     flag = ApartmentDaoImpl.getInstance().updateStatusByApartmentId(id, ApartmentStatus.DELETED);
                     if(flag){
@@ -229,16 +237,6 @@ public class ApartmentServiceImpl implements ApartmentService {
                             log.warn("photos wasn't deleted: apartmentId=" + id);
                         }
                     }
-                    break;
-                case IN_DEMAND:
-                    List<Demand> demandList = DemandServiceImpl.getInstance().getActiveDemandsByApartmentId(id);
-                    for(Demand demand : demandList){
-                        boolean refusingResult = DemandServiceImpl.getInstance().refuseDemand(demand.getId());
-                        if(!refusingResult){
-                            log.error("can't refuse demand: id=" + demand.getId());
-                        }
-                    }
-                    flag = true;
                     break;
                 case RENT:
                     log.warn("try to delete rent apartment");
