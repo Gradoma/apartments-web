@@ -35,11 +35,12 @@ public class ApproveDemandCommand implements Command {
         Router router = new Router();
         router.setRedirect();
         String page;
-        long requestId = Long.parseLong(request.getParameter(DEMAND_ID));
+        long demandId = Long.parseLong(request.getParameter(DEMAND_ID));
+        log.debug("demand id =" + demandId);
         long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
         try{
             List<Demand> demandList = DemandServiceImpl.getInstance().getActiveDemandsByApartmentId(apartmentId);
-            boolean approvingResult = DemandServiceImpl.getInstance().approveDemandFromList(requestId, demandList);
+            boolean approvingResult = DemandServiceImpl.getInstance().approveDemandFromList(demandId, demandList);
             if(approvingResult){
                 Advertisement advertisement = AdServiceImpl.getInstance().getAdByApartmentId(apartmentId);
                 long advertisementId = advertisement.getId();

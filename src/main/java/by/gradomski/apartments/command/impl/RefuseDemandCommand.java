@@ -28,10 +28,11 @@ public class RefuseDemandCommand implements Command {
         Router router = new Router();
         router.setRedirect();
         String page;
-        long requestId = Long.parseLong(request.getParameter(DEMAND_ID));
+        long demandId = Long.parseLong(request.getParameter(DEMAND_ID));
         long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
+        log.debug("demand id=" + demandId);
         try{
-            boolean refusingResult = DemandServiceImpl.getInstance().refuseDemand(requestId);
+            boolean refusingResult = DemandServiceImpl.getInstance().refuseDemand(demandId);
             HttpSession session = request.getSession(false);
             if(!refusingResult){
                 session.setAttribute("refuseErrorMessage", "Error, try again.");        //todo as tmp atr

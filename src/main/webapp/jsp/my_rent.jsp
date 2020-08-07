@@ -223,7 +223,7 @@
 <%--                                                        </form>--%>
                                                     </strong>
                                                     <strong>
-                                                        <a href="http://localhost:8080/apartments_web_war/control?command=decline_invitation&=demandId=${ demand.getId() }&advertisementId=${ advertisement.getId() }"
+                                                        <a href="http://localhost:8080/apartments_web_war/control?command=decline_invitation&demandId=${ demand.getId() }&advertisementId=${ advertisement.getId() }"
                                                            class="btn btn-sm btn-danger"><fmt:message key="myDemands.declineButton"/></a>
 <%--                                                        <form action="${pageContext.demand.contextPath}/control" method="get">--%>
 <%--                                                            <input type="hidden" name="command" value="decline_invitation"/>--%>
