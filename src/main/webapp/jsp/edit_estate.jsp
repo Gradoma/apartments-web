@@ -95,6 +95,9 @@
 <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
     <fmt:message key="estate.deleteButton"/>
 </button>
+<c:if test="${errorDeleteMessage eq true}">
+    <fmt:message key="estate.deleteError"/>
+</c:if>
 <div id="id01" class="modal">
 
     <form class="modal-content animate" action="${pageContext.request.contextPath}/control" method="post">

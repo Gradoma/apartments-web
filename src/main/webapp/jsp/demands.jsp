@@ -94,7 +94,6 @@
 </head>
 <body>
 <c:import url="header.jsp"/>
-    ${refuseErrorMessage}
     <c:choose>
         <c:when test="${demandList == null}">
             <fmt:message key="demands.messageNoDemands"/>

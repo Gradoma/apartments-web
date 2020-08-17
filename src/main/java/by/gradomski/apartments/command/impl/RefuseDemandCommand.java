@@ -35,16 +35,10 @@ public class RefuseDemandCommand implements Command {
             boolean refusingResult = DemandServiceImpl.getInstance().refuseDemand(demandId);
             HttpSession session = request.getSession(false);
             if(!refusingResult){
-                session.setAttribute("refuseErrorMessage", "Error, try again.");        //todo as tmp atr
+                log.error("demand wasn't refused, id=" + demandId);
             }
             List<Demand> demandList = DemandServiceImpl.getInstance().getActiveDemandsByApartmentId(apartmentId);
             session.setAttribute(DEMAND_LIST, demandList);
-            //todo as tmp atr
-//            if(!requestList.isEmpty()) {
-//                request.setAttribute(REQUEST_LIST, requestList);
-//            } else {
-//                request.setAttribute(REQUEST_LIST, null);
-//            }
             page = DEMANDS;
         } catch (ServiceException e){
             log.error(e);
@@ -52,6 +46,5 @@ public class RefuseDemandCommand implements Command {
         }
         router.setPage(page);
         return router;
-//        return page;
     }
 }

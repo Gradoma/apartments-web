@@ -51,10 +51,10 @@ public class SignInCommand implements Command {
                         Long advertisementId = (Long) session.getAttribute(ADVERTISEMENT_ID);
                         if(advertisementId != null){
                             Advertisement advertisement = AdServiceImpl.getInstance().getAdById(advertisementId);
-                            session.setAttribute(ADVERTISEMENT, advertisement);      //todo as tmp atr
+                            session.setAttribute(ADVERTISEMENT, advertisement);
                             long apartmentId = advertisement.getApartmentId();
                             Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
-                            session.setAttribute(APARTMENT, apartment);      //todo as tmp atr
+                            session.setAttribute(APARTMENT, apartment);
                             page = PagePath.ADVERTISEMENT;
                         } else {
                             page = USER_PAGE;
@@ -63,7 +63,6 @@ public class SignInCommand implements Command {
                         page = ERROR_PAGE;
                     }
                 } else {
-//                    session.setAttribute("greeting", true);             //todo check on page -> delete if ok
                     page = USER_SETTINGS;
                 }
             } else {

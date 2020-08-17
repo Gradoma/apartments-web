@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -61,12 +62,17 @@ public class NewAdCommand implements Command {
                         if (updateStatusResult) {
                             List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(adAuthor.getId());
                             session.removeAttribute(APARTMENT_ID);
-                            session.setAttribute("apartmentList", updatedApartmentList); //TODO(change to request.attr?)
+                            session.setAttribute("apartmentList", updatedApartmentList);
 
                             Advertisement newAdvertisement = AdServiceImpl.getInstance().getAdById(newAdvertisementId);
                             Object obj = request.getServletContext().getAttribute(ADVERTISEMENT_LIST);
-                            log.debug("obj from servletContext ADVERTISEMENT_LIST: " + obj);    //FIXME(if this first ad -> obj == null?)
-                            List<Advertisement> advertisementList = (List<Advertisement>) obj;
+                            log.debug("obj from servletContext ADVERTISEMENT_LIST: " + obj);
+                            List<Advertisement> advertisementList;
+                            if(obj != null){
+                                advertisementList = (List<Advertisement>) obj;
+                            } else {
+                                advertisementList = new ArrayList<>();
+                            }
                             advertisementList.add(newAdvertisement);
                             advertisementList.sort(new AdvertisementComparator());
 

@@ -27,7 +27,6 @@ public class TransitionToEstateCommand implements Command {
     private static final String USER = "user";
     private static final String APARTMENT_LIST = "apartmentList";
     private static final String DEMAND_MAP = "demandMap";
-    private static final String DEMAND_COUNTS = "demandCounts";
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -45,17 +44,16 @@ public class TransitionToEstateCommand implements Command {
                 if(apartmentList.isEmpty()){
                     request.setAttribute("noAppartmentsMessage", true);
                 } else {
-                    Map<Long, Boolean> requestMap = new HashMap<>();
+                    Map<Long, Boolean> demandMap = new HashMap<>();
                     for(Apartment apartment : apartmentList){
                         long apartmentId = apartment.getId();
                         List<Demand> apartmentDemandList = DemandServiceImpl.getInstance()
                                 .getActiveDemandsByApartmentId(apartmentId);
-                        request.setAttribute(DEMAND_COUNTS, apartmentDemandList.size());
                         if(containsApproved(apartmentDemandList)){
-                            requestMap.put(apartmentId, true);
+                            demandMap.put(apartmentId, true);
                         }
                     }
-                    request.setAttribute(DEMAND_MAP, requestMap);
+                    request.setAttribute(DEMAND_MAP, demandMap);
                 }
                 request.setAttribute(APARTMENT_LIST, apartmentList);
                 page = ESTATE;

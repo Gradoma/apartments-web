@@ -41,7 +41,7 @@ public class DeleteAdvertisementCommand implements Command {
             long apartmentId = advertisement.getApartmentId();
             List<Demand> apartmentDemandList = DemandServiceImpl.getInstance().getActiveDemandsByApartmentId(apartmentId);
             for(Demand apartmentReq : apartmentDemandList){
-                if(apartmentReq.getStatus() != DemandStatus.APPROVED){     //TODO(check is needed??)
+                if(apartmentReq.getStatus() != DemandStatus.APPROVED){
                     boolean updateStatusResult = DemandServiceImpl.getInstance().refuseDemand(apartmentReq.getId());
                     if(!updateStatusResult){
                         log.error("can't refuse apartment request: id=" + apartmentReq.getId());

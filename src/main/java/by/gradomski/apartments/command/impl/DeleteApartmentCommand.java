@@ -39,13 +39,14 @@ public class DeleteApartmentCommand implements Command {
                 boolean result = ApartmentServiceImpl.getInstance().deleteApartment(id);
                 if(result){
                     List<Apartment> updatedApartmentList = apartmentService.getApartmentsByOwner(currentUser.getId());
-                    session.setAttribute(APARTMENT_LIST, updatedApartmentList);     //todo as tmp atr
+                    session.setAttribute(APARTMENT_LIST, updatedApartmentList);
+                    page = ESTATE;
                 } else {
-                    //todo change page, now go to estate
+                    log.error("apartment wasn't deleted, id=" + id);
                     router.setForward();
-                    request.setAttribute("errorDeleteMessage", "You can't delete this apartment");//todo translate
+                    request.setAttribute("errorDeleteMessage", true);
+                    page = EDIT_ESTATE;
                 }
-                page = ESTATE;
             } catch (ServiceException e){
                 log.error(e);
                 page = ERROR_PAGE;
@@ -53,6 +54,5 @@ public class DeleteApartmentCommand implements Command {
         }
         router.setPage(page);
         return router;
-//        return page;
     }
 }

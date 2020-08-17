@@ -85,11 +85,6 @@ public class ApartmentServiceImpl implements ApartmentService {
             long apartmentId = apartment.getId();
             PhotoApartmentService photoService = PhotoApartmentServiceImpl.getInstance();
             Map<Long, String> photoMap = photoService.getByApartmentId(apartmentId);
-//            if(photoList.isEmpty()){          // todo(def photo here or load logo on page)
-//                log.debug("no apartment photo, default photo will be set");
-//                String defaultImage = photoService.getDefaultImage();
-//                photoList.add(defaultImage);
-//            }
             apartment.setPhotoMap(photoMap);
         }
         return apartmentList;

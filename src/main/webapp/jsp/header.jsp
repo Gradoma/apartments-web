@@ -125,7 +125,7 @@
             </a>
             <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_estate">
                 <fmt:message key="main.estateButton"/>
-                    <%--                    <span class="badge badge-pill bg-light align-text-bottom">27</span>todo add on requests--%>
+
             </a>
             <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_my_rent">
                 <fmt:message key="main.myRentButton"/>
@@ -199,7 +199,7 @@
 <%--            </a>--%>
 <%--            <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_estate">--%>
 <%--                <fmt:message key="main.estateButton"/>--%>
-<%--                    &lt;%&ndash;                    <span class="badge badge-pill bg-light align-text-bottom">27</span>todo add on requests&ndash;%&gt;--%>
+<%--                    &lt;%&ndash;                    <span class="badge badge-pill bg-light align-text-bottom">27</span>--%>
 <%--            </a>--%>
 <%--            <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_my_rent">--%>
 <%--                <fmt:message key="main.myRentButton"/>--%>

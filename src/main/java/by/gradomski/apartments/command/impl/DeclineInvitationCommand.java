@@ -49,7 +49,7 @@ public class DeclineInvitationCommand implements Command {
                     long apartmentId = advertisement.getApartmentId();
                     Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
                     allApartmentsMap.put(advertisementId, apartment);
-                    request.getServletContext().setAttribute(APARTMENT_MAP, allApartmentsMap); // todo change names in servlcontext and my_rent
+                    request.getServletContext().setAttribute(APARTMENT_MAP, allApartmentsMap);
 
                     page = USER_PAGE;
                 } else {
