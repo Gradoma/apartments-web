@@ -116,64 +116,64 @@
     <input type="hidden" name="command" value="edit_apartment">
 <%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
     <fmt:message key="newEstate.region"/>* : <input required name="region" value="${apartment.getRegion()}"
-                                                   pattern="^[а-яА-я-.\s]{1,45}$"><br/>
+                                                   pattern="^[а-яА-я-.\s]{1,45}$">
     <c:choose>
         <c:when test="${regionError eq true}">
-            <fmt:message key="estate.regionErrorMessage"/><br/>
+            <fmt:message key="estate.regionErrorMessage"/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.city"/>* : <input required name="city" value="${apartment.getCity()}"
-                                                 pattern="^[а-яА-я-.\s]{1,45}$"><br/>
+    <br/><fmt:message key="newEstate.city"/>* : <input required name="city" value="${apartment.getCity()}"
+                                                 pattern="^[а-яА-я-.\s]{1,45}$">
     <c:choose>
         <c:when test="${cityError eq true}">
-            <fmt:message key="estate.cityErrorMessage"/><br/>
+            <fmt:message key="estate.cityErrorMessage"/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.address"/>* : <input required name="address" value="${apartment.getAddress()}"
-                                                    pattern="^.{1,45}$"><br/>
+    <br/><fmt:message key="newEstate.address"/>* : <input required name="address" value="${apartment.getAddress()}"
+                                                    pattern="^.{1,45}$">
     <c:choose>
         <c:when test="${addressError eq true}">
-            <fmt:message key="estate.addressErrorMessage"/><br/>
+            <fmt:message key="estate.addressErrorMessage"/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.rooms"/>* : <input required type="number" name="rooms" value="${apartment.getRooms()}"
-                                                  pattern="\p{Digit}{1,2}"><br/>
+    <br/><fmt:message key="newEstate.rooms"/>* : <input required type="number" name="rooms" value="${apartment.getRooms()}"
+                                                  pattern="\p{Digit}{1,2}">
     <c:choose>
         <c:when test="${roomsError eq true}">
-            <fmt:message key="estate.roomsErrorMessage"/><br/>
+            <fmt:message key="estate.roomsErrorMessage"/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.floor"/> : <input type="number" name="floor" pattern="\p{Digit}{1,2}"
-                                                  value="${apartment.getFloor() !=0 ? apartment.getFloor() : null}" ><br/>
+    <br/><fmt:message key="newEstate.floor"/> : <input type="number" name="floor" pattern="\p{Digit}{1,2}"
+                                                  value="${apartment.getFloor() !=0 ? apartment.getFloor() : null}" >
     <c:choose>
         <c:when test="${floorError eq true}">
-            <fmt:message key="estate.floorErrorMessage"/><br/>
+            <fmt:message key="estate.floorErrorMessage"/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.square"/> : <input type="text" name="square" pattern="^(\p{Digit}+([.,]\d)?)$"
-                                                   value="${apartment.getSquare() !=0.0 ? apartment.getSquare() : null}" ><br/>
+    <br/><fmt:message key="newEstate.square"/> : <input type="text" name="square" pattern="^(\p{Digit}+([.,]\d)?)$"
+                                                   value="${apartment.getSquare() !=0.0 ? apartment.getSquare() : null}" >
     <c:choose>
         <c:when test="${squareError eq true}">
-            <fmt:message key="estate.squareErrorMessage"/><br/>
+            <fmt:message key="estate.squareErrorMessage"/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.year"/> : <input type="text" pattern="\p{Digit}{4}" name="year"
-                                                 value="${apartment.getYear()}"><br/>
+    <br/><fmt:message key="newEstate.year"/> : <input type="text" pattern="\p{Digit}{4}" name="year"
+                                                 value="${apartment.getYear()}">
     <c:choose>
         <c:when test="${yearError eq true}">
-            <fmt:message key="estate.yearErrorMessage"/><br/>
+            <fmt:message key="estate.yearErrorMessage"/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.furniture"/> :
+    <br/><fmt:message key="newEstate.furniture"/> :
     <input type="checkbox" name="furniture" value="true" ${apartment.hasFurniture() eq true ? 'checked' : ''}/><fmt:message key="newEstate.yes"/><br/>
     <fmt:message key="newEstate.description"/> : <input name="description" value="${apartment.getDescription()}"
-                                                        pattern="^.{0,200}$"><br/>
+                                                        pattern="^.{0,200}$">
     <c:choose>
         <c:when test="${descriptionError eq true}">
-            <fmt:message key="estate.descriptionErrorMessage"/><br/>
+            <fmt:message key="estate.descriptionErrorMessage"/>
         </c:when>
     </c:choose>
-    <input type="submit" name="button" value="<fmt:message key="setting.saveButton"/>"/>
+    <br/><input type="submit" name="button" value="<fmt:message key="setting.saveButton"/>"/>
 </form>
 <c:choose>
     <c:when test="${incorrectType eq true}">

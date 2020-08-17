@@ -195,17 +195,17 @@
                                             <c:choose>
                                                 <c:when test="${demand.getStatus() == approved}">
                                                     <strong>
-                                                        <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;" class="btn btn-sm btn-success">
+                                                        <button onclick="document.getElementById(${ status.count }).style.display='block'" style="width:auto;" class="btn btn-sm btn-success">
                                                             <fmt:message key="myDemands.acceptButton"/>
                                                         </button>
-                                                        <div id="id01" class="modal">
+                                                        <div id="${ status.count }" class="modal">
 
                                                             <form class="modal-content animate" action="${pageContext.request.contextPath}/control" method="post">
                                                                 <input type="hidden" name="command" value="accept_invitation">
-                                                                <input type="hidden" name="demandId" value="${ demand.getId() }"/>
+                                                                <input type="hidden" name="demandId" value="${demandId}"/>
                                                                 <input type="hidden" name="apartmentId" value="${ demand.getApartmentId() }"/>
                                                                 <div class="imgcontainer">
-                                                                    <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                                                                    <span onclick="document.getElementById(${ status.count }).style.display='none'" class="close" title="Close Modal">&times;</span>
                                                                 </div>
 
                                                                 <div class="container">

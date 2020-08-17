@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class ApartmentValidator {
     private static final Logger log = LogManager.getLogger();
     private static final String REGION_CITY_PATTERN = "^[а-яА-я-.\\s]{1,45}$";
-    private static final String ROOMS_FLOOR_PATTERN = "\\p{Digit}{1,2}";
+    private static final String ROOMS_FLOOR_PATTERN = "\\p{Digit}{1,3}";
     private static final String SQUARE_PATTERN = "^(\\p{Digit}+([.,]\\d)?)$";
     private static final String YEAR_PATTERN = "\\p{Digit}{4}";
     private static final String FALSE = "false";

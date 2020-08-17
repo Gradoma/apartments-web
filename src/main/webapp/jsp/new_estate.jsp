@@ -36,7 +36,7 @@
             <fmt:message key="estate.roomsErrorMessage"/><br/>
         </c:when>
     </c:choose>
-    <fmt:message key="newEstate.floor"/> : <input type="number" name="floor" pattern="\p{Digit}{1,2}"><br/>
+    <fmt:message key="newEstate.floor"/> : <input type="number" name="floor" pattern="\p{Digit}{1,3}"><br/>
     <c:choose>
         <c:when test="${floorError eq true}">
             <fmt:message key="estate.floorErrorMessage"/><br/>

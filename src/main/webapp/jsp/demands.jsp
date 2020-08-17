@@ -138,27 +138,23 @@
                                             <strong><fmt:message key="demands.statusRefused"/></strong>
                                         </c:when>
                                         <c:otherwise>
-                                            <c:set var="demandId" value="${demand.getId()}"/>
-                                            <button onclick="document.getElementById('id01').style.display='block'" style="width:auto;" class="btn btn-sm btn-success" >
-                                                demandId= ${demandId}
-                                                apartId= ${ demand.getApartmentId() }
+                                            <button onclick="document.getElementById(${ status.count }).style.display='block'" style="width:auto;" class="btn btn-sm btn-success" >
                                                 <fmt:message key="demands.approveButton"/>
                                             </button>
 
-                                            <div id="id01" class="modal">
+                                            <div id="${ status.count }" class="modal">
                                                 <form class="modal-content animate" action="${pageContext.request.contextPath}/control" method="get">
                                                         <input type="hidden" name="command" value="approve_demand"/>
                                                         <input type="hidden" name="demandId" value="${demand.getId()}"/>
                                                         <input type="hidden" name="apartmentId" value="${demand.getApartmentId()}"/>
 
                                                     <div class="imgcontainer">
-                                                        <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+                                                        <span onclick="document.getElementById('${ status.count }').style.display='none'" class="close" title="Close Modal">&times;</span>
                                                     </div>
 
                                                     <div class="container">
                                                         <b><fmt:message key="demands.acceptConfirmText"/></b><br/>
                                                         <p><fmt:message key="demands.acceptConfirmText2"/></p>
-                                                        <p>${demandId}</p>
                                                         <button type="submit" style=""><fmt:message key="demands.approveButton"/></button>
                                                     </div>
                                                 </form>

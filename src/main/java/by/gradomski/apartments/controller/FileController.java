@@ -42,50 +42,111 @@ public class FileController extends HttpServlet {
     private static final String PAGE = "page";
     private static final String EDIT = "EDIT";
     private static final String SETTINGS = "SETTINGS";
+    private static final String USER = "user";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String page = null;
+        String pageName = request.getParameter(PAGE);
+        switch (pageName){
+            case EDIT:
+                page = EDIT_ESTATE;
+                break;
+            case SETTINGS:
+                page = USER_SETTINGS;
+                break;
+        }
+        HttpSession session = request.getSession(false);
         InputStream inputStream = null;
         Part filePart = request.getPart(IMAGE);
         Pattern pattern = Pattern.compile(IMAGE_TYPE_PATTERN);
         Matcher matcher = pattern.matcher(filePart.getContentType());
-        if(!matcher.find()){
-            request.setAttribute(INCORRECT_TYPE, true);
-        } else {
-            if(filePart != null){
+        if(filePart != null){
+            if(filePart.getSize() == 0){
+                request.setAttribute(EMPTY_FILE, true);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+                dispatcher.forward(request, response);
+            } else if(!matcher.find()){
+                request.setAttribute(INCORRECT_TYPE, true);
+                RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+                dispatcher.forward(request, response);
+            } else {
                 inputStream = filePart.getInputStream();
                 try {
-                    String pageName = request.getParameter(PAGE);
+//                    String pageName = request.getParameter(PAGE);
                     switch (pageName){
                         case EDIT:
-                            page = EDIT_ESTATE;
+//                            page = EDIT_ESTATE;
                             long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
                             boolean result = PhotoApartmentServiceImpl.getInstance().add(inputStream, apartmentId);
                             if(result){
                                 Apartment apartment = ApartmentServiceImpl.getInstance()
                                         .getApartmentByIdWithOwner(apartmentId) ;
-                                HttpSession session = request.getSession(false);
+//                                HttpSession session = request.getSession(false);
                                 session.setAttribute(APARTMENT, apartment);
                             } else {
                                 log.warn("photo wasn't added: apartmentId=" + apartmentId);
                             }
                             break;
                         case SETTINGS:
-                            page = USER_SETTINGS;
+//                            page = USER_SETTINGS;
                             String login = request.getParameter(LOGIN);
                             User updatedUser = UserServiceImpl.getInstance().updateUserPhoto(inputStream, login);
-                            request.getSession().setAttribute("user", updatedUser);
+//                            request.getSession().setAttribute("user", updatedUser);
+                            session.setAttribute(USER, updatedUser);
                             break;
                     }
                 } catch (ServiceException e) {
                     log.error("file upload failed: " + e);
                     throw new UnsupportedOperationException(e);
                 }
-            } else {
-                request.setAttribute(EMPTY_FILE, true);
+                response.sendRedirect(request.getContextPath() + page);
             }
+        } else {
+            log.error("filePart == null");
         }
-        response.sendRedirect(request.getContextPath() + page);
+
+//        if(!matcher.find()){
+//            request.setAttribute(INCORRECT_TYPE, true);
+//            RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+//            dispatcher.forward(request, response);
+//        } else {
+//            if(filePart != null){
+//                inputStream = filePart.getInputStream();
+//                try {
+////                    String pageName = request.getParameter(PAGE);
+//                    switch (pageName){
+//                        case EDIT:
+////                            page = EDIT_ESTATE;
+//                            long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
+//                            boolean result = PhotoApartmentServiceImpl.getInstance().add(inputStream, apartmentId);
+//                            if(result){
+//                                Apartment apartment = ApartmentServiceImpl.getInstance()
+//                                        .getApartmentByIdWithOwner(apartmentId) ;
+////                                HttpSession session = request.getSession(false);
+//                                session.setAttribute(APARTMENT, apartment);
+//                            } else {
+//                                log.warn("photo wasn't added: apartmentId=" + apartmentId);
+//                            }
+//                            break;
+//                        case SETTINGS:
+////                            page = USER_SETTINGS;
+//                            String login = request.getParameter(LOGIN);
+//                            User updatedUser = UserServiceImpl.getInstance().updateUserPhoto(inputStream, login);
+////                            request.getSession().setAttribute("user", updatedUser);
+//                            session.setAttribute(USER, updatedUser);
+//                            break;
+//                    }
+//                } catch (ServiceException e) {
+//                    log.error("file upload failed: " + e);
+//                    throw new UnsupportedOperationException(e);
+//                }
+//                response.sendRedirect(request.getContextPath() + page);
+//            } else {
+//                request.setAttribute(EMPTY_FILE, true);
+//                RequestDispatcher dispatcher = request.getRequestDispatcher(page);
+//                dispatcher.forward(request, response);
+//            }
+//        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {

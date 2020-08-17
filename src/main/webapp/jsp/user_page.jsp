@@ -168,7 +168,7 @@
                         ${apartment.getAddress()}, ${apartment.getRegion()}, ${apartment.getCity()} <br/>
                     <small><ctg:dateTime dateTimeValue="${advertisement.getCreationDate()}"/></small>
                 </p>
-                <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">${advertisement.getPrice()}</p>
+                <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">${advertisement.getPrice()} <fmt:message key="advertisement.currency"/></p>
             </div>
             <%--        <div class="media text-muted pt-3 border-bottom border-gray" style="">--%>
         </c:forEach>
