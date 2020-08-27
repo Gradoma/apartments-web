@@ -17,22 +17,13 @@ public class TransitionToEstateEditCommand implements Command{
     private static final Logger log = LogManager.getLogger();
     private static final String APARTMENT_ID = "apartmentId";
     private static final String APARTMENT = "apartment";
-//    private static final String REGION = "region";
-//    private static final String CITY = "city";
-//    private static final String ADDRESS = "address";
-//    private static final String ROOMS = "rooms";
-//    private static final String FLOOR = "floor";
-//    private static final String SQUARE = "square";
-//    private static final String YEAR = "year";
-//    private static final String FURNITURE = "furniture";
-//    private static final String DESCRIPTION = "description";
 
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
         String page;
         HttpSession session = request.getSession(false);
-        if(session != null){
+        if(session != null){              //TODO (filter)
             long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
             try {
                 Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);

@@ -159,20 +159,8 @@
                                                 </form>
                                             </div>
 
-<%--                                            <form action="${pageContext.request.contextPath}/control" method="get">--%>
-<%--                                                <input type="hidden" name="command" value="approve_request"/>--%>
-<%--                                                <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
-<%--                                                <input type="hidden" name="apartmentId" value="${ demand.getApartmentId() }"/>--%>
-<%--                                                <input type="submit" name="button" value="<fmt:message key="demands.approveButton"/>">--%>
-<%--                                            </form>--%>
                                             <a href="http://localhost:8080/apartments_web_war/control?command=refuse_demand&demandId=${ demand.getId() }&apartmentId=${ demand.getApartmentId() }"
                                                class="btn btn-sm btn-danger"><fmt:message key="demands.refuseButton"/></a>
-<%--                                            <form action="${pageContext.request.contextPath}/control" method="get">--%>
-<%--                                                <input type="hidden" name="command" value="refuse_request"/>--%>
-<%--                                                <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
-<%--                                                <input type="hidden" name="apartmentId" value="${ demand.getApartmentId() }"/>--%>
-<%--                                                <input type="submit" name="button" value="<fmt:message key="demands.refuseButton"/>">--%>
-<%--                                            </form>--%>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:otherwise>

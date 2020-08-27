@@ -71,7 +71,6 @@ public class ApproveDemandCommand implements Command {
                     page = ERROR_PAGE;
                 }
             } else {
-                // message = request was cancled or deleted
                 log.debug("request was cancled or deleted");
                 page = DEMANDS;
             }
@@ -81,10 +80,8 @@ public class ApproveDemandCommand implements Command {
         }
         router.setPage(page);
         return router;
-//        return page;
     }
 
-    // copy-paste from transitionToEstateCommand
     private boolean containsApproved(List<Demand> demandList){
         Optional<Demand> optionalRequest = demandList.stream()
                 .filter(request -> request.getStatus()== DemandStatus.APPROVED)

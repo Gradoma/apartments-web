@@ -2,8 +2,6 @@ package by.gradomski.apartments.command.impl;
 
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
-import by.gradomski.apartments.entity.User;
-import by.gradomski.apartments.exception.ServiceException;
 import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +19,7 @@ public class TransitionToSettingsCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
         String page;
-        if(request.getSession(false) != null){
+        if(request.getSession(false) != null){              //TODO (filter)
             page = USER_SETTINGS;
         } else {
             page = SIGN_IN;

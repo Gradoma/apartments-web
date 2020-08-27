@@ -115,8 +115,6 @@
         </p>
         </div>
 
-<%--        <div class="media text-muted pt-3 border-bottom border-gray" style=""><img class="mr-3" src="https://getbootstrap.com/assets/brand/bootstrap-outline.svg" alt="" width="250" height="170">--%>
-
             <c:forEach var="advertisement" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"
                        end="${ not empty lastAdvertisement ? lastAdvertisement : 4}">
                 <c:set var="apartment" value="${apartmentMap[advertisement.getId()]}"/>
@@ -141,14 +139,7 @@
                     </p>
                     <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">${advertisement.getPrice()} <fmt:message key="advertisement.currency"/> </p>
                 </div>
-<%--        <div class="media text-muted pt-3 border-bottom border-gray" style="">--%>
             </c:forEach>
-
-<%--            <p class="media-body pb-3 mb-0 small lh-125" style="width: 322px;">--%>
-<%--                <strong class="d-block text-gray-dark">@username</strong>--%>
-<%--                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.--%>
-<%--            </p><p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">Price</p>--%>
-<%--        </div><div class="media text-muted pt-3 border-bottom border-gray" style=""><img class="mr-3" src="https://getbootstrap.com/assets/brand/bootstrap-outline.svg" alt="" width="250" height="170">--%>
 
         <div class="media text-muted pt-3 border-bottom border-gray" style="">
             <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 67px; right: 30%; width: 86px; min-width: 14px; font-weight: 700; height: 0%; min-height: 0%; max-width: 159%; max-height: 0%; text-align: center; margin-top: 9px;">

@@ -90,7 +90,6 @@ public class EditAdvertisementCommand implements Command {
         }
         router.setPage(page);
         return router;
-//        return page;
     }
 
     private String defineFalseKey(Map<String, String> map){

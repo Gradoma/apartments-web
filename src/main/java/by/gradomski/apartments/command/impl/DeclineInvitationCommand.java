@@ -50,7 +50,6 @@ public class DeclineInvitationCommand implements Command {
                     Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
                     allApartmentsMap.put(advertisementId, apartment);
                     request.getServletContext().setAttribute(APARTMENT_MAP, allApartmentsMap);
-
                     page = USER_PAGE;
                 } else {
                     log.error("can't change ad status");

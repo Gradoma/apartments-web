@@ -12,7 +12,7 @@ public class TransitionToUserPage implements Command {
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
         String page;
-        if(request.getSession(false) != null){
+        if(request.getSession(false) != null){              //TODO (filter)
             page = USER_PAGE;
         } else {
             page = SIGN_IN;

@@ -3,11 +3,8 @@ package by.gradomski.apartments.command.impl;
 import by.gradomski.apartments.command.Command;
 import by.gradomski.apartments.controller.Router;
 import by.gradomski.apartments.entity.Apartment;
-import by.gradomski.apartments.entity.User;
 import by.gradomski.apartments.exception.ServiceException;
-import by.gradomski.apartments.service.ApartmentService;
 import by.gradomski.apartments.service.impl.ApartmentServiceImpl;
-import by.gradomski.apartments.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

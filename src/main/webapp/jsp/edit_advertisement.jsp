@@ -128,10 +128,6 @@
     </c:choose>
     <input type="submit" name="button" value="<fmt:message key="advertisement.saveButton"/>"/>
 </form>
-<%--<form action="${pageContext.request.contextPath}/control" method="get">--%>
-<%--    <input type="hidden" name="command" value="delete_advertisement">--%>
-<%--    <input type="submit" name="button" value="<fmt:message key="advertisement.deleteButton"/>"/>--%>
-<%--</form>--%>
 <b><fmt:message key="advertisement.apartment"/></b><br/>
 <fmt:message key="newEstate.region"/> : ${region}<br/>
 <fmt:message key="newEstate.city"/> : ${city}"<br/>

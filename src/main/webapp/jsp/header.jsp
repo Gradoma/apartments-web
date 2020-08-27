@@ -107,18 +107,6 @@
 <c:if test="${not empty user}">
     <div class="nav-scroller bg-white box-shadow">
         <nav class="nav nav-underline">
-<%--            <a class="nav-link" href="#">Dashboard</a>--%>
-<%--            <a class="nav-link" href="#">--%>
-<%--                Friends--%>
-<%--                <span class="badge badge-pill bg-light align-text-bottom">27</span>--%>
-<%--            </a>--%>
-<%--            <a class="nav-link" href="#">Explore</a>--%>
-<%--            <a class="nav-link" href="#">Suggestions</a>--%>
-<%--            <a class="nav-link" href="#">Link</a>--%>
-<%--            <a class="nav-link" href="#">Link</a>--%>
-<%--            <a class="nav-link" href="#">Link</a>--%>
-<%--            <a class="nav-link" href="#">Link</a>--%>
-<%--            <a class="nav-link" href="#">Link</a>--%>
 
             <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_user_page">
                 <fmt:message key="header.home"/>
@@ -134,16 +122,6 @@
     </div>
 </c:if>
 
-
-
-<main role="main" class="container">
-
-
-
-
-
-</main>
-
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
@@ -156,84 +134,6 @@
 
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="none" style="display: none; visibility: hidden; position: absolute; top: -100%; left: -100%;"><defs><style type="text/css"></style></defs><text x="0" y="2" style="font-weight:bold;font-size:2pt;font-family:Arial, Helvetica, Open Sans, sans-serif">32x32</text></svg>
 
-<%--<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-success" style="position: static;">--%>
-<%--    <a class="navbar-brand mr-auto mr-lg-0" >Gradomski apartment project</a>--%>
-<%--    <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">--%>
-<%--        <span class="navbar-toggler-icon"></span>--%>
-<%--    </button>--%>
-
-<%--    <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">--%>
-<%--        <ul class="navbar-nav mr-auto">--%>
-<%--            <li class="nav-item active">--%>
-
-<%--            </li>--%>
-<%--            <li class="nav-item">--%>
-
-<%--            </li>--%>
-<%--            <li class="nav-item">--%>
-<%--                <form action="control">--%>
-<%--                    <select name="language" onchange="submit()">--%>
-<%--                        <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>--%>
-<%--                        <option value="ru" ${language == 'ru' ? 'selected' : ''}>Русский</option>--%>
-<%--                    </select>--%>
-<%--                </form>--%>
-<%--            </li>--%>
-<%--            <li class="nav-item">--%>
-<%--            <c:if test="${not empty user}">--%>
-<%--                <img src="data:image/jpg;base64,${user.getPhotoBase64()}" width="50" height="50" class="user_img">--%>
-<%--                ${user.getFirstName()} ${user.getLastName()}--%>
-<%--                <form action="control" method="get">--%>
-<%--                    <input type="hidden" name="command" value="log_out"/>--%>
-<%--                    <input type="submit" name="button" value="<fmt:message key="main.logoutButton"/>">--%>
-<%--                </form>--%>
-<%--            </c:if>--%>
-<%--            </li>--%>
-<%--        </ul>--%>
-<%--    </div>--%>
-<%--</nav>--%>
-<%--<c:if test="${not empty user}">--%>
-<%--    <div class="nav-scroller bg-white box-shadow">--%>
-<%--        <nav class="nav nav-underline">--%>
-<%--            <a class="nav-link active" href="http://localhost:8080/apartments_web_war/control?command=transition_to_user_page">--%>
-<%--                <fmt:message key="header.home"/>--%>
-<%--            </a>--%>
-<%--            <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_estate">--%>
-<%--                <fmt:message key="main.estateButton"/>--%>
-<%--                    &lt;%&ndash;                    <span class="badge badge-pill bg-light align-text-bottom">27</span>--%>
-<%--            </a>--%>
-<%--            <a class="nav-link" href="http://localhost:8080/apartments_web_war/control?command=transition_to_my_rent">--%>
-<%--                <fmt:message key="main.myRentButton"/>--%>
-<%--            </a>--%>
-<%--        </nav>--%>
-<%--    </div>--%>
-<%--</c:if>--%>
-<%--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>--%>
-<%--<script src="bootstrap/js/vendor/popper.min.js"></script>--%>
-<%--<script src="bootstrap/js/bootstrap.min.js"></script>--%>
-<%--<script src="https://cdn.jsdelivr.net/npm/holderjs@2.9.4/holder.js"></script>--%>
-<%--<script src="bootstrap/js/offcanvas.js"></script>--%>
-
-
-<%--<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" preserveAspectRatio="none" style="display: none; visibility: hidden; position: absolute; top: -100%; left: -100%;"><defs><style type="text/css"></style></defs>--%>
-<%--    <text x="0" y="2" style="font-weight:bold;font-size:2pt;font-family:Arial, Helvetica, Open Sans, sans-serif">32x32</text></svg>--%>
-
-
-
-<%--<body >--%>
-<%--<h2>Gradomski apartment project</h2>--%>
-<%--    <form action="${pageContext.demand.contextPath}/control">--%>
-<%--        <select name="language" onchange="submit()">--%>
-<%--            <option value="en" ${language == 'en' ? 'selected' : ''}>English</option>--%>
-<%--            <option value="ru" ${language == 'ru' ? 'selected' : ''}>Русский</option>--%>
-<%--        </select>--%>
-<%--    </form>--%>
-<%--    <c:if test="${not empty user}">--%>
-<%--        <form name="Simple" action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--            <input type="hidden" name="command" value="transition_to_user_page"/>--%>
-<%--            <input type="submit" name="button" value="<fmt:message key="header.home"/>">--%>
-<%--        </form>--%>
-<%--    </c:if>--%>
-<%--<hr/>--%>
 </body>
 </html>
 

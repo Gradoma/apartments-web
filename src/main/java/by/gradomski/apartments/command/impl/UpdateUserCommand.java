@@ -20,7 +20,6 @@ import static by.gradomski.apartments.command.PagePath.*;
 public class UpdateUserCommand implements Command {
     private static final Logger log = LogManager.getLogger();
     private static final String LOGIN = "login";
-    private static final String PASSWORD = "password";
     private static final String FIRST_NAME = "firstName";
     private static final String LAST_NAME = "lastName";
     private static final String GENDER = "gender";
@@ -36,7 +35,7 @@ public class UpdateUserCommand implements Command {
         router.setRedirect();
         String page;
         HttpSession session = request.getSession(false);
-        if(session == null){
+        if(session == null){              //TODO (filter)
             log.info("session timed out");
             page = SIGN_IN;
         } else {

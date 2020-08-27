@@ -79,7 +79,6 @@
     </fieldset>
 </form>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!-- Подключаем Bootstrap JS -->
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <c:import url="footer.jsp"/>
 </body>

@@ -11,91 +11,6 @@
 <%@ taglib prefix="ctg" uri="/WEB-INF/custom/custom.tld" %>
 <fmt:setLocale value="${pageContext.session.getAttribute('locale')}"  />
 <fmt:setBundle basename="prop.pagecontent" />
-<%--<html>--%>
-<%--<head>--%>
-<%--    <title>User Page</title>--%>
-<%--    <meta name="viewport" content="width=device-width, initial-scale=1">--%>
-<%--    <style>--%>
-<%--        .pagination a {--%>
-<%--            color: black;--%>
-<%--            float: left;--%>
-<%--            padding: 8px 16px;--%>
-<%--            text-decoration: none;--%>
-<%--            transition: background-color .3s;--%>
-<%--        }--%>
-
-<%--        .pagination a.active {--%>
-<%--            background-color: dodgerblue;--%>
-<%--            color: white;--%>
-<%--        }--%>
-
-<%--        .pagination a:hover:not(.active) {background-color: #ddd;}--%>
-<%--    </style>--%>
-<%--</head>--%>
-<%--<body>--%>
-<%--<c:import url="header.jsp"/>--%>
-<%--<img src="data:image/jpg;base64,${user.getPhotoBase64()}" width="100" height="100">--%>
-<%--<h3>${user.getFirstName()} ${user.getLastName()}</h3><br/>--%>
-<%--<form name="Simple" action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--    <input type="hidden" name="command" value="transition_to_settings"/>--%>
-<%--    <input type="hidden" name="login" value="${user.getLoginName()}"/>--%>
-<%--    <input type="submit" name="button" value=<fmt:message key="main.settingsButton"/>>--%>
-<%--</form>--%>
-<%--<form action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--    <input type="hidden" name="command" value="transition_to_estate"/>--%>
-<%--    <input type="submit" name="button" value="<fmt:message key="main.estateButton"/>">--%>
-<%--</form>--%>
-<%--<form action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--    <input type="hidden" name="command" value="transition_to_my_rent"/>--%>
-<%--    <input type="submit" name="button" value="<fmt:message key="main.myRentButton"/>">--%>
-<%--</form>--%>
-<%--<form action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--    <input type="hidden" name="command" value="log_out"/>--%>
-<%--    <input type="submit" name="button" value="<fmt:message key="main.logoutButton"/>">--%>
-<%--</form>--%>
-<%--<div class="pagination">--%>
-<%--    <c:forEach var="page" varStatus="status" begin="1" end="${pagesAmount}">--%>
-<%--        <a class="${status.count == currentPage ? 'active' : ''}" href="http://localhost:8080/apartments_web_war/control?command=next_advertisement&page=${status.count}"><c:out value="${status.count}" /></a>--%>
-<%--    </c:forEach>--%>
-<%--</div><br/>--%>
-<%--<table>--%>
-<%--    <c:forEach var="advertisement" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"--%>
-<%--               end="${ not empty lastAdvertisement ? lastAdvertisement : 4}">--%>
-<%--        <c:set var="apartment" value="${apartmentMap[advertisement.getId()]}"/>--%>
-<%--        <c:set var="photoMap" value="${apartment.getUnmodifiablePhotoMap()}"/>--%>
-<%--        <tr>--%>
-<%--            <td>--%>
-<%--                <c:choose>--%>
-<%--                <c:when test="${photoMap.isEmpty()}">--%>
-<%--                    No photo--%>
-<%--                </c:when>--%>
-<%--                <c:otherwise>--%>
-<%--                    <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>--%>
-<%--                    <img src="data:image/jpg;base64,${entry.value}" width="120" height="120">--%>
-<%--            </c:otherwise>--%>
-<%--            </c:choose>--%>
-<%--            </td>--%>
-<%--            <td>--%>
-<%--                <a href=http://localhost:8080/apartments_web_war/control?command=transition_to_advertisement&id=${advertisement.getId()}>${advertisement.getTitle()}</a><br/>--%>
-<%--                <strong>${apartment.getAddress()}</strong><br/>--%>
-<%--                ${apartment.getRegion()}, ${apartment.getCity()}--%>
-<%--            </td>--%>
-<%--            <td><c:out value="${advertisement.getPrice() }" /></td>--%>
-<%--        </tr>--%>
-<%--        <tr>--%>
-<%--            <td><small><ctg:dateTime dateTimeValue="${advertisement.getCreationDate()}"/></small></td>--%>
-<%--&lt;%&ndash;            <td><small><c:out value="${advertisement.getCreationDate() }" /></small></td>&ndash;%&gt;--%>
-<%--        </tr>--%>
-<%--    </c:forEach>--%>
-<%--</table><br/>--%>
-<%--<div class="pagination">--%>
-<%--    <c:forEach var="page" items="${pagesAmount}" varStatus="status">--%>
-<%--        <a class="${status.count == currentPage ? 'active' : ''}" href="http://localhost:8080/apartments_web_war/control?command=next_advertisement&page=${status.count}"><c:out value="${ status.count }" /></a>--%>
-<%--    </c:forEach>--%>
-<%--</div>--%>
-<%--<c:import url="footer.jsp"/>--%>
-<%--</body>--%>
-<%--</html>--%>
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
@@ -104,7 +19,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Offcanvas template for Bootstrap</title>
+    <title>Apartment project</title>
 
     <!-- Bootstrap core CSS -->
     <link href="${pageContext.request.contextPath}/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -144,8 +59,6 @@
             </p>
         </div>
 
-        <%--        <div class="media text-muted pt-3 border-bottom border-gray" style=""><img class="mr-3" src="https://getbootstrap.com/assets/brand/bootstrap-outline.svg" alt="" width="250" height="170">--%>
-
         <c:forEach var="advertisement" items="${advertisementList}" varStatus="status" begin="${ not empty firstAdvertisement ? firstAdvertisement : 0}"
                    end="${ not empty lastAdvertisement ? lastAdvertisement : 4}">
             <c:set var="apartment" value="${apartmentMap[advertisement.getId()]}"/>
@@ -170,14 +83,7 @@
                 </p>
                 <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">${advertisement.getPrice()} <fmt:message key="advertisement.currency"/></p>
             </div>
-            <%--        <div class="media text-muted pt-3 border-bottom border-gray" style="">--%>
         </c:forEach>
-
-        <%--            <p class="media-body pb-3 mb-0 small lh-125" style="width: 322px;">--%>
-        <%--                <strong class="d-block text-gray-dark">@username</strong>--%>
-        <%--                Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.--%>
-        <%--            </p><p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 30%; right: 30%; width: 50%; min-width: 0%; font-weight: 700; height: 0%; min-height: 0%; max-width: 120px; max-height: 0%;">Price</p>--%>
-        <%--        </div><div class="media text-muted pt-3 border-bottom border-gray" style=""><img class="mr-3" src="https://getbootstrap.com/assets/brand/bootstrap-outline.svg" alt="" width="250" height="170">--%>
 
         <div class="media text-muted pt-3 border-bottom border-gray" style="">
             <p class="media-body pb-3 mb-0 small lh-125" style="border-color: rgb(13, 32, 49); top: auto; left: 67px; right: 30%; width: 86px; min-width: 14px; font-weight: 700; height: 0%; min-height: 0%; max-width: 159%; max-height: 0%; text-align: center; margin-top: 9px;">

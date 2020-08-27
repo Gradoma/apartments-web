@@ -47,7 +47,6 @@ public class AdminBanAdvertisementCommand implements Command {
                 switch (demand.getStatus()){
                     case CREATED:
                         DemandServiceImpl.getInstance().refuseDemand(demand.getId());
-
                         break;
                     case APPROVED:
                         DemandServiceImpl.getInstance().cancelDemand(demand.getId());
@@ -60,10 +59,6 @@ public class AdminBanAdvertisementCommand implements Command {
             request.getServletContext().setAttribute(ADVERTISEMENT_LIST, advertisementList);
             int pages = PageCounter.countPages(advertisementList);
             request.getServletContext().setAttribute(PAGES_AMOUNT, pages);
-//            int size = advertisementList.size();
-//            int pages = (int) Math.ceil(size/ON_PAGE);
-//            int[] arrayPages = new int[pages];
-//            request.getServletContext().setAttribute(PAGES_AMOUNT, arrayPages);
             long authorId = advertisement.getAuthorId();
             log.debug("author id = " + authorId);
             User author = UserServiceImpl.getInstance().getUserById(authorId);

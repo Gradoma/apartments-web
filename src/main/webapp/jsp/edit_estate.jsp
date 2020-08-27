@@ -117,7 +117,6 @@
 <form name="update_apartment" action="${pageContext.request.contextPath}/control" method="get">
     <small><fmt:message key="message.required"/> </small><br/>
     <input type="hidden" name="command" value="edit_apartment">
-<%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
     <fmt:message key="newEstate.region"/>* : <input required name="region" value="${apartment.getRegion()}"
                                                    pattern="^[а-яА-я-.\s]{1,45}$">
     <c:choose>
@@ -193,11 +192,6 @@
     <input type="hidden" name="apartmentId" value="${apartment.getId()}"/>
     <input type="submit" name="button" value="<fmt:message key="setting.browseButton"/>">
 </form>
-<%--<form name="${pageContext.demand.contextPath}/delete_apartment" action="control" method="get">--%>
-<%--    <input type="hidden" name="command" value="delete_apartment">--%>
-<%--    <input type="hidden" name="apartmentId" value="${apartment.getId()}">--%>
-<%--    <input type="submit" name="button" value="<fmt:message key="estate.deleteButton"/>"/>--%>
-<%--</form>--%>
 
 
 <table>

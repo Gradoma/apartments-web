@@ -19,15 +19,18 @@ public class LocaleFilter implements Filter {
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+        log.debug("start locale filter");
         HttpServletRequest reqHttp = (HttpServletRequest) req;
         String userLanguageChoice = reqHttp.getParameter("language");
         HttpServletResponse respHttp = (HttpServletResponse) resp;
         HttpSession session = reqHttp.getSession(true);
         String localeString = (String) session.getAttribute("locale");
         if(userLanguageChoice != null){
+            log.debug("user set language: " + userLanguageChoice);
             session.setAttribute("locale", userLanguageChoice);
             respHttp.sendRedirect(reqHttp.getHeader("referer"));
         } else if(localeString == null ){
+            log.debug("default lang null, set lang...");
             session.setAttribute("locale", "en");
             chain.doFilter(req, resp);
         } else {

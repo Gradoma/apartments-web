@@ -19,14 +19,17 @@ public class EncodingFilter implements Filter {
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+        log.debug("start encode filter");
         String requestEncoding = req.getCharacterEncoding();
         if(requestEncoding == null || !requestEncoding.equalsIgnoreCase(encoding)){
+            log.debug("encoding problem: " + requestEncoding);
             req.setCharacterEncoding(encoding);
             resp.setCharacterEncoding(encoding);
         }
         chain.doFilter(req, resp);
+    }
 
-    }public void destroy() {
+    public void destroy() {
         encoding = null;
     }
 }

@@ -171,18 +171,6 @@
             </c:forEach>
         </c:if>
 
-<%--        <c:choose>--%>
-<%--            <c:when test="${!photoMap.isEmpty()}">--%>
-<%--                <img class="mr-3" src="${pageContext.request.contextPath}/bootstrap/image/def_apartment.jpg" alt=""--%>
-<%--                     width="170" height="170">--%>
-<%--            </c:when>--%>
-<%--            <c:otherwise>--%>
-<%--                <c:set var="entry" value="${photoMap.entrySet().iterator().next()}"/>--%>
-<%--                <img class="mr-3" src="data:image/jpg;base64,${entry.value}" width="850" height="500"--%>
-<%--                     style="position: static; left: 50px;">--%>
-<%--            </c:otherwise>--%>
-<%--        </c:choose>--%>
-
         <div class="media text-muted pt-3 border-bottom border-gray" style="margin-right: -3px;">
 
         </div>

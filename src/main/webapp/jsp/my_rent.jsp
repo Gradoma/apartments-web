@@ -166,11 +166,6 @@
                                         <strong>
                                             <a href="http://localhost:8080/apartments_web_war/control?command=cancel_demand&demandId=${ demand.getId() }"
                                                class="btn btn-sm btn-danger"><fmt:message key="myDemands.cancelButton"/></a>
-<%--                                            <form action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--                                                <input type="hidden" name="command" value="cancel_request"/>--%>
-<%--                                                <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
-<%--                                                <input type="submit" name="button" value="<fmt:message key="myDemands.cancelButton"/>">--%>
-<%--                                            </form>--%>
                                         </strong>
                                         </c:when>
 
@@ -183,12 +178,6 @@
                                             <strong>
                                                 <a href="http://localhost:8080/apartments_web_war/control?command=finish_rent&apartmentId=${apartment.getId() }&demandId=${ demand.getId() }"
                                                    class="btn btn-sm btn-primary"><fmt:message key="myDemands.finishRentButton"/></a>
-<%--                                                <form action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--                                                    <input type="hidden" name="command" value="finish_rent"/>--%>
-<%--                                                    <input type="hidden" name="apartmentId" value="${apartment.getId() }"/>--%>
-<%--                                                    <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
-<%--                                                    <input type="submit" name="button" value="<fmt:message key="myDemands.finishRentButton"/>">--%>
-<%--                                                </form>--%>
                                             </strong>
                                         </c:when>
                                         <c:otherwise>
@@ -215,22 +204,10 @@
                                                                 </div>
                                                                 </form>
                                                             </div>
-<%--                                                        <form action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--                                                            <input type="hidden" name="command" value="accept_invitation"/>--%>
-<%--                                                            <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
-<%--                                                            <input type="hidden" name="apartmentId" value="${ demand.getApartmentId() }"/>--%>
-<%--                                                            <input type="submit" name="button" value="<fmt:message key="myDemands.acceptButton"/>">--%>
-<%--                                                        </form>--%>
                                                     </strong>
                                                     <strong>
                                                         <a href="http://localhost:8080/apartments_web_war/control?command=decline_invitation&demandId=${ demand.getId() }&advertisementId=${ advertisement.getId() }"
                                                            class="btn btn-sm btn-danger"><fmt:message key="myDemands.declineButton"/></a>
-<%--                                                        <form action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--                                                            <input type="hidden" name="command" value="decline_invitation"/>--%>
-<%--                                                            <input type="hidden" name="requestId" value="${ demand.getId() }"/>--%>
-<%--                                                            <input type="hidden" name="advertisementId" value="${ advertisement.getId() }"/>--%>
-<%--                                                            <input type="submit" name="button" value="<fmt:message key="myDemands.declineButton"/>">--%>
-<%--                                                        </form>--%>
                                                     </strong>
                                                     <br/>
                                                 </c:when>
@@ -240,7 +217,6 @@
                                             </c:choose>
                                         </c:otherwise>
                                     </c:choose>
-
                                 </c:otherwise>
                             </c:choose>
                         </p>

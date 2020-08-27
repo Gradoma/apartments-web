@@ -19,6 +19,5 @@ public class LogOutCommand implements Command {
         }
         router.setPage(SIGN_IN);
         return router;
-//        return SIGN_IN;
     }
 }

@@ -32,6 +32,5 @@ public class ConfirmEmailCommand implements Command {
         log.debug("return page: " + page);
         router.setPage(page);
         return  router;
-//        return page;
     }
 }

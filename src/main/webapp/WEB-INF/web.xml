@@ -13,6 +13,26 @@
     <location>/jsp/errors/error404.jsp</location>
   </error-page>
   <session-config>
-    <session-timeout>10</session-timeout>
+    <session-timeout>2</session-timeout>
   </session-config>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>TimeOutFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>RedirectSecurityFilter</filter-name>
+    <url-pattern>/jsp/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>AdminRedirectFilter</filter-name>
+    <url-pattern>/jsp/admin/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>LocaleFilter</filter-name>
+    <url-pattern>/control</url-pattern>
+  </filter-mapping>
 </web-app>

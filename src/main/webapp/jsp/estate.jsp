@@ -116,15 +116,6 @@
            class="btn btn-success">
             <span class="glyphicon glyphicon-plus"></span><fmt:message key="estate.newApartmentButton"/>
         </a>
-
-<%--        <form action="${pageContext.demand.contextPath}/control" method="get">--%>
-<%--            <input type="hidden" name="command" value="transition_to_new_estate"/>--%>
-<%--            <input type="submit" name="button" value="<fmt:message key="estate.newApartmentButton"/>">--%>
-<%--        </form>--%>
-
-<%--        <small class="d-block text-right mt-3">--%>
-
-<%--        </small>--%>
     </div>
 </main>
 

@@ -42,7 +42,7 @@ public class NewAdCommand implements Command {
         router.setRedirect();
         String page;
         HttpSession session = request.getSession(false);
-        if(session == null) {
+        if(session == null) {              //TODO (filter)
             log.info("session timed out");
             page = SIGN_IN;
         } else {

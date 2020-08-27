@@ -73,6 +73,5 @@ public class DeleteAdvertisementCommand implements Command {
         }
         router.setPage(page);
         return router;
-//        return page;
     }
 }

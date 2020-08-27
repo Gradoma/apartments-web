@@ -12,7 +12,7 @@ public class TransitionToNewEstateCommand implements Command {
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
         String page;
-        if(request.getSession(false) != null){
+        if(request.getSession(false) != null){               //TODO (filter)
             page = NEW_ESTATE;
         } else {
             page = SIGN_IN;
