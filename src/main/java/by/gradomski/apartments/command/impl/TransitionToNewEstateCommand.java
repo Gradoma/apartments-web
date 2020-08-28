@@ -11,12 +11,7 @@ public class TransitionToNewEstateCommand implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
-        String page;
-        if(request.getSession(false) != null){               //TODO (filter)
-            page = NEW_ESTATE;
-        } else {
-            page = SIGN_IN;
-        }
+        String page = NEW_ESTATE;
         router.setPage(page);
         return router;
     }

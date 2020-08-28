@@ -23,18 +23,14 @@ public class TransitionToEstateEditCommand implements Command{
         Router router = new Router();
         String page;
         HttpSession session = request.getSession(false);
-        if(session != null){              //TODO (filter)
-            long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
-            try {
-                Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
-                session.setAttribute(APARTMENT, apartment);
-                page = EDIT_ESTATE;
-            } catch (ServiceException e) {
-                log.error(e);
-                page = ERROR_PAGE;
-            }
-        } else {
-            page = SIGN_IN;
+        long apartmentId = Long.parseLong(request.getParameter(APARTMENT_ID));
+        try {
+            Apartment apartment = ApartmentServiceImpl.getInstance().getApartmentByIdWithOwner(apartmentId);
+            session.setAttribute(APARTMENT, apartment);
+            page = EDIT_ESTATE;
+        } catch (ServiceException e) {
+            log.error(e);
+            page = ERROR_PAGE;
         }
         router.setPage(page);
         return router;

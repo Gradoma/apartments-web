@@ -11,12 +11,7 @@ public class TransitionToUserPage implements Command {
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
-        String page;
-        if(request.getSession(false) != null){              //TODO (filter)
-            page = USER_PAGE;
-        } else {
-            page = SIGN_IN;
-        }
+        String page = USER_PAGE;
         router.setPage(page);
         return router;
     }

@@ -12,18 +12,12 @@ import static by.gradomski.apartments.command.PagePath.*;
 
 public class TransitionToSettingsCommand implements Command {
     private static final Logger log = LogManager.getLogger();
-    private static final String LOGIN = "login";
     private UserServiceImpl userService = UserServiceImpl.getInstance();
 
     @Override
     public Router execute(HttpServletRequest request) {
         Router router = new Router();
-        String page;
-        if(request.getSession(false) != null){              //TODO (filter)
-            page = USER_SETTINGS;
-        } else {
-            page = SIGN_IN;
-        }
+        String page = USER_SETTINGS;
         router.setPage(page);
         return router;
     }

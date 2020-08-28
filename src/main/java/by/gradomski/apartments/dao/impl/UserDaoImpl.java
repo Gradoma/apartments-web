@@ -231,9 +231,7 @@ public class UserDaoImpl implements UserDao {
                 user.setMail(resultSet.getString(UserTable.MAIL_ADDRESS));
                 user.setVisibility(resultSet.getBoolean(UserTable.VISIBILITY));
                 byte[] photoBytes = resultSet.getBytes(UserTable.PHOTO);
-                log.info("photoBytes:"  + Arrays.toString(photoBytes));
                 String photoBase64 = Base64.getEncoder().encodeToString(photoBytes);
-                log.info("photo string: " + photoBase64);
                 user.setPhotoBase64(photoBase64);
             }
             if(user != null) optionalUser = Optional.of(user);

@@ -32,6 +32,7 @@ public class AdminRedirectFilter implements Filter {
         if (user.getRole() != Role.ADMIN){
             log.debug("user is not admin");
             response.sendRedirect(request.getContextPath() + userPath);
+            return;
         }
         chain.doFilter(req, resp);
     }

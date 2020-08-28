@@ -28,10 +28,9 @@ public class TimeOutFilter implements Filter {
         HttpSession session = request.getSession(false);
         if (session == null){
             log.debug("session is null...");
-            request.getSession();
-            RequestDispatcher dispatcher = request.getRequestDispatcher(indexPath);     //TODO(doesn't work)
+            RequestDispatcher dispatcher = request.getRequestDispatcher(indexPath);
             dispatcher.forward(request, response);
-//            response.sendRedirect(request.getContextPath() + indexPath);
+            return;
         }
         chain.doFilter(req, resp);
     }

@@ -19,12 +19,8 @@ public class TransitionToNewAdCommand implements Command {
         Router router = new Router();
         String page;
         HttpSession session = request.getSession(false);
-        if(session != null){              //TODO (filter)
-            session.setAttribute(APARTMENT_ID, request.getParameter(APARTMENT_ID));
-            page = NEW_AD;
-        } else {
-            page = SIGN_IN;
-        }
+        session.setAttribute(APARTMENT_ID, request.getParameter(APARTMENT_ID));
+        page = NEW_AD;
         router.setPage(page);
         return router;
     }

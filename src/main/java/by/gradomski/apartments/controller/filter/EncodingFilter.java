@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 @WebFilter(filterName = "EncodingFilter", urlPatterns = {"/*"},
@@ -20,6 +21,7 @@ public class EncodingFilter implements Filter {
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         log.debug("start encode filter");
+        log.debug("encode filter: session = " + ((HttpServletRequest) req).getSession(false));
         String requestEncoding = req.getCharacterEncoding();
         if(requestEncoding == null || !requestEncoding.equalsIgnoreCase(encoding)){
             log.debug("encoding problem: " + requestEncoding);

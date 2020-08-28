@@ -187,7 +187,7 @@ public class Apartment {
         if (status != apartment.status) return false;
         if (registrationDate != null ? !registrationDate.equals(apartment.registrationDate) : apartment.registrationDate != null)
             return false;
-        return photoMap != null ? photoMap.equals(apartment.photoMap) : apartment.photoMap == null; //todo check equals!!
+        return photoMap != null ? photoMap.equals(apartment.photoMap) : apartment.photoMap == null;
     }
 
     @Override

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(filterName = "RedirectSecurityFilter", urlPatterns = { "/jsp/*" },
-        initParams = { @WebInitParam(name = "SIGN_IN_PATH", value = "/jsp/sign_in.jsp") })
+        initParams = { @WebInitParam(name = "SIGN_IN_PATH", value = "/index.jsp") })
 public class RedirectSecurityFilter implements Filter {
     private static final Logger log = LogManager.getLogger();
     String signInPath;
@@ -31,6 +31,7 @@ public class RedirectSecurityFilter implements Filter {
         if (user == null){
             log.debug("user is null...");
             resp.sendRedirect(req.getContextPath() + signInPath);
+            return;
         }
         chain.doFilter(req, resp);
     }
