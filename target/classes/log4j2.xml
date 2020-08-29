@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <property name="pattern_file">
+            %d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{5} - %msg%n
+        </property>
+        <property name="pattern_console">
+            %d{HH:mm:ss} %-5level %logger{1} - %msg%n
+        </property>
+    </Properties>
+    <ThresholdFilter level="trace"/>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern_console}"/>
+        </Console>
+        <RollingFile name="File" fileName="F:\My Projects\epam java training\Appartment project\apartments-web\logs\log_file.log" append="true"
+                     filePattern="logs/${date:yyyy-MM-dd}/%d{HH-mm-ss}_%i.log">
+            <PatternLayout pattern="${pattern_file}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="550 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <Appender-ref ref="File" level="debug"/>
+            <Appender-ref ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
