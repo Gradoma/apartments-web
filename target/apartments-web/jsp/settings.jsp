@@ -63,7 +63,8 @@
                 <fmt:message key="setting.genderErrorMessage"/>
             </c:when>
         </c:choose>
-        <fmt:message key="setting.phone"/> : <input name="phone" value="${user.getPhone()}" pattern="^[+]?[(]?[0-9]{5}[)]?[-\s]?[0-9]{3}[-\s]?[0-9]{2}[-\s]?[0-9]{2}$"><br/>
+        <fmt:message key="setting.phone"/> : <input type="text" name="phone" value="${user.getPhone()}" pattern="^[+]?[(]?[0-9]{5}[)]?[-\s]?[0-9]{3}[-\s]?[0-9]{2}[-\s]?[0-9]{2}$">
+        <i><fmt:message key="setting.phoneFormats" /></i><br/>
         <c:choose>
             <c:when test="${phoneErrorMessage eq true}">
                 <fmt:message key="setting.phoneErrorMessage"/>
@@ -75,7 +76,7 @@
                 <fmt:message key="setting.birthdayErrorMessage"/>
             </c:when>
         </c:choose>
-        <input type="submit" name="button" value=<fmt:message key="setting.saveButton"/>>
+        <br/><input type="submit" name="button" value=<fmt:message key="setting.saveButton"/>>
     </form>
 <c:import url="footer.jsp"/>
 </body>

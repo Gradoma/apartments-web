@@ -21,19 +21,19 @@
     <input type="hidden" name="apartmentId" value="${apartmentId}">
     <h3><fmt:message key="newDemand.head"/><br/></h3>
     <small><fmt:message key="message.required"/> </small><br/>
-    <fmt:message key="newDemand.date"/>* : <input type="date" required name="expectedDate"><br/>
+    <fmt:message key="newDemand.date"/>* : <input type="date" required name="expectedDate">
     <c:choose>
         <c:when test="${dateError eq true}">
             <fmt:message key="newDemand.dateErrorMessage"/><br/>
         </c:when>
     </c:choose>
-    <fmt:message key="newDemand.description"/> : <input name="description" pattern="^.{1,150}$"><br/>
+    <br/><fmt:message key="newDemand.description"/> : <input name="description" pattern="^.{1,150}$">
     <c:choose>
         <c:when test="${descriptionError eq true}">
             <fmt:message key="newDemand.descriptionErrorMessage"/><br/>
         </c:when>
     </c:choose>
-    <i><fmt:message key="newDemand.note"/> </i>
+    <br/><i><fmt:message key="newDemand.note"/> </i>
     <input type="submit" name="button" value="<fmt:message key="newDemand.applyButton"/>"/>
     <c:choose>
         <c:when test="${error eq true}">

@@ -80,6 +80,7 @@ by\gradomski\apartments\command\impl\DeleteAdvertisementCommand.class
 by\gradomski\apartments\dao\impl\AdDaoImpl.class
 by\gradomski\apartments\command\impl\AdminToUserProfileCommand.class
 by\gradomski\apartments\entity\Role.class
+by\gradomski\apartments\validator\Main.class
 by\gradomski\apartments\command\impl\SignInCommand.class
 by\gradomski\apartments\util\AdvertisementComparator.class
 by\gradomski\apartments\command\Command.class

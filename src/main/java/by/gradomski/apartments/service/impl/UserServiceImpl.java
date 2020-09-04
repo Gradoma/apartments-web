@@ -177,8 +177,10 @@ public class UserServiceImpl implements UserService {
         user.setLastName(lastName);
         user.setPhone(phone);
         try {
-            LocalDate birthday = LocalDate.parse(birthdayString);
-            user.setBirthday(birthday);
+            if(birthdayString != null && !birthdayString.isBlank()) {
+                LocalDate birthday = LocalDate.parse(birthdayString);
+                user.setBirthday(birthday);
+            }
         } catch (DateTimeParseException pEx){
             throw new ServiceException(pEx);
         }
